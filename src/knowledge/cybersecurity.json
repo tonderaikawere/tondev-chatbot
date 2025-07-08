@@ -1,0 +1,304 @@
+{
+  "name": "What is Cybersecurity?",
+  "description": "A cybersecurity expert providing accurate, research-backed answers about security concepts, tools, and best practices.",
+  "version": "1.0.0",
+  "knowledgeBase": {
+    "coreConcepts": [
+      {"question": "What is cybersecurity?", "answer": "Cybersecurity is the practice of protecting systems, networks, and data from cyber attacks, ensuring confidentiality, integrity, and availability."},
+      {"question": "What is the CIA Triad?", "answer": "The CIA Triad consists of Confidentiality, Integrity, and Availability — the core principles of cybersecurity."},
+      {"question": "What is a firewall?", "answer": "A firewall is a security system that monitors and controls incoming and outgoing network traffic based on predetermined rules."},
+      {"question": "What is the difference between a virus and a worm?", "answer": "A virus attaches to a file and spreads with user action, while a worm self-replicates and spreads across networks automatically."},
+      {"question": "What is phishing?", "answer": "Phishing is a cyber attack that tricks users into revealing sensitive information through fake emails or websites."},
+      {"question": "How do I keep my passwords secure?", "answer": "Use strong, unique passwords and enable two-factor authentication to secure online accounts."},
+      {"question": "What is two-factor authentication?", "answer": "2FA adds an extra layer of security by requiring a second form of verification, such as a code sent to your phone."},
+      {"question": "What is malware?", "answer": "Malware is malicious software designed to damage, disrupt, or gain unauthorized access to systems, including viruses and ransomware."},
+      {"question": "What is ransomware?", "answer": "Ransomware encrypts a user's data and demands payment for its release, often delivered via phishing or unpatched systems."},
+      {"question": "What is social engineering?", "answer": "Social engineering involves manipulating people into giving up confidential information, often by pretending to be someone trustworthy."},
+      {"question": "What does antivirus software do?", "answer": "Antivirus software scans, detects, and removes malicious software to help protect your devices from infections."},
+      {"question": "What is a brute force attack?", "answer": "A brute force attack tries many combinations of usernames and passwords until the correct one is found."},
+      {"question": "What is a keylogger?", "answer": "A keylogger records everything typed on a keyboard to steal sensitive data like passwords or credit card numbers."},
+      {"question": "What is a Trojan Horse?", "answer": "A Trojan Horse disguises itself as legitimate software but secretly performs malicious actions when installed."},
+      {"question": "What is a botnet?", "answer": "A botnet is a group of compromised computers controlled by an attacker, often used for DDoS attacks."},
+      {"question": "What is penetration testing?", "answer": "Penetration testing is the practice of testing a system's defenses by simulating attacks to find vulnerabilities."},
+      {"question": "What is the difference between black hat and white hat hackers?", "answer": "Black hat hackers attack systems for malicious purposes, while white hat hackers test systems to improve security."},
+      {"question": "What is a zero-day vulnerability?", "answer": "A zero-day is an unknown software flaw that can be exploited before a patch is available."},
+      {"question": "What is multi-factor authentication?", "answer": "MFA requires two or more verification methods to access an account, improving security over single-password logins."},
+      {"question": "What is encryption?", "answer": "Encryption scrambles data into unreadable code that only authorized parties can decrypt with the right key."},
+      {"question": "What is a DDoS attack?", "answer": "A Distributed Denial of Service (DDoS) attack floods a network with traffic to disrupt services."},
+      {"question": "What is a man-in-the-middle attack?", "answer": "This attack intercepts communication between two parties to steal or alter information."},
+      {"question": "What is a security patch?", "answer": "A security patch fixes vulnerabilities in software to prevent exploitation by attackers."},
+      {"question": "What is a vulnerability?", "answer": "A weakness in a system that can be exploited to gain unauthorized access or cause damage."},
+      {"question": "What is an exploit?", "answer": "An exploit is a tool or method used to take advantage of a vulnerability in a system."},
+      {"question": "What are social media risks?", "answer": "Social media can expose users to phishing, identity theft, and social engineering attacks."},
+      {"question": "What is an insider threat?", "answer": "An insider threat comes from someone within an organization who misuses access to cause harm."},
+      {"question": "What is a data breach?", "answer": "A data breach occurs when sensitive information is accessed or disclosed without authorization."},
+      {"question": "What is security awareness training?", "answer": "Training employees on how to recognize and avoid security threats helps reduce risk."},
+      {"question": "What is access control?", "answer": "Access control ensures only authorized users can access certain systems or data."},
+      {"question": "What is role-based access control?", "answer": "RBAC restricts access to systems based on a user's role within an organization."},
+      {"question": "What is network segmentation?", "answer": "Dividing a network into smaller parts limits the spread of threats if one part is compromised."},
+      {"question": "What is backup and recovery?", "answer": "Regular backups and recovery plans help restore data and operations after an attack or failure."},
+      {"question": "What is pharming?", "answer": "Pharming redirects users to fake websites to steal credentials or personal information."},
+      {"question": "What is spyware?", "answer": "Spyware secretly gathers user data without consent, often for advertising or identity theft."},
+      {"question": "What is adware?", "answer": "Adware displays unwanted ads and can sometimes track user behavior without permission."},
+      {"question": "What is patch management?", "answer": "Patch management involves updating software to fix security flaws and improve functionality."},
+      {"question": "What is an incident response plan?", "answer": "An IRP outlines procedures for detecting, responding to, and recovering from cybersecurity incidents."},
+      {"question": "What is a security audit?", "answer": "A security audit evaluates an organization's systems to identify risks and ensure compliance."},
+      {"question": "What is the dark web?", "answer": "The dark web is a hidden part of the internet often used for illegal activities like selling stolen data."},
+      {"question": "What is ethical hacking?", "answer": "Ethical hackers simulate attacks to find vulnerabilities and help organizations strengthen security."},
+      {"question": "What is a security token?", "answer": "A physical or digital device used to prove identity and enable secure access to systems."},
+      {"question": "What is the difference between authentication and authorization?", "answer": "Authentication verifies identity; authorization determines what actions a user is allowed to perform."},
+      {"question": "What is the Zero Trust model?", "answer": "Zero Trust assumes no user or device is trustworthy by default and requires strict verification."},
+      {"question": "What is endpoint security?", "answer": "Endpoint security protects individual devices like laptops and phones from cyber threats."},
+      {"question": "What is cloud security?", "answer": "Cloud security protects data, applications, and services in cloud computing environments."},
+      {"question": "What is SIEM?", "answer": "Security Information and Event Management (SIEM) systems collect and analyze security data in real-time to detect threats."},
+      {"question": "What is a VPN?", "answer": "A VPN encrypts internet traffic and hides your IP address to enhance online privacy and security."},
+      {"question": "What is secure coding?", "answer": "Secure coding involves writing software in a way that prevents security flaws like SQL injection."},
+      {"question": "What is SQL injection?", "answer": "SQL injection is an attack that inserts malicious SQL into a query to manipulate a database."},
+      {"question": "What is cross-site scripting (XSS)?", "answer": "XSS allows attackers to inject malicious scripts into websites viewed by other users."},
+      {"question": "What is cross-site request forgery (CSRF)?", "answer": "CSRF tricks a user into performing unwanted actions on a web application where they're authenticated."},
+      {"question": "What is a digital signature?", "answer": "A digital signature verifies the authenticity and integrity of a message or document using cryptography."},
+      {"question": "What is hashing?", "answer": "Hashing converts data into a fixed-size string, often used to store passwords securely."},
+      {"question": "What is PKI?", "answer": "Public Key Infrastructure (PKI) is a system that manages digital certificates and public-key encryption to secure communications."},
+      {"question": "What is a certificate authority?", "answer": "A CA issues digital certificates that verify the ownership of public keys in secure communications."},
+      {"question": "What is SSL/TLS?", "answer": "SSL/TLS protocols encrypt internet communications to ensure privacy and data integrity."},
+      {"question": "What is HTTPS?", "answer": "HTTPS is the secure version of HTTP, using SSL/TLS to encrypt data exchanged between browser and server."},
+      {"question": "What is cyber hygiene?", "answer": "Cyber hygiene refers to best practices users follow to maintain system health and improve security."},
+      {"question": "What is BYOD?", "answer": "BYOD (Bring Your Own Device) policies allow employees to use personal devices at work, which requires strict security controls."},
+      {"question": "What is a security policy?", "answer": "A security policy defines rules and procedures for protecting an organization's digital assets."},
+      {"question": "What is risk assessment?", "answer": "Risk assessment evaluates potential threats and vulnerabilities to determine their impact and likelihood."},
+      {"question": "What is threat modeling?", "answer": "Threat modeling identifies, categorizes, and mitigates potential security threats during system design."},
+      {"question": "What is data classification?", "answer": "Classifying data based on sensitivity levels helps enforce appropriate security controls."},
+      {"question": "What is the least privilege principle?", "answer": "Users should have the minimum access necessary to perform their tasks, reducing risk."},
+      {"question": "What is log monitoring?", "answer": "Monitoring system logs helps detect suspicious activity and supports incident response."},
+      {"question": "What is a Security Operations Center (SOC)?", "answer": "A SOC is a dedicated team that monitors, detects, and responds to cybersecurity incidents."},
+      {"question": "What is cyber forensics?", "answer": "Cyber forensics involves investigating digital crimes by collecting and analyzing digital evidence."},
+      {"question": "What is insider risk management?", "answer": "Managing insider risks focuses on preventing data leaks or sabotage from trusted users."},
+      {"question": "What is a supply chain attack?", "answer": "A supply chain attack targets a vendor or third party to compromise its customers."},
+      {"question": "What is sandboxing?", "answer": "Sandboxing isolates programs in a controlled environment to safely analyze their behavior."},
+      {"question": "What is air gap security?", "answer": "Air-gapped systems are physically isolated from unsecured networks for maximum protection."},
+      {"question": "What is security by design?", "answer": "Security by design ensures that security is integrated into the development of systems from the beginning."},
+      {"question": "What is decryption?", "answer": "Decryption is the process of converting encrypted data back to its original, readable form."},
+      {"question": "What is an IDS?", "answer": "An Intrusion Detection System (IDS) monitors network traffic for suspicious activity and known threats."},
+      {"question": "What is an IPS?", "answer": "An Intrusion Prevention System (IPS) actively blocks detected threats to prevent breaches or disruptions."},
+      {"question": "What is security awareness?", "answer": "Security awareness involves educating users about potential threats and safe practices."},
+      {"question": "What is cloud misconfiguration?", "answer": "Incorrect cloud setup can expose sensitive data or systems to the public internet."},
+      {"question": "What is a drive-by download?", "answer": "A drive-by download is an automatic download of malicious software without user consent."},
+      {"question": "What is a RAT?", "answer": "A Remote Access Trojan (RAT) gives attackers remote control over a compromised device."},
+      {"question": "What is credential stuffing?", "answer": "Attackers use stolen usernames and passwords to try logging into different systems."},
+      {"question": "What is security compliance?", "answer": "Compliance means meeting legal and regulatory security requirements like GDPR or HIPAA."},
+      {"question": "What is cyber insurance?", "answer": "Cyber insurance helps cover financial losses from cyber incidents like data breaches."},
+      {"question": "What is VM security?", "answer": "Virtual Machine (VM) security involves protecting virtualized environments from attacks and misconfigurations."},
+      {"question": "What is IoT security?", "answer": "IoT security protects internet-connected devices from vulnerabilities and attacks."},
+      {"question": "What is a phishing simulation?", "answer": "Simulated phishing emails are used to test employee awareness and train against real threats."},
+      {"question": "What is password cracking?", "answer": "Password cracking attempts to discover passwords through guessing, brute force, or dictionary attacks."},
+      {"question": "What is a digital footprint?", "answer": "Your digital footprint is the trail of data you leave online, which can be exploited by attackers."},
+      {"question": "What are security tokens (2FA)?", "answer": "Security tokens are physical or digital devices used for authentication in two-factor setups."},
+      {"question": "What is data exfiltration?", "answer": "Data exfiltration refers to the unauthorized transfer of data from a system to an external location."},
+      {"question": "What is security patch management?", "answer": "Patch management ensures software is up to date to close known security gaps."},
+      {"question": "What is threat intelligence?", "answer": "Threat intelligence gathers information about threats to anticipate and defend against attacks."},
+      {"question": "What is a bug bounty program?", "answer": "Bug bounty programs reward ethical hackers for finding and reporting security vulnerabilities."},
+      {"question": "What is MDM?", "answer": "Mobile Device Management (MDM) solutions manage and secure smartphones and tablets used in business environments."},
+      {"question": "What is a cybersecurity framework?", "answer": "A cybersecurity framework provides structured guidance for managing security risks (e.g., NIST, ISO 27001)."},
+      {"question": "What is a threat surface?", "answer": "The threat surface is the total of all points where an unauthorized user could try to enter or extract data."},
+      {"question": "What is security posture?", "answer": "Security posture is an organization's overall defense status and ability to detect/respond to threats."},
+      {"question": "What is application security?", "answer": "Application security involves designing, developing, and testing software to prevent vulnerabilities."},
+      {"question": "What is cyber resilience?", "answer": "Cyber resilience is the ability to prepare for, respond to, and recover from cyber attacks."},
+      {"question": "What are access logs?", "answer": "Access logs record who accessed a system or file and when, helping in audits and investigations."},
+      {"question": "What is tokenization?", "answer": "Tokenization replaces sensitive data with unique identifiers, reducing exposure during processing."},
+      {"question": "What is cybersecurity culture?", "answer": "Creating a cybersecurity-aware culture means everyone in the organization contributes to security."}
+    ],
+    "commonVulnerabilities": [
+      {
+        "name": "SQL Injection",
+        "description": "SQL injection is a code injection technique that might destroy your database. It occurs when user input is incorrectly filtered for string literal escape characters embedded in SQL statements.",
+        "prevention": [
+          "Use parameterized queries",
+          "Implement input validation",
+          "Use ORM frameworks",
+          "Apply the principle of least privilege",
+          "Escape special characters"
+        ],
+        "examples": [
+          {
+            "vulnerable": "SELECT * FROM users WHERE username = 'admin'",
+            "secure": "SELECT * FROM users WHERE username = ?"
+          }
+        ]
+      },
+      {
+        "name": "Cross-Site Scripting (XSS)",
+        "description": "XSS attacks inject malicious scripts into websites viewed by other users. These scripts can steal cookies, session tokens, or other sensitive information.",
+        "prevention": [
+          "Implement Content Security Policy (CSP)",
+          "Encode output",
+          "Validate input",
+          "Use HttpOnly cookies",
+          "Implement XSS filters"
+        ],
+        "examples": [
+          {
+            "vulnerable": "<div>user input here</div>",
+            "secure": "<div>encoded user input here</div>"
+          }
+        ]
+      }
+    ],
+    "securityTools": [
+      {
+        "name": "Burp Suite",
+        "description": "An integrated platform for performing security testing of web applications.",
+        "features": [
+          "Web vulnerability scanner",
+          "Proxy server",
+          "Spider",
+          "Intruder",
+          "Repeater"
+        ],
+        "resources": [
+          "https://portswigger.net/burp/documentation",
+          "https://portswigger.net/web-security"
+        ]
+      },
+      {
+        "name": "OWASP ZAP",
+        "description": "The OWASP Zed Attack Proxy is an easy to use integrated penetration testing tool for finding vulnerabilities in web applications.",
+        "features": [
+          "Automated scanner",
+          "Passive scanner",
+          "Fuzzer",
+          "API scanning",
+          "Authentication handling"
+        ],
+        "resources": [
+          "https://www.zaproxy.org/docs/",
+          "https://www.zaproxy.org/getting-started/"
+        ]
+      }
+    ]
+  },
+  "faqs": [
+    {
+      "question": "What is the OWASP Top 10?",
+      "answer": "The OWASP Top 10 is a standard awareness document for developers and web application security. It represents a broad consensus about the most critical security risks to web applications. The list is updated every few years to reflect the current threat landscape.",
+      "resources": [
+        "https://owasp.org/www-project-top-ten/",
+        "https://owasp.org/www-project-web-security-testing-guide/"
+      ]
+    },
+    {
+      "question": "How do I implement secure authentication?",
+      "answer": "Secure authentication implementation involves multiple layers: 1) Use strong password policies, 2) Implement MFA, 3) Use secure session management, 4) Implement proper password hashing (bcrypt, Argon2), 5) Use HTTPS, 6) Implement rate limiting, 7) Use secure password reset flows.",
+      "resources": [
+        "https://auth0.com/docs/",
+        "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html"
+      ]
+    },
+    {
+      "question": "What does a cybersecurity expert do?",
+      "answer": "A cybersecurity expert protects computer systems, networks, and data from digital attacks, unauthorized access, and damage. This includes monitoring for threats, responding to incidents, conducting security assessments, and implementing security measures.",
+      "resources": ["https://www.cyberseek.org/pathway.html"]
+    },
+    {
+      "question": "What skills are important in cybersecurity?",
+      "answer": "Key skills include knowledge of networks, operating systems, cryptography, risk assessment, incident response, ethical hacking, and strong problem-solving abilities. Communication and continuous learning are also vital.",
+      "resources": ["https://www.sans.org/cyber-security-skills-roadmap/"]
+    },
+    {
+      "question": "How do I start a career in cybersecurity?",
+      "answer": "Start by learning the basics of IT, networking, and security. Get hands-on experience with labs and simulations. Consider certifications like CompTIA Security+, and participate in Capture The Flag (CTF) competitions. Networking with professionals and joining cybersecurity communities helps too.",
+      "resources": ["https://www.cyberseek.org/entry-level.html"]
+    },
+    {
+      "question": "What tools do cybersecurity professionals use?",
+      "answer": "Common tools include network scanners (Nmap), vulnerability scanners (Nessus), penetration testing tools (Metasploit, Burp Suite), SIEM systems, firewalls, and packet analyzers (Wireshark).",
+      "resources": ["https://www.geeksforgeeks.org/top-10-tools-used-in-cybersecurity/"]
+    },
+    {
+      "question": "What is a typical day like for a cybersecurity expert?",
+      "answer": "A typical day may involve monitoring security alerts, analyzing logs, responding to incidents, patching vulnerabilities, conducting risk assessments, and educating staff about security best practices.",
+      "resources": ["https://www.cyberdegrees.org/resources/a-day-in-the-life-of-a-cybersecurity-professional/"]
+    },
+    {
+      "question": "What advice do you have for beginners in cybersecurity?",
+      "answer": "Be curious and never stop learning. Practice with hands-on labs, read security blogs, join online communities, and don't be afraid to ask questions. Start with foundational knowledge and build up to more advanced topics.",
+      "resources": ["https://www.coursera.org/articles/cybersecurity-career-guide"]
+    },
+    {
+      "question": "What are the biggest challenges in cybersecurity?",
+      "answer": "The biggest challenges include keeping up with evolving threats, managing complex systems, user awareness, and balancing security with usability. Attackers are always finding new ways to exploit vulnerabilities.",
+      "resources": ["https://www.csoonline.com/article/3532107/the-7-biggest-challenges-facing-cybersecurity.html"]
+    },
+    {
+      "question": "What certifications are valuable in cybersecurity?",
+      "answer": "Valuable certifications include CompTIA Security+, CISSP, CEH, CISM, and OSCP. These demonstrate knowledge and commitment to the field.",
+      "resources": ["https://www.isc2.org/Certifications/CISSP","https://www.eccouncil.org/programs/certified-ethical-hacker-ceh/"]
+    },
+    {
+      "question": "What industries need cybersecurity?",
+      "answer": "All industries need cybersecurity, but it is especially critical in finance, healthcare, government, energy, and technology sectors.",
+      "resources": ["https://www.cyberseek.org/heatmap.html"]
+    },
+    {
+      "question": "How do you keep learning in this field?",
+      "answer": "Continuous learning is essential. Attend conferences, take online courses, read security news, participate in CTFs, and experiment with new tools and techniques.",
+      "resources": ["https://www.blackhat.com/","https://www.defcon.org/"]
+    }
+  ],
+  "codeExamples": [
+    {
+      "name": "Secure Password Hashing",
+      "description": "Example of secure password hashing using bcrypt",
+      "code": "const bcrypt = require('bcrypt');\n\nasync function hashPassword(password) {\n  const saltRounds = 10;\n  return await bcrypt.hash(password, saltRounds);\n}\n\nasync function verifyPassword(password, hash) {\n  return await bcrypt.compare(password, hash);\n}"
+    },
+    {
+      "name": "SQL Injection Prevention",
+      "description": "Example of preventing SQL injection using parameterized queries",
+      "code": "const { Pool } = require('pg');\nconst pool = new Pool();\n\nasync function getUser(username) {\n  const query = 'SELECT * FROM users WHERE username = $1';\n  const values = [username];\n  return await pool.query(query, values);\n}"
+    }
+  ],
+  "bestPractices": {
+    "authentication": [
+      "Use strong password policies",
+      "Implement MFA",
+      "Use secure session management",
+      "Implement proper password hashing",
+      "Use HTTPS",
+      "Implement rate limiting"
+    ],
+    "dataProtection": [
+      "Encrypt sensitive data at rest",
+      "Use TLS for data in transit",
+      "Implement proper key management",
+      "Use secure storage mechanisms",
+      "Implement data backup and recovery"
+    ],
+    "applicationSecurity": [
+      "Follow the principle of least privilege",
+      "Implement input validation",
+      "Use secure coding practices",
+      "Keep dependencies updated",
+      "Implement proper error handling",
+      "Use security headers"
+    ]
+  },
+  "resources": {
+    "documentation": [
+      "https://owasp.org/www-project-top-ten/",
+      "https://cheatsheetseries.owasp.org/",
+      "https://www.owasp.org/index.php/Main_Page",
+      "https://portswigger.net/web-security"
+    ],
+    "tools": [
+      "https://www.zaproxy.org/",
+      "https://portswigger.net/burp",
+      "https://www.tenable.com/products/nessus",
+      "https://www.metasploit.com/"
+    ],
+    "communities": [
+      "https://owasp.org/www-community/",
+      "https://www.reddit.com/r/netsec/",
+      "https://www.hackerone.com/",
+      "https://bugcrowd.com/"
+    ]
+  }
+} 
