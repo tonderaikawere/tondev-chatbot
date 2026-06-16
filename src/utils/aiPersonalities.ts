@@ -7,6 +7,7 @@ import mobileKB from '../knowledge/mobile.json';
 import cloudopsKB from '../knowledge/cloudops.json';
 import { loadAISettings } from './aiSettings';
 import { Message } from '../types/chat';
+import generalChatKB from '../knowledge/general_chat.json';
 
 export const aiPersonalities = {
   'cyber-security': {
@@ -469,7 +470,7 @@ export function retrieveRAGContext(message: string, kb: any): string {
 }
 
 function buildSystemPrompt(mentor: any, ragContext: string): string {
-  return `You are ${mentor.name}, an expert AI mentor in ${mentor.specialty}.
+  return `You are ${mentor.name}, an expert AI mentor in ${mentor.description}.
 Your background: ${mentor.description}
 Your expertise: ${mentor.expertise.join(', ')}.
 
@@ -495,8 +496,37 @@ function generateLocalFallbackResponse(message: string, mentor: any, history: Me
   if (!kb) return "I'm still loading my knowledge base. Please try again in a moment.";
 
   const userTopic = message.trim().toLowerCase();
+  const queryTokens = userTopic.split(/\W+/).filter(Boolean);
+
+  // 1. Try general conversation match first
+  if (generalChatKB && generalChatKB.conversations) {
+    let bestGeneralMatch = null;
+    let bestGeneralScore = 0;
+    
+    for (const conv of generalChatKB.conversations) {
+      let score = 0;
+      for (const kw of conv.keywords) {
+        if (userTopic === kw || userTopic.startsWith(kw + ' ') || userTopic.endsWith(' ' + kw) || userTopic.includes(' ' + kw + ' ')) {
+          score += 5; // Direct match or exact phrase match
+        } else if (userTopic.includes(kw)) {
+          score += 2;
+        }
+        for (const token of queryTokens) {
+          if (kw === token) score += 1;
+        }
+      }
+      if (score > bestGeneralScore) {
+        bestGeneralScore = score;
+        bestGeneralMatch = conv;
+      }
+    }
+    
+    if (bestGeneralMatch && bestGeneralScore >= 3) {
+      return bestGeneralMatch.answer;
+    }
+  }
   
-  // Try dialog context handling: if user replies "yes" or "more"
+  // 2. Try dialog context handling: if user replies "yes" or "more"
   if (history.length > 0) {
     const lastAssistantMsg = [...history].reverse().find(msg => msg.senderId !== 'me');
     if (lastAssistantMsg && (userTopic === 'yes' || userTopic === 'more' || userTopic.includes('roadmap') || userTopic.includes('example'))) {
@@ -521,7 +551,7 @@ function generateLocalFallbackResponse(message: string, mentor: any, history: Me
     }
   }
 
-  // General responses (social/small talk)
+  // 3. General responses (social/small talk specific to personality, e.g. hi/hello fallback)
   if (mentor.generalResponses) {
     const userNorm = userTopic.replace(/[^a-zA-Z0-9 ]/g, '');
     for (const key of Object.keys(mentor.generalResponses)) {
@@ -532,12 +562,11 @@ function generateLocalFallbackResponse(message: string, mentor: any, history: Me
     }
     const socialWords = ['hi','hello','hey','how are you','how is the weather','what\'s up','who built you','who created you','joke','sleep','real'];
     if (socialWords.some(w => userNorm.includes(w))) {
-      return `Hello! I'm ${mentor.name}, your ${mentor.specialty} mentor. I'm here to help you understand complex technical concepts in simple terms. Ask me a question about my specialty, and let's learn together!`;
+      return `Hello! I'm ${mentor.name}, your ${mentor.description} mentor. I'm here to help you understand complex technical concepts in simple terms. Ask me a question about my specialty, and let's learn together!`;
     }
   }
 
   // Score matching questions
-  const queryTokens = userTopic.split(/\W+/).filter(Boolean);
   let bestMatch: any = null;
   let bestScore = 0;
 
@@ -602,7 +631,7 @@ function generateLocalFallbackResponse(message: string, mentor: any, history: Me
     const suggestions = shuffled.slice(0, 4);
     return `I couldn't find a direct match for "${message}" in my offline files. 
 
-However, since we are learning together, here are some questions you can ask me about **${mentor.specialty}**:
+However, since we are learning together, here are some questions you can ask me about **${mentor.description}**:
 ${suggestions.map(s => `- *${s}*`).join('\n')}
 
 Or, if you are online, go to the **Gear Settings** at the bottom of the sidebar to enable the **Google Gemini API Key (Free Tier)** for unlimited, intelligent ChatGPT-like responses!`;

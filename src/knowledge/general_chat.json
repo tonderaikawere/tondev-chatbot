@@ -1,0 +1,84 @@
+{
+  "conversations": [
+    {
+      "keywords": ["hi", "hello", "hey", "yo", "good morning", "good afternoon", "good evening", "greet", "greetings"],
+      "answer": "Hello! I'm your AI mentor. I'm here to help you learn, solve programming problems, and understand technical concepts step-by-step. What would you like to learn or build today?"
+    },
+    {
+      "keywords": ["how are you", "how's it going", "how are you doing", "hows it going", "how do you feel"],
+      "answer": "I'm running smoothly, my compilers are warm, and I'm ready to write some code! I hope you are doing well. What tech topic are we exploring today?"
+    },
+    {
+      "keywords": ["who are you", "what is your name", "whats your name", "who is this"],
+      "answer": "I am one of the expert AI Dev Mentors built to guide developers. Each of us has a specific domain of expertise (Frontend, Backend, Python, Mobile, Security, Cloud). You can switch between us in the sidebar!"
+    },
+    {
+      "keywords": ["who built you", "who created you", "who is your owner", "who is tondev", "who is tonde", "tonde kawere", "creator", "developer"],
+      "answer": "I was created and developed by Tonde Kawere (also known as Tondev), a passionate software developer. He built this system to help developers master frontend, backend, cybersecurity, mobile dev, Python, and cloud engineering."
+    },
+    {
+      "keywords": ["thank you", "thanks", "appreciate it", "thank", "nice", "perfect", "awesome", "great", "cool"],
+      "answer": "You're very welcome! I'm glad I could help. Helping you understand and learn is my primary goal. Do you have any other questions, or is there a code snippet you'd like to write together?"
+    },
+    {
+      "keywords": ["tell me a joke", "joke", "funny", "laugh"],
+      "answer": "Why do programmers prefer dark mode? Because light attracts bugs!\n\nHere's another one: There are 10 types of people in the world: those who understand binary, and those who don't!"
+    },
+    {
+      "keywords": ["meaning of life", "why are we here", "purpose of life"],
+      "answer": "To write clean, bug-free code, build awesome applications that help people, and never stop learning! What do you think?"
+    },
+    {
+      "keywords": ["do you sleep", "are you awake", "sleep"],
+      "answer": "No sleep for me! I'm an AI, so I'm awake 24/7, ready to help you debug your code or learn new skills whenever you feel inspired."
+    },
+    {
+      "keywords": ["what is offline", "how offline works", "how do you work offline", "fallback mode", "no internet"],
+      "answer": "This application works both online and offline! When offline, I run in **Smart Fallback** mode, which searches my local pre-loaded JSON knowledge bases of coding concepts. You can also run LLMs locally offline using **Ollama**!"
+    },
+    {
+      "keywords": ["what is coding", "what is programming", "how do i start coding", "learn to code"],
+      "answer": "Coding is telling a computer what to do using a language it understands. To start coding:\n\n1. Choose a language: **HTML/CSS/JS** for web, or **Python** for general programming/data.\n2. Start with basics: variables, loops, functions.\n3. Build small projects (like a calculator or simple todo list).\n\nI can help you write your very first script if you'd like! Just ask me how."
+    },
+    {
+      "keywords": ["what is html", "explain html", "html basics"],
+      "answer": "HTML stands for **HyperText Markup Language**. It's the structural backbone of any webpage. Think of it like the skeleton of a building—it defines where headers, paragraphs, links, and images go.\n\nExample:\n```html\n<h1>Welcome to my site</h1>\n<p>This is a paragraph!</p>\n```"
+    },
+    {
+      "keywords": ["what is css", "explain css", "css basics"],
+      "answer": "CSS stands for **Cascading Style Sheets**. It defines the look and layout of a webpage. If HTML is the skeleton, CSS is the paint, styling, and decor. It handles colors, fonts, margins, positions, and animations.\n\nExample:\n```css\nh1 {\n  color: #2563eb; /* Royal Blue */\n  font-size: 24px;\n}\n```"
+    },
+    {
+      "keywords": ["what is javascript", "explain javascript", "js basics"],
+      "answer": "JavaScript (JS) is the programming language of the web. It adds interactivity, logic, and behavior to webpages. While HTML is the structure and CSS is the style, JavaScript is the brain (e.g. what happens when you click a button or submit a form).\n\nExample:\n```javascript\nconst button = document.querySelector('button');\nbutton.addEventListener('click', () => {\n  alert('Hello World!');\n});\n```"
+    },
+    {
+      "keywords": ["what is python", "explain python", "python basics"],
+      "answer": "Python is a powerful, high-level programming language known for being extremely readable and clean. It's widely used for web development (Django/Flask), scripting, automation, data science, and Artificial Intelligence.\n\nExample:\n```python\n# Clean and easy to read!\ndef greet(name):\n    return f\"Hello, {name}!\"\n\nprint(greet(\"Tonde\"))\n```"
+    },
+    {
+      "keywords": ["what is sql", "explain sql", "database basics", "sql basics"],
+      "answer": "SQL stands for **Structured Query Language**. It is the standard language used to communicate with relational databases (like PostgreSQL, MySQL, SQLite). It lets you create, retrieve, update, and delete database records.\n\nExample:\n```sql\nSELECT name, email \nFROM users \nWHERE role = 'developer';\n```"
+    },
+    {
+      "keywords": ["what is git", "what is github", "explain git", "version control"],
+      "answer": "**Git** is a local version control system that tracks changes in your code files so you can undo changes or collaborate. \n\n**GitHub** is a cloud hosting platform for your Git repositories, letting you back up your code and collaborate with others globally."
+    },
+    {
+      "keywords": ["what is cloud", "what is cloud computing", "aws", "azure"],
+      "answer": "Cloud computing is renting servers, storage, databases, and networking over the internet instead of buying and running your own physical servers. Giant providers like **AWS** (Amazon Web Services), **Google Cloud**, and **Microsoft Azure** manage the physical infrastructure for you."
+    },
+    {
+      "keywords": ["what is cybersecurity", "security basics", "how to stay safe"],
+      "answer": "Cybersecurity is protecting computers, networks, programs, and data from unauthorized access, attacks, or damage. Important practices include:\n\n1. **Authentication**: Strong passwords and Multi-Factor Authentication (MFA).\n2. **Encryption**: Scrambling data so only authorized users can read it.\n3. **Validation**: Sanitizing user input to prevent injection attacks (like SQL injection or XSS)."
+    },
+    {
+      "keywords": ["yes", "ok", "okay", "sure", "yep", "true", "correct"],
+      "answer": "Awesome! Let's keep moving. What concept or code snippet would you like to explore next?"
+    },
+    {
+      "keywords": ["no", "nope", "false", "incorrect", "nah"],
+      "answer": "No problem! We can adjust. Tell me what is confusing or what topic you would prefer to focus on, and we will get it sorted."
+    }
+  ]
+}

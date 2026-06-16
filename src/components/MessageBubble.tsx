@@ -20,23 +20,23 @@ const MessageBubble = ({ message, isOwn }: MessageBubbleProps) => {
   return (
     <div className={`flex ${isOwn ? 'justify-end' : 'justify-start'} mb-2 px-2 sm:px-0`}>
       <div
-        className={`max-w-[85%] sm:max-w-xs md:max-w-sm lg:max-w-md xl:max-w-lg px-3 sm:px-4 py-2 sm:py-3 rounded-2xl transition-all duration-200 animate-fade-in ${
+        className={`max-w-[85%] sm:max-w-xs md:max-w-sm lg:max-w-md xl:max-w-lg px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-2xl transition-all duration-200 animate-fade-in ${
           isOwn
-            ? 'bg-gradient-to-r from-blue-800 to-blue-900 text-white rounded-br-md shadow-lg border border-blue-700'
-            : 'bg-white text-blue-900 rounded-bl-md shadow-lg border border-blue-200 hover:shadow-xl'
+            ? 'bg-gradient-to-br from-[#1C2541] to-blue-600 text-white rounded-br-none shadow-md border border-blue-500/10'
+            : 'bg-white text-[#0B132B] rounded-bl-none shadow-sm border border-slate-200 hover:shadow-md'
         }`}
       >
         <MarkdownRenderer content={message.text} />
-        <div className={`flex items-center justify-end mt-2 space-x-1 ${
-          isOwn ? 'text-blue-200' : 'text-blue-500'
+        <div className={`flex items-center justify-end mt-1.5 space-x-1 ${
+          isOwn ? 'text-blue-200/80' : 'text-slate-400'
         }`}>
-          <span className="text-xs font-medium">{formatTime(message.timestamp)}</span>
+          <span className="text-[10px] font-medium">{formatTime(message.timestamp)}</span>
           {isOwn && (
-            <div className="ml-1 flex-shrink-0">
+            <div className="ml-0.5 flex-shrink-0">
               {message.isRead ? (
-                <CheckCheck size={14} className="text-yellow-300" />
+                <CheckCheck size={13} className="text-blue-300" />
               ) : (
-                <Check size={14} className="text-blue-300" />
+                <Check size={13} className="text-slate-300" />
               )}
             </div>
           )}

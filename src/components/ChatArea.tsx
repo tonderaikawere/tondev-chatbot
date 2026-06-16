@@ -55,17 +55,16 @@ const ChatArea = ({ contact, messages, onSendMessage, isGenerating = false }: Ch
   const dates = Object.keys(groupedMessages).sort();
 
   return (
-    <div className="flex-1 flex flex-col bg-gradient-to-br from-blue-50 via-white to-blue-50 h-full max-h-screen overflow-hidden">
+    <div className="flex-1 flex flex-col bg-[#F4F5F7] h-full max-h-screen overflow-hidden">
       {/* Mobile Mentor Header */}
-      <div className="lg:hidden bg-gradient-to-r from-blue-800 to-blue-900 text-white p-3 flex items-center justify-between shadow-lg">
+      <div className="lg:hidden bg-[#0B132B] text-white p-3 flex items-center justify-between shadow-md border-b border-[#1C2541]">
         <div className="flex items-center space-x-3 min-w-0">
-          <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center">
+          <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-[#1C2541] rounded-full flex items-center justify-center border border-blue-500/30">
             <span className="text-sm">{contact.avatar}</span>
           </div>
           <div className="min-w-0">
-            <span className="font-semibold text-sm truncate block">{contact.name}</span>
-            <span className="text-xs text-blue-200 truncate block">{contact.specialty} • {contact.isOnline ? 'Online & Ready' : 'Last seen recently'}</span>
-            <span className="text-xs text-yellow-300 font-medium block">AI Mentor • Expert Level</span>
+            <span className="font-bold text-sm truncate block">{contact.name}</span>
+            <span className="text-[10px] text-blue-400 font-semibold truncate block">{contact.specialty} • {contact.isOnline ? 'Online' : 'Offline'}</span>
           </div>
         </div>
       </div>
@@ -75,7 +74,7 @@ const ChatArea = ({ contact, messages, onSendMessage, isGenerating = false }: Ch
         {dates.map((date) => (
           <div key={date}>
             <div className="text-center mb-4 sticky top-0 z-10">
-              <span className="bg-white px-3 py-2 rounded-full text-xs text-blue-700 shadow-md border border-blue-200 backdrop-blur-sm">
+              <span className="bg-white px-3 py-1.5 rounded-full text-xs text-[#0B132B] font-semibold shadow-sm border border-slate-200/60 backdrop-blur-sm">
                 {new Date(date).toLocaleDateString('en-US', { 
                   weekday: 'long', 
                   year: 'numeric', 
@@ -97,11 +96,11 @@ const ChatArea = ({ contact, messages, onSendMessage, isGenerating = false }: Ch
         ))}
         {isGenerating && (
           <div className="flex justify-start mb-2 px-2 sm:px-0 animate-pulse">
-            <div className="bg-white text-blue-900 px-4 py-3 rounded-2xl rounded-bl-md shadow-lg border border-blue-200 flex items-center space-x-1.5">
+            <div className="bg-white text-[#0B132B] px-4 py-3 rounded-2xl rounded-bl-md shadow-md border border-slate-200 flex items-center space-x-1.5">
               <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
               <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
               <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-              <span className="text-xs text-blue-500 font-medium ml-1.5">{contact.name} is thinking...</span>
+              <span className="text-xs text-slate-500 font-medium ml-1.5">{contact.name} is thinking...</span>
             </div>
           </div>
         )}
@@ -109,9 +108,9 @@ const ChatArea = ({ contact, messages, onSendMessage, isGenerating = false }: Ch
       </div>
 
       {/* Input Area */}
-      <div className="bg-white border-t border-blue-200 p-3 lg:p-4 shadow-lg safe-area-inset-bottom">
+      <div className="bg-white border-t border-slate-200 p-3 lg:p-4 shadow-lg safe-area-inset-bottom">
         <div className="flex items-end space-x-2 max-w-6xl mx-auto">
-          <div className="flex-1 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-200 overflow-hidden shadow-sm">
+          <div className="flex-1 bg-slate-50 rounded-xl border border-slate-200 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100 transition-all overflow-hidden shadow-sm">
             <div className="flex items-end px-3 py-2">
               <User className="w-4 h-4 text-blue-600 mr-2 flex-shrink-0 mb-1" />
               <textarea
@@ -121,7 +120,7 @@ const ChatArea = ({ contact, messages, onSendMessage, isGenerating = false }: Ch
                 onKeyPress={handleKeyPress}
                 disabled={isGenerating}
                 placeholder={isGenerating ? `${contact.name} is writing a response...` : `Ask ${contact.name} about ${contact.specialty.toLowerCase()}...`}
-                className="w-full bg-transparent resize-none focus:outline-none max-h-[120px] text-sm text-blue-900 placeholder-blue-400 min-h-[1.5rem] leading-relaxed disabled:opacity-55"
+                className="w-full bg-transparent resize-none focus:outline-none max-h-[120px] text-sm text-[#0B132B] placeholder-slate-400 min-h-[1.5rem] leading-relaxed disabled:opacity-55"
                 rows={1}
                 style={{ 
                   height: 'auto',
@@ -133,23 +132,23 @@ const ChatArea = ({ contact, messages, onSendMessage, isGenerating = false }: Ch
           <button
             onClick={handleSend}
             disabled={!inputText.trim() || isGenerating}
-            className="bg-gradient-to-r from-blue-800 to-blue-900 hover:from-blue-900 hover:to-blue-800 disabled:from-gray-400 disabled:to-gray-500 text-white p-2.5 rounded-xl transition-all duration-200 shadow-lg disabled:shadow-none transform hover:scale-105 disabled:transform-none flex-shrink-0 active:scale-95"
+            className="bg-blue-600 hover:bg-blue-700 disabled:bg-slate-200 text-white p-2.5 rounded-xl transition-all duration-200 shadow-md disabled:shadow-none transform hover:scale-102 disabled:transform-none flex-shrink-0 active:scale-95 cursor-pointer"
           >
             <Send size={16} />
           </button>
         </div>
         
         <div className="mt-2 text-center">
-          <p className="text-xs text-blue-600">
-            💡 Try: "Hi", "What is frontend?", "How are you?", "Explain JavaScript"
+          <p className="text-xs text-slate-500">
+            💡 Try: "Hi", "What is frontend?", "How are you?", or click the settings gear to link models.
           </p>
-          <div className="mt-1 flex flex-wrap items-center justify-center gap-2 text-[11px] text-blue-500">
-            <Link to="/terms" className="mx-1 hover:underline text-blue-700">Terms of Service</Link>
-            <span className="text-blue-300">|</span>
-            <Link to="/privacy" className="mx-1 hover:underline text-blue-700">Privacy Policy</Link>
-            <span className="text-blue-300">|</span>
-            <Link to="/guide" className="mx-1 hover:underline text-blue-700">User Guide</Link>
-            <span className="ml-2 text-blue-400">&copy; {new Date().getFullYear()} Tonde Kawere (Tondev)</span>
+          <div className="mt-1 flex flex-wrap items-center justify-center gap-2 text-[11px] text-slate-400">
+            <Link to="/terms" className="mx-1 hover:underline hover:text-blue-600 transition-colors">Terms of Service</Link>
+            <span className="text-slate-300">|</span>
+            <Link to="/privacy" className="mx-1 hover:underline hover:text-blue-600 transition-colors">Privacy Policy</Link>
+            <span className="text-slate-300">|</span>
+            <Link to="/guide" className="mx-1 hover:underline hover:text-blue-600 transition-colors">User Guide</Link>
+            <span className="ml-2 text-slate-400">&copy; {new Date().getFullYear()} Tonde Kawere (Tondev)</span>
           </div>
         </div>
       </div>
