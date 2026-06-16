@@ -23,7 +23,7 @@ const Sidebar = ({ contacts, activeContact, onContactSelect, isCollapsed = false
   return (
     <div className={`${isCollapsed ? 'w-0 lg:w-16' : 'w-80'} transition-all duration-300 bg-[#0B132B] border-r border-[#1C2541] flex flex-col shadow-xl overflow-hidden`}>
       {/* Header */}
-      <div className="bg-gradient-to-r from-[#1C2541] via-[#0B132B] to-[#1C2541] text-white p-3 flex items-center justify-between min-h-[56px] border-b border-[#243B6B]/20">
+      <div className="bg-[#0B132B] text-white p-3 flex items-center justify-between min-h-[56px] border-b border-[#243B6B]/20">
         {!isCollapsed && (
           <div className="flex items-center space-x-2">
             <div className="w-9 h-9 bg-white bg-opacity-10 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/10">
@@ -57,7 +57,7 @@ const Sidebar = ({ contacts, activeContact, onContactSelect, isCollapsed = false
           </div>
 
           {/* Mentors Info - compact single line */}
-          <div className="px-3 py-1.5 bg-gradient-to-r from-[#1C2541] to-[#0B132B] text-slate-300 text-xs flex items-center justify-between border-b border-[#243B6B]/30">
+          <div className="px-3 py-1.5 bg-[#1C2541] text-slate-300 text-xs flex items-center justify-between border-b border-[#243B6B]/30">
             <span className="font-semibold text-slate-200">Expert AI Mentors</span>
             <span className="text-blue-400 font-bold ml-2 bg-[#1C2541] px-2 py-0.5 rounded border border-[#243B6B]/30">{contacts.length} Active</span>
           </div>

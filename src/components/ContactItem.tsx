@@ -42,7 +42,7 @@ const ContactItem = ({ contact, isActive, onClick }: ContactItemProps) => {
         }`}
       >
         <div className="relative flex-shrink-0">
-          <div className="w-11 h-11 bg-gradient-to-br from-blue-600 to-[#1C2541] rounded-full flex items-center justify-center text-lg border border-[#243B6B]/40 shadow-md">
+          <div className="w-11 h-11 bg-[#2563EB] rounded-full flex items-center justify-center text-lg border border-[#243B6B]/40 shadow-sm">
             {contact.avatar}
           </div>
           {contact.isOnline && (

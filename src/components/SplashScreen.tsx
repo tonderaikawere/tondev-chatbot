@@ -35,20 +35,20 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
   }, [onComplete]);
 
   return (
-    <div className="fixed inset-0 h-screen max-h-screen overflow-hidden bg-gradient-to-br from-[#0B132B] via-[#1C2541] to-[#243B6B] flex items-center justify-center z-50">
+    <div className="fixed inset-0 h-screen max-h-screen overflow-hidden bg-[#0B132B] flex items-center justify-center z-50">
       <div className="w-full h-full max-h-screen flex flex-col items-center justify-center p-2 sm:p-3 md:p-4">
         <div className="text-center w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto flex flex-col items-center justify-center space-y-2 sm:space-y-3 md:space-y-4">
           
           {/* Logo Animation */}
           <div className="flex flex-col items-center">
-            <div className="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-blue-600 to-[#0B132B] rounded-2xl mb-2 sm:mb-3 animate-pulse shadow-2xl border border-blue-500/20">
+            <div className="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 bg-[#2563EB] rounded-2xl mb-2 sm:mb-3 animate-pulse shadow-md border border-blue-500/20">
               <span className="text-base sm:text-lg md:text-2xl lg:text-3xl">🤖</span>
             </div>
             <div className="w-16 sm:w-24 md:w-32 lg:w-40 h-0.5 bg-blue-500 rounded-full animate-pulse"></div>
           </div>
           
           {/* Brand Name */}
-          <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-extrabold bg-gradient-to-r from-blue-400 via-blue-200 to-white bg-clip-text text-transparent leading-tight px-2 tracking-tight">
+          <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-extrabold text-white leading-tight px-2 tracking-tight">
             Tondev AI Mentors
           </h1>
           
@@ -87,7 +87,7 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
           {/* Loading Bar */}
           <div className="w-full max-w-[180px] sm:max-w-[220px] md:max-w-[260px] mx-auto">
             <div className="w-full bg-[#1C2541] rounded-full h-1 sm:h-1.5 overflow-hidden border border-[#243B6B]/20">
-              <div className="h-full bg-gradient-to-r from-blue-600 to-blue-400 rounded-full animate-pulse"></div>
+              <div className="h-full bg-[#2563EB] rounded-full animate-pulse"></div>
             </div>
             <p className="text-slate-400 text-[9px] sm:text-[10px] md:text-xs mt-1.5 sm:mt-2 leading-tight">
               Loading AI mentors...

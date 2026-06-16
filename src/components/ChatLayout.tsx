@@ -157,7 +157,7 @@ const ChatLayout = ({
             </button>
             {activeContactData && (
               <div className="flex items-center space-x-2.5 min-w-0 flex-1">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-[#1C2541] rounded-full flex items-center justify-center border border-blue-500/30">
+                <div className="w-8 h-8 bg-[#2563EB] rounded-full flex items-center justify-center border border-blue-500/30">
                   <span className="text-sm">{activeContactData.avatar}</span>
                 </div>
                 <div className="min-w-0 flex-1">
@@ -188,7 +188,7 @@ const ChatLayout = ({
           <div className="flex-1 flex items-center justify-center bg-[#F4F5F7] p-4 sm:p-6 md:p-8">
             <div className="text-center max-w-xl mx-auto animate-fade-in">
               <div className="mb-6">
-                <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-600 to-[#0B132B] rounded-2xl mb-4 shadow-xl border border-[#243B6B]/30">
+                <div className="inline-flex items-center justify-center w-20 h-20 bg-[#2563EB] rounded-2xl mb-4 shadow-sm border border-[#243B6B]/30">
                   <span className="text-4xl">🤖</span>
                 </div>
                 <div className="w-20 h-1 bg-blue-500 rounded-full mx-auto"></div>

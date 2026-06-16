@@ -349,7 +349,7 @@ export default function SettingsDialog({
             <button
               onClick={handleTestConnection}
               disabled={testingConnection}
-              className="flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-700 to-blue-800 hover:from-blue-800 hover:to-blue-700 disabled:from-blue-400 disabled:to-blue-500 text-white rounded-lg py-2 px-4 text-sm font-medium transition-all shadow-md active:scale-98"
+              className="flex items-center justify-center space-x-2 bg-[#2563EB] hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg py-2 px-4 text-sm font-medium transition-all shadow-sm active:scale-98"
             >
               {testingConnection ? (
                 <>

@@ -22,11 +22,11 @@ const MessageBubble = ({ message, isOwn }: MessageBubbleProps) => {
       <div
         className={`max-w-[85%] sm:max-w-xs md:max-w-sm lg:max-w-md xl:max-w-lg px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-2xl transition-all duration-200 animate-fade-in ${
           isOwn
-            ? 'bg-gradient-to-br from-[#1C2541] to-blue-600 text-white rounded-br-none shadow-md border border-blue-500/10'
+            ? 'bg-[#2563EB] text-white rounded-br-none shadow-sm'
             : 'bg-white text-[#0B132B] rounded-bl-none shadow-sm border border-slate-200 hover:shadow-md'
         }`}
       >
-        <MarkdownRenderer content={message.text} />
+        <MarkdownRenderer content={message.text} isOwn={isOwn} />
         <div className={`flex items-center justify-end mt-1.5 space-x-1 ${
           isOwn ? 'text-blue-200/80' : 'text-slate-400'
         }`}>

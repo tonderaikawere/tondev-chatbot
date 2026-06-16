@@ -59,7 +59,7 @@ const ChatArea = ({ contact, messages, onSendMessage, isGenerating = false }: Ch
       {/* Mobile Mentor Header */}
       <div className="lg:hidden bg-[#0B132B] text-white p-3 flex items-center justify-between shadow-md border-b border-[#1C2541]">
         <div className="flex items-center space-x-3 min-w-0">
-          <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-[#1C2541] rounded-full flex items-center justify-center border border-blue-500/30">
+          <div className="w-8 h-8 bg-[#2563EB] rounded-full flex items-center justify-center border border-blue-500/30">
             <span className="text-sm">{contact.avatar}</span>
           </div>
           <div className="min-w-0">

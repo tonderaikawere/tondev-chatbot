@@ -127,7 +127,7 @@ const AuthScreen = ({ onLogin }: AuthScreenProps) => {
   ];
 
   return (
-    <div className="fixed inset-0 h-screen max-h-screen overflow-hidden bg-gradient-to-br from-[#0B132B] via-[#1C2541] to-[#243B6B] flex items-center justify-center">
+    <div className="fixed inset-0 h-screen max-h-screen overflow-hidden bg-[#0B132B] flex items-center justify-center">
       <div className="w-full h-full max-h-screen flex items-center justify-center p-2 sm:p-3 md:p-4 overflow-y-auto">
         
         {/* Background code animation - hidden on small screens for performance */}
@@ -150,10 +150,10 @@ const AuthScreen = ({ onLogin }: AuthScreenProps) => {
         <div className="w-full max-w-xs sm:max-w-sm md:max-w-md relative z-10 flex flex-col justify-center min-h-0">
           {/* Header */}
           <div className="text-center mb-3 sm:mb-4 md:mb-6 flex-shrink-0">
-            <div className="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 bg-gradient-to-br from-blue-600 to-[#0B132B] rounded-2xl mb-2 sm:mb-3 shadow-2xl border border-blue-500/20">
+            <div className="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 bg-[#2563EB] rounded-2xl mb-2 sm:mb-3 shadow-md border border-blue-500/20">
               <span className="text-base sm:text-lg md:text-2xl">🤖</span>
             </div>
-            <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-extrabold bg-gradient-to-r from-blue-400 via-blue-200 to-white bg-clip-text text-transparent mb-1 leading-tight px-2 tracking-tight">
+            <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-extrabold text-white mb-1 leading-tight px-2 tracking-tight">
               Tondev AI Mentors
             </h1>
             <p className="text-slate-300 text-xs sm:text-sm md:text-base px-2 leading-tight">
