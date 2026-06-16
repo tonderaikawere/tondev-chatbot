@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Contact, Message } from '../types/chat';
 import Sidebar from './Sidebar';
 import ChatArea from './ChatArea';
 import SearchBar from './SearchBar';
-import { Link } from "react-router-dom";
-import { Search } from 'lucide-react';
+import { Search, Sparkles, Key } from 'lucide-react';
+import { loadAISettings, saveAISettings } from '../utils/aiSettings';
 
 interface User {
   id: string;
@@ -34,6 +34,24 @@ const ChatLayout = ({
   isGenerating = false
 }: ChatLayoutProps) => {
   const [filteredContacts, setFilteredContacts] = useState<Contact[]>(contacts);
+  const [settings, setSettings] = useState(() => loadAISettings());
+  const [tempKey, setTempKey] = useState('');
+
+  const hasGeminiKey = !!settings.geminiApiKey;
+
+  const handleSaveKey = () => {
+    if (!tempKey.trim()) return;
+    const updated = {
+      ...settings,
+      geminiApiKey: tempKey.trim(),
+      aiMode: 'gemini' as const
+    };
+    saveAISettings(updated);
+    setSettings(updated);
+    setTempKey('');
+    alert('🚀 Unlimited Knowledge Mode activated successfully! Chatbot is now connected to Gemini.');
+    window.location.reload();
+  };
   const [isSearching, setIsSearching] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -201,6 +219,37 @@ const ChatLayout = ({
               <p className="text-sm text-slate-500 mb-8 max-w-sm mx-auto leading-relaxed">
                 Select an expert AI mentor from the sidebar to begin your interactive learning journey.
               </p>
+              
+              {/* Gemini API Key Entry Widget */}
+              {!hasGeminiKey && (
+                <div className="mb-8 bg-blue-50/50 border border-blue-100 rounded-2xl p-4 sm:p-5 text-left max-w-md mx-auto shadow-sm">
+                  <h3 className="text-xs sm:text-sm font-bold text-blue-900 flex items-center mb-1">
+                    <Sparkles className="w-4 h-4 text-blue-600 mr-1.5 flex-shrink-0" />
+                    <span>Enable Unlimited Knowledge Mode (Free)</span>
+                  </h3>
+                  <p className="text-[10px] sm:text-xs text-slate-500 mb-3.5 leading-normal">
+                    Connect this chatbot to Google Gemini for unlimited, smart, ChatGPT-like reasoning. Get a free API key in 10 seconds (no credit card required) from <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline font-semibold hover:text-blue-700">Google AI Studio</a>.
+                  </p>
+                  <div className="flex space-x-2">
+                    <div className="relative flex-1">
+                      <Key className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 transform -translate-y-1/2" />
+                      <input
+                        type="password"
+                        placeholder="Paste your Gemini API key here..."
+                        className="w-full bg-white border border-slate-200 rounded-lg pl-8 pr-2.5 py-1.5 text-xs focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                        value={tempKey}
+                        onChange={(e) => setTempKey(e.target.value)}
+                      />
+                    </div>
+                    <button
+                      onClick={handleSaveKey}
+                      className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4.5 py-1.5 rounded-lg transition-all cursor-pointer flex-shrink-0 active:scale-98 shadow-sm"
+                    >
+                      Activate
+                    </button>
+                  </div>
+                </div>
+              )}
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
                 {[

@@ -526,25 +526,40 @@ function generateLocalFallbackResponse(message: string, mentor: any, history: Me
     }
   }
   
-  // 2. Try dialog context handling: if user replies "yes" or "more"
+  // 2. Dialog context and follow-up handling
   if (history.length > 0) {
     const lastAssistantMsg = [...history].reverse().find(msg => msg.senderId !== 'me');
-    if (lastAssistantMsg && (userTopic === 'yes' || userTopic === 'more' || userTopic.includes('roadmap') || userTopic.includes('example'))) {
+    if (lastAssistantMsg) {
       const lastText = lastAssistantMsg.text.toLowerCase();
-      // Look for a concept mentioned in the last text
-      if (kb.codeExamples && Array.isArray(kb.codeExamples)) {
-        for (const ex of kb.codeExamples) {
-          if (lastText.includes(ex.name.toLowerCase())) {
-            return `Here is a practical code example for **${ex.name}** to help you understand:\n\n*${ex.description}*\n\n\`\`\`javascript\n${ex.code}\n\`\`\`\n\nDoes this code breakdown make sense? Let me know if you want me to explain any specific line!`;
+      
+      // Handle short conversational follow-ups
+      if (userTopic === 'really' || userTopic === 'really?') {
+        return `Yes, absolutely! It might sound surprising at first, but it is a fundamental concept in software development. Would you like me to provide a practical code example or break down how it works step-by-step?`;
+      }
+      if (userTopic === 'why' || userTopic === 'why?') {
+        return `That is a great question! In software engineering, this approach is preferred because it ensures efficiency, maintainability, and clean separation of concerns. Would you like me to break down the underlying mechanics or show you a code example?`;
+      }
+      if (userTopic === 'how' || userTopic === 'how?') {
+        return `It works by leveraging standard design patterns and browser/compiler architectures. Let me show you how it is implemented in code. Ask me for a 'code example' and let's walk through it together!`;
+      }
+      if (userTopic === 'explain' || userTopic.includes('explain more') || userTopic.includes('tell me more')) {
+        return `I'd love to explain further! Let's dive deeper. Would you like a practical code snippet, a simplified analogy, or a step-by-step roadmap of how to learn this topic?`;
+      }
+
+      if (userTopic === 'yes' || userTopic === 'more' || userTopic.includes('roadmap') || userTopic.includes('example')) {
+        if (kb.codeExamples && Array.isArray(kb.codeExamples)) {
+          for (const ex of kb.codeExamples) {
+            if (lastText.includes(ex.name.toLowerCase())) {
+              return `Here is a practical code example for **${ex.name}** to help you understand:\n\n*${ex.description}*\n\n\`\`\`javascript\n${ex.code}\n\`\`\`\n\nDoes this code breakdown make sense? Let me know if you want me to explain any specific line!`;
+            }
           }
         }
-      }
-      
-      // Look for rich answers or roadmaps in general responses
-      if (mentor.followUps) {
-        for (const key of Object.keys(mentor.followUps)) {
-          if (lastText.includes(key)) {
-            return mentor.followUps[key];
+        
+        if (mentor.followUps) {
+          for (const key of Object.keys(mentor.followUps)) {
+            if (lastText.includes(key)) {
+              return mentor.followUps[key];
+            }
           }
         }
       }
@@ -553,15 +568,30 @@ function generateLocalFallbackResponse(message: string, mentor: any, history: Me
 
   // 3. General responses (social/small talk specific to personality, e.g. hi/hello fallback)
   if (mentor.generalResponses) {
-    const userNorm = userTopic.replace(/[^a-zA-Z0-9 ]/g, '');
+    const userNorm = userTopic.replace(/[^a-zA-Z0-9 ]/g, ' ').trim();
+    const userTokens = userNorm.split(/\s+/).filter(Boolean);
+
     for (const key of Object.keys(mentor.generalResponses)) {
-      const keyNorm = key.replace(/[^a-zA-Z0-9 ]/g, '');
-      if (userNorm.includes(keyNorm) || keyNorm.includes(userNorm)) {
+      const keyNorm = key.replace(/[^a-zA-Z0-9 ]/g, ' ').trim();
+      const keyTokens = keyNorm.split(/\s+/).filter(Boolean);
+      
+      // Match if the key matches exactly as tokens
+      const isMatch = keyTokens.every(token => userTokens.includes(token)) && 
+                      (userNorm.includes(keyNorm) || keyNorm.includes(userNorm));
+      
+      if (isMatch) {
         return mentor.generalResponses[key];
       }
     }
-    const socialWords = ['hi','hello','hey','how are you','how is the weather','what\'s up','who built you','who created you','joke','sleep','real'];
-    if (socialWords.some(w => userNorm.includes(w))) {
+
+    const socialWords = ['hi', 'hello', 'hey', 'how are you', 'how is the weather', 'whats up', 'who built you', 'who created you', 'joke', 'sleep', 'are you real'];
+    const matchesSocial = socialWords.some(w => {
+      const wNorm = w.replace(/[^a-zA-Z0-9 ]/g, ' ').trim();
+      const wTokens = wNorm.split(/\s+/).filter(Boolean);
+      return wTokens.every(token => userTokens.includes(token));
+    });
+
+    if (matchesSocial) {
       return `Hello! I'm ${mentor.name}, your ${mentor.description} mentor. I'm here to help you understand complex technical concepts in simple terms. Ask me a question about my specialty, and let's learn together!`;
     }
   }
@@ -704,8 +734,8 @@ export async function generateAIResponse(message: string, mentorId: string, hist
       if (replyText) return replyText;
       throw new Error('Could not parse text response from Gemini.');
     } catch (err: any) {
-      console.error('Gemini call failed:', err);
-      return `❌ **Gemini Connection Error**\n\nFailed to fetch response: ${err.message || 'Network error'}.\n\nPlease double-check your API Key in Settings or switch to **Smart Fallback** mode if you are offline.`;
+      console.warn('Gemini call failed, using offline fallback:', err);
+      return generateLocalFallbackResponse(message, mentor, history);
     }
   }
 
@@ -751,8 +781,8 @@ export async function generateAIResponse(message: string, mentorId: string, hist
       }
       throw new Error('Invalid response structure from Ollama.');
     } catch (err: any) {
-      console.error('Ollama call failed:', err);
-      return `❌ **Ollama Offline Error**\n\nCould not connect to Ollama at \`${settings.ollamaUrl}\`.\n\n**Troubleshooting steps:**\n1. Ensure the Ollama app is running locally on your computer.\n2. Ensure CORS is enabled on Ollama by running it with \`OLLAMA_ORIGINS="*" ollama serve\`.\n3. Verify your settings by clicking the Gear icon in the sidebar.`;
+      console.warn('Ollama call failed, using offline fallback:', err);
+      return generateLocalFallbackResponse(message, mentor, history);
     }
   }
 
@@ -793,8 +823,8 @@ export async function generateAIResponse(message: string, mentorId: string, hist
       session.destroy(); // Clean up session memory
       return result;
     } catch (err: any) {
-      console.error('Chrome AI failed:', err);
-      return `❌ **Chrome Built-in AI Error**\n\nFailed to generate response: ${err.message || 'Unknown error'}.\n\nPlease open settings to troubleshoot or switch back to **Smart Fallback** mode.`;
+      console.warn('Chrome AI failed, using offline fallback:', err);
+      return generateLocalFallbackResponse(message, mentor, history);
     }
   }
 
