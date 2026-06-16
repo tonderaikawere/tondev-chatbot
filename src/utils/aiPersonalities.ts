@@ -487,6 +487,22 @@ ${ragContext}
 Always stay in character as ${mentor.name}. Explain things clearly, step-by-step.`;
 }
 
+const STOP_WORDS = new Set([
+  'what', 'is', 'the', 'a', 'an', 'do', 'you', 'of', 'to', 'in', 'for', 'on', 'with', 'at', 'by', 'from', 'about', 
+  'how', 'why', 'who', 'where', 'when', 'does', 'did', 'are', 'am', 'was', 'were', 'be', 'been', 'being', 
+  'have', 'has', 'had', 'doing', 'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'your', 'yours', 
+  'yourself', 'yourselves', 'he', 'him', 'his', 'himself', 'she', 'her', 'hers', 'herself', 'it', 'its', 'itself', 
+  'they', 'them', 'their', 'theirs', 'themselves', 'and', 'but', 'or', 'if', 'because', 'as', 'until', 'while', 
+  'of', 'at', 'by', 'for', 'with', 'about', 'against', 'between', 'into', 'through', 'during', 'before', 'after', 
+  'above', 'below', 'to', 'from', 'up', 'down', 'in', 'out', 'on', 'off', 'over', 'under', 'again', 'further', 
+  'then', 'once', 'here', 'there', 'all', 'any', 'both', 'each', 'few', 'more', 'most', 'other', 'some', 'such', 
+  'no', 'nor', 'not', 'only', 'own', 'same', 'so', 'than', 'too', 'very', 'can', 'will', 'just', 'should', 'now',
+  'really', 'sure', 'why', 'how', 'explain', 'tell', 'more',
+  'work', 'works', 'working', 'use', 'uses', 'using', 'run', 'runs', 'running', 'make', 'makes', 'making',
+  'create', 'creates', 'creating', 'concept', 'concepts', 'basic', 'basics', 'learn', 'learning', 'understand',
+  'understanding', 'show', 'shows', 'give', 'gives', 'ask', 'asks', 'question', 'questions', 'definition', 'explain'
+]);
+
 // Smart Local Fallback matcher
 function generateLocalFallbackResponse(message: string, mentor: any, history: Message[]): string {
   const kb = mentor.knowledgeBase && mentor.knowledgeBase.knowledgeBase
@@ -496,7 +512,25 @@ function generateLocalFallbackResponse(message: string, mentor: any, history: Me
   if (!kb) return "I'm still loading my knowledge base. Please try again in a moment.";
 
   const userTopic = message.trim().toLowerCase();
+  const userTopicClean = userTopic.replace(/[^a-zA-Z0-9 ]/g, ' ').trim();
+
+  // Dynamic conversational fallbacks for common unhandled phrases
+  if (userTopicClean.includes('date') || userTopicClean.includes('time')) {
+    return `Since I'm running offline right now, I don't have access to a real-time clock to check the current date or time. However, I can help you with software engineering! Ask me a question about HTML, CSS, JavaScript, or React, and let's get started.`;
+  }
+  if (userTopicClean.includes('what do you know') || userTopicClean.includes('what can you do') || userTopicClean.includes('help me') || userTopicClean.includes('commands') || userTopicClean === 'help') {
+    return `I am pre-loaded with an offline database of software engineering concepts! Here is a summary of what you can ask me about:
+- **Core Web**: HTML structure, CSS layouts (Flexbox/Grid), JavaScript DOM manipulation, event handling.
+- **Modern Frameworks**: React components, state, props, hooks, Next.js routing.
+- **Foundations**: Variables, loops, functions, array methods (map/filter/reduce), promises, async/await.
+- **Backend & Network**: APIs, REST APIs, JSON data, HTTP methods, database modeling (SQL vs NoSQL), CORS errors.
+- **Tools**: Git version control, GitHub workflows, package managers, TypeScript configuration.
+
+Just ask me a question like **"What is an API?"** or **"Explain React hooks"** to begin!`;
+  }
+
   const queryTokens = userTopic.split(/\W+/).filter(Boolean);
+  const significantTokens = queryTokens.filter(token => !STOP_WORDS.has(token));
 
   // 1. Try general conversation match first
   if (generalChatKB && generalChatKB.conversations) {
@@ -550,7 +584,7 @@ function generateLocalFallbackResponse(message: string, mentor: any, history: Me
         if (kb.codeExamples && Array.isArray(kb.codeExamples)) {
           for (const ex of kb.codeExamples) {
             if (lastText.includes(ex.name.toLowerCase())) {
-              return `Here is a practical code example for **${ex.name}** to help you understand:\n\n*${ex.description}*\n\n\`\`\`javascript\n${ex.code}\n\`\`\`\n\nDoes this code breakdown make sense? Let me know if you want me to explain any specific line!`;
+              return `Here is a practical code example for **${ex.name}** to help you understand:\n\n*${ex.description}*\n\n\`\`\`javascript\n${ex.code}\n\`\`\``;
             }
           }
         }
@@ -596,42 +630,58 @@ function generateLocalFallbackResponse(message: string, mentor: any, history: Me
     }
   }
 
-  // Score matching questions
+  // Score matching questions using stop word filtering
   let bestMatch: any = null;
   let bestScore = 0;
 
-  if (kb.coreConcepts && Array.isArray(kb.coreConcepts)) {
-    for (const concept of kb.coreConcepts) {
-      let score = 0;
-      const question = concept.question.toLowerCase();
-      for (const token of queryTokens) {
-        if (question.includes(token)) score += 3;
+  if (significantTokens.length > 0) {
+    if (kb.coreConcepts && Array.isArray(kb.coreConcepts)) {
+      for (const concept of kb.coreConcepts) {
+        let score = 0;
+        const question = concept.question.toLowerCase();
+        const questionTokens = question.split(/\W+/).filter(Boolean);
+        
+        for (const token of significantTokens) {
+          if (questionTokens.includes(token)) {
+            score += 10; // Exact word match
+          } else if (question.includes(token)) {
+            score += 3;  // Substring match
+          }
+        }
+        
+        if (score > bestScore) {
+          bestScore = score;
+          bestMatch = concept;
+        }
       }
-      if (score > bestScore) {
-        bestScore = score;
-        bestMatch = concept;
+    }
+
+    if (kb.faqs && Array.isArray(kb.faqs)) {
+      for (const faq of kb.faqs) {
+        let score = 0;
+        const question = faq.question.toLowerCase();
+        const questionTokens = question.split(/\W+/).filter(Boolean);
+        
+        for (const token of significantTokens) {
+          if (questionTokens.includes(token)) {
+            score += 10;
+          } else if (question.includes(token)) {
+            score += 3;
+          }
+        }
+        
+        if (score > bestScore) {
+          bestScore = score;
+          bestMatch = faq;
+        }
       }
     }
   }
 
-  if (kb.faqs && Array.isArray(kb.faqs)) {
-    for (const faq of kb.faqs) {
-      let score = 0;
-      const question = faq.question.toLowerCase();
-      for (const token of queryTokens) {
-        if (question.includes(token)) score += 3;
-      }
-      if (score > bestScore) {
-        bestScore = score;
-        bestMatch = faq;
-      }
-    }
-  }
+  console.log(`[Offline Matcher] Query: "${message}" | SigTokens: [${significantTokens.join(', ')}] | Best Match: "${bestMatch ? (bestMatch.question || bestMatch.name) : 'None'}" | Score: ${bestScore}`);
 
-  if (bestMatch && bestScore >= 2) {
+  if (bestMatch && bestScore >= 5) {
     const baseAnswer = bestMatch.answer || bestMatch.description;
-    
-    // Add teaching style to the offline fallback!
     let response = `**${bestMatch.question || bestMatch.name}**\n\n${baseAnswer}`;
     
     // Check if there is an associated code example to offer
@@ -838,54 +888,79 @@ export async function routeAndGenerateAIResponse(
   history: Message[] = []
 ): Promise<{ mentorId: string, response: string }> {
   const lowerMessage = message.toLowerCase();
+  const queryTokens = lowerMessage.split(/\W+/).filter(Boolean);
+  const significantTokens = queryTokens.filter(token => !STOP_WORDS.has(token));
+
   let bestMentorId = currentMentorId;
   let bestMatchScore = 0;
 
-  // Build a list of all mentors and their topic keywords
-  const mentorEntries = Object.entries(aiPersonalities);
-  for (const [mentorId, mentor] of mentorEntries) {
-    if (!mentor.knowledgeBase || !mentor.knowledgeBase.knowledgeBase) continue;
-    const kb = mentor.knowledgeBase.knowledgeBase;
-    if (!kb.coreConcepts) continue;
-    
-    let score = 0;
-    for (const concept of kb.coreConcepts) {
-      if (
-        lowerMessage.includes(concept.question.toLowerCase()) ||
-        (concept.answer && lowerMessage.includes(concept.answer.toLowerCase()))
-      ) {
-        score++;
+  console.log(`[Router] Incoming query: "${message}" | Significant tokens: [${significantTokens.join(', ')}]`);
+
+  if (significantTokens.length > 0) {
+    const mentorEntries = Object.entries(aiPersonalities);
+    for (const [mentorId, mentor] of mentorEntries) {
+      let score = 0;
+      
+      // 1. Check expertise overlap
+      if (mentor.expertise) {
+        for (const skill of mentor.expertise) {
+          const skillLower = skill.toLowerCase();
+          const skillTokens = skillLower.split(/\W+/).filter(Boolean);
+          for (const token of significantTokens) {
+            if (skillTokens.includes(token)) {
+              score += 15; // High match for exact expertise keyword
+            }
+          }
+        }
       }
-    }
-    
-    if (mentor.expertise) {
-      for (const skill of mentor.expertise) {
-        if (lowerMessage.includes(skill.toLowerCase())) score++;
+
+      // 2. Check knowledge base question overlap
+      const kb = mentor.knowledgeBase && (mentor.knowledgeBase as any).knowledgeBase
+        ? (mentor.knowledgeBase as any).knowledgeBase
+        : mentor.knowledgeBase;
+
+      if (kb) {
+        if (kb.coreConcepts && Array.isArray(kb.coreConcepts)) {
+          for (const concept of kb.coreConcepts) {
+            const question = concept.question.toLowerCase();
+            const questionTokens = question.split(/\W+/).filter(Boolean);
+            
+            for (const token of significantTokens) {
+              if (questionTokens.includes(token)) {
+                score += 10;
+              }
+            }
+          }
+        }
+
+        if (kb.faqs && Array.isArray(kb.faqs)) {
+          for (const faq of kb.faqs) {
+            const question = faq.question.toLowerCase();
+            const questionTokens = question.split(/\W+/).filter(Boolean);
+            
+            for (const token of significantTokens) {
+              if (questionTokens.includes(token)) {
+                score += 10;
+              }
+            }
+          }
+        }
       }
-    }
-    if (score > bestMatchScore) {
-      bestMatchScore = score;
-      bestMentorId = mentorId;
+
+      console.log(`[Router] - ${mentor.name} score: ${score}`);
+      if (score > bestMatchScore) {
+        bestMatchScore = score;
+        bestMentorId = mentorId;
+      }
     }
   }
 
-  // If no strong match, try keyword-based routing (e.g. 'cyber', 'python', etc.)
-  if (bestMatchScore === 0) {
-    const routingKeywords = [
-      { id: 'cyber-security', keywords: ['cyber', 'security', 'hacking', 'vulnerability', 'phishing', 'firewall'] },
-      { id: 'frontend', keywords: ['frontend', 'react', 'html', 'css', 'javascript', 'ui', 'component', 'dom'] },
-      { id: 'backend', keywords: ['backend', 'api', 'server', 'database', 'node', 'express', 'sql', 'mongodb'] },
-      { id: 'fullstack', keywords: ['fullstack', 'full-stack', 'mern', 'jamstack'] },
-      { id: 'python', keywords: ['python', 'django', 'flask', 'pandas', 'numpy', 'sensei'] },
-      { id: 'mobile', keywords: ['mobile', 'android', 'ios', 'flutter', 'react native'] },
-      { id: 'cloudops', keywords: ['cloud', 'aws', 'azure', 'devops', 'docker', 'kubernetes', 'ci/cd'] },
-    ];
-    for (const route of routingKeywords) {
-      if (route.keywords.some(kw => lowerMessage.includes(kw))) {
-        bestMentorId = route.id;
-        break;
-      }
-    }
+  // Routing threshold: must have a clear thematic overlap score of 8+ to switch mentors
+  if (bestMatchScore >= 8) {
+    console.log(`[Router] -> Switching mentor to: ${bestMentorId} (Score: ${bestMatchScore})`);
+  } else {
+    bestMentorId = currentMentorId;
+    console.log(`[Router] -> Keeping current mentor: ${currentMentorId} (Best score: ${bestMatchScore} < 8)`);
   }
 
   // Generate the response using the selected mentor

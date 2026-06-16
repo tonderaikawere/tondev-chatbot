@@ -1,140 +1,486 @@
 {
   "conversations": [
     {
-      "keywords": ["hi", "hello", "hey", "yo", "good morning", "good afternoon", "good evening", "greet", "greetings"],
+      "keywords": [
+        "hi",
+        "hello",
+        "hey",
+        "yo",
+        "good morning",
+        "good afternoon",
+        "good evening",
+        "greet",
+        "greetings"
+      ],
       "answer": "Hello! I'm your AI mentor. I'm here to help you learn, solve programming problems, and understand technical concepts step-by-step. What would you like to learn or build today?"
     },
     {
-      "keywords": ["how are you", "how's it going", "how are you doing", "hows it going", "how do you feel"],
+      "keywords": [
+        "how are you",
+        "how's it going",
+        "how are you doing",
+        "hows it going",
+        "how do you feel"
+      ],
       "answer": "I'm running smoothly, my compilers are warm, and I'm ready to write some code! I hope you are doing well. What tech topic are we exploring today?"
     },
     {
-      "keywords": ["who are you", "what is your name", "whats your name", "who is this"],
+      "keywords": [
+        "who are you",
+        "what is your name",
+        "whats your name",
+        "who is this"
+      ],
       "answer": "I am one of the expert AI Dev Mentors built to guide developers. Each of us has a specific domain of expertise (Frontend, Backend, Python, Mobile, Security, Cloud). You can switch between us in the sidebar!"
     },
     {
-      "keywords": ["who built you", "who created you", "who is your owner", "who is tondev", "who is tonde", "tonde kawere", "creator", "developer"],
+      "keywords": [
+        "who built you",
+        "who created you",
+        "who is your owner",
+        "who is tondev",
+        "who is tonde",
+        "tonde kawere",
+        "creator",
+        "developer"
+      ],
       "answer": "I was created and developed by Tonde Kawere (also known as Tondev), a passionate software developer. He built this system to help developers master frontend, backend, cybersecurity, mobile dev, Python, and cloud engineering."
     },
     {
-      "keywords": ["thank you", "thanks", "appreciate it", "thank", "nice", "perfect", "awesome", "great", "cool"],
+      "keywords": [
+        "thank you",
+        "thanks",
+        "appreciate it",
+        "thank",
+        "nice",
+        "perfect",
+        "awesome",
+        "great",
+        "cool"
+      ],
       "answer": "You're very welcome! I'm glad I could help. Helping you understand and learn is my primary goal. Do you have any other questions, or is there a code snippet you'd like to write together?"
     },
     {
-      "keywords": ["tell me a joke", "joke", "funny", "laugh"],
+      "keywords": [
+        "tell me a joke",
+        "joke",
+        "funny",
+        "laugh"
+      ],
       "answer": "Why do programmers prefer dark mode? Because light attracts bugs!\n\nHere's another one: There are 10 types of people in the world: those who understand binary, and those who don't!"
     },
     {
-      "keywords": ["meaning of life", "why are we here", "purpose of life"],
+      "keywords": [
+        "meaning of life",
+        "why are we here",
+        "purpose of life"
+      ],
       "answer": "To write clean, bug-free code, build awesome applications that help people, and never stop learning! What do you think?"
     },
     {
-      "keywords": ["do you sleep", "are you awake", "sleep"],
+      "keywords": [
+        "do you sleep",
+        "are you awake",
+        "sleep"
+      ],
       "answer": "No sleep for me! I'm an AI, so I'm awake 24/7, ready to help you debug your code or learn new skills whenever you feel inspired."
     },
     {
-      "keywords": ["what is offline", "how offline works", "how do you work offline", "fallback mode", "no internet"],
+      "keywords": [
+        "what is offline",
+        "how offline works",
+        "how do you work offline",
+        "fallback mode",
+        "no internet"
+      ],
       "answer": "This application works both online and offline! When offline, I run in **Smart Fallback** mode, which searches my local pre-loaded JSON knowledge bases of coding concepts. You can also run LLMs locally offline using **Ollama**!"
     },
     {
-      "keywords": ["api", "apis", "what is an api", "explain api", "api basics", "application programming interface"],
+      "keywords": [
+        "api",
+        "apis",
+        "what is an api",
+        "explain api",
+        "api basics",
+        "application programming interface"
+      ],
       "answer": "An **API** (Application Programming Interface) is a set of rules that allows different software applications to communicate with each other. It acts as a middleman, letting one app request data or actions from another.\n\n**IN SIMPLE TERMS:**\nThink of an API like a **waiter** at a restaurant. You (the client) sit at the table and look at the menu. The kitchen (the server) prepares the food. The waiter (the API) takes your order, brings it to the kitchen, and delivers the food back to you. You don't need to know how the kitchen cooks the food; you just need to talk to the waiter.\n\n**KEY TYPES OF APIS:**\n1. **Web APIs**: Send data over the internet using protocols like HTTP (e.g., fetching weather details or user profiles).\n2. **Library/Library APIs**: Code structures that allow programming languages to interact with the OS or libraries.\n3. **Database APIs**: Enable communication between applications and database management systems.\n\n**WEB API EXAMPLE:**\n```javascript\n// Requesting user data from a public API\nfetch('https://api.github.com/users/tonderaikawere')\n  .then(response => response.json())\n  .then(data => console.log(`User: ${data.name}`));\n```\n\nWould you like me to explain how **REST APIs** work, show you how to write an API route, or explain the **HTTP methods** (GET, POST)?"
     },
     {
-      "keywords": ["rest", "restful", "rest api", "rest apis", "restful api"],
+      "keywords": [
+        "rest",
+        "restful",
+        "rest api",
+        "rest apis",
+        "restful api"
+      ],
       "answer": "**REST** (Representational State Transfer) is an architectural style for designing Web APIs. It uses standard HTTP requests to manage and transfer data between a client and a server.\n\n**CORE PRINICPLES OF REST:**\n1. **Stateless**: Every request from a client must contain all the information needed to understand and complete the request. The server doesn't store session history.\n2. **Resources**: Data is represented as resources (like users, posts, or books) and accessed via unique URLs (e.g., `/api/users/123`).\n3. **Standard HTTP Methods**: REST uses basic HTTP actions to perform CRUD (Create, Read, Update, Delete) operations.\n\n**REST URL AND HTTP METHOD MAPPING:**\n- `GET /api/posts` -> Read/Retrieve all posts\n- `GET /api/posts/1` -> Read/Retrieve post with ID 1\n- `POST /api/posts` -> Create a new post\n- `PUT /api/posts/1` -> Update post with ID 1\n- `DELETE /api/posts/1` -> Delete post with ID 1\n\nWould you like me to write a Node.js Express API example or explain how **HTTP status codes** work?"
     },
     {
-      "keywords": ["http", "http methods", "get", "post", "put", "delete", "request", "http headers"],
+      "keywords": [
+        "http",
+        "http methods",
+        "get",
+        "post",
+        "put",
+        "delete",
+        "request",
+        "http headers"
+      ],
       "answer": "**HTTP** (HyperText Transfer Protocol) is the foundation of data exchange on the web. It defines how messages are formatted and transmitted, and what actions web servers and browsers should take in response to various commands.\n\n**PRIMARY HTTP METHODS:**\n- **GET**: Used to retrieve data from a server. It should not modify any data (read-only).\n- **POST**: Used to send data to a server to create a new resource (e.g., submitting a signup form).\n- **PUT**: Used to update an existing resource by replacing it entirely with new data.\n- **PATCH**: Used to partially update an existing resource (only modifying specific fields).\n- **DELETE**: Used to delete a resource from the server.\n\n**HTTP STATUS CODES:**\n- `200 OK`: Request succeeded.\n- `201 Created`: Resource was successfully created.\n- `400 Bad Request`: Server could not understand the request due to invalid syntax.\n- `401 Unauthorized`: Authentication is required to access the resource.\n- `404 Not Found`: The requested resource could not be found.\n- `500 Internal Server Error`: The server encountered an unexpected condition.\n\nWould you like to see a JavaScript example of how to make a POST request with data?"
     },
     {
-      "keywords": ["json", "what is json", "javascript object notation", "json data"],
+      "keywords": [
+        "json",
+        "what is json",
+        "javascript object notation",
+        "json data"
+      ],
       "answer": "**JSON** (JavaScript Object Notation) is a lightweight format for storing and transporting data. It is easy for humans to read and write, and easy for computers to parse and generate. It is the most common format used for sending data in Web APIs.\n\n**JSON SYNTAX RULES:**\n- Data is in key-value pairs: \"name\": \"Tonde\"\n- Keys must be strings enclosed in double quotes.\n- Data is separated by commas.\n- Curly braces `{}` hold objects.\n- Square brackets `[]` hold arrays.\n- Allowed values: String, Number, Object, Array, Boolean, Null.\n\n**EXAMPLE:**\n```json\n{\n  \"username\": \"tondev\",\n  \"isOnline\": true,\n  \"skills\": [\"React\", \"TypeScript\", \"Node.js\"]\n}\n```\n\n**USING JSON IN JAVASCRIPT:**\n- `JSON.stringify(object)`: Converts a JavaScript object into a JSON string (useful when sending data to a server).\n- `JSON.parse(jsonString)`: Converts a JSON string into a JavaScript object (useful when receiving data from a server).\n\nWould you like me to write a code snippet showing how to send and receive JSON data?"
     },
     {
-      "keywords": ["database", "databases", "sql", "nosql", "mongodb", "postgresql", "mysql", "database basics"],
+      "keywords": [
+        "database",
+        "databases",
+        "sql",
+        "nosql",
+        "mongodb",
+        "postgresql",
+        "mysql",
+        "database basics"
+      ],
       "answer": "A **database** is an organized collection of structured information, or data, typically stored electronically in a computer system.\n\n**RELATIONAL (SQL) vs NON-RELATIONAL (NoSQL) DATABASES:**\n\n1. **SQL Databases (Relational)**:\n   - Store data in structured tables with rows and columns.\n   - Use schemas to define tables and relationships.\n   - Great for complex queries and transactional integrity (ACID compliance).\n   - Examples: PostgreSQL, MySQL, SQLite.\n\n2. **NoSQL Databases (Non-Relational)**:\n   - Store data in documents, key-value pairs, wide-columns, or graphs.\n   - Schema-less, allowing highly flexible data structures.\n   - Excellent for horizontal scalability and high-speed write operations.\n   - Examples: MongoDB, Redis, Cassandra.\n\n**SQL QUERY EXAMPLE:**\n```sql\nSELECT name, email FROM users WHERE age >= 18;\n```\n\nWould you like to write a database query together or explore **ORM/ODM** libraries like Prisma or Mongoose?"
     },
     {
-      "keywords": ["variable", "variables", "let", "const", "var", "scope", "javascript variables"],
+      "keywords": [
+        "variable",
+        "variables",
+        "let",
+        "const",
+        "var",
+        "scope",
+        "javascript variables"
+      ],
       "answer": "A **variable** is a container for storing data values. In programming, we declare variables to store, label, and retrieve values in memory.\n\n**VARIABLES IN MODERN JAVASCRIPT:**\n- **const**: Declares a block-scoped, read-only constant value. You cannot reassign it. (Use this by default for cleaner, safer code).\n- **let**: Declares a block-scoped variable that *can* be reassigned later.\n- **var**: The legacy variable declaration. It is function-scoped (or globally scoped) and can cause bugs due to variable hoisting. Avoid using this.\n\n**CODE EXAMPLE:**\n```javascript\nconst brandColor = '#2563EB'; // Cannot be reassigned\nlet userAge = 24;\nuserAge = 25; // Reassignment is allowed\n```\n\nWould you like me to explain JavaScript **data types** (Strings, Numbers, Booleans) or **scope** (Global vs Local)?"
     },
     {
-      "keywords": ["function", "functions", "arrow function", "parameters", "arguments", "return statement"],
+      "keywords": [
+        "function",
+        "functions",
+        "arrow function",
+        "parameters",
+        "arguments",
+        "return statement"
+      ],
       "answer": "A **function** is a block of organized, reusable code that performs a single, related action. Functions provide better modularity and high code reuse.\n\n**DECLARATION vs ARROW FUNCTIONS (JavaScript):**\n\n1. **Function Declaration** (Traditional):\n```javascript\nfunction greet(name) {\n  return `Hello, ${name}!`;\n}\n```\n\n2. **Arrow Function** (Modern ES6):\n```javascript\nconst greet = (name) => `Hello, ${name}!`;\n```\n\n**PARAMETERS vs ARGUMENTS:**\n- **Parameters** are the placeholders defined in the function declaration (`name`).\n- **Arguments** are the actual values passed to the function when calling it (`greet('Tonde')` -> `'Tonde'` is the argument).\n\nWould you like to learn about function **closures** or write a function that performs mathematical calculations?"
     },
     {
-      "keywords": ["loop", "loops", "for loop", "while loop", "foreach", "iteration", "looping"],
+      "keywords": [
+        "loop",
+        "loops",
+        "for loop",
+        "while loop",
+        "foreach",
+        "iteration",
+        "looping"
+      ],
       "answer": "A **loop** is a programming control structure that repeats a block of code as long as a specified condition remains `true`.\n\n**COMMON TYPES OF LOOPS:**\n\n1. **For Loop**: Repeats code a specific number of times. Excellent when you know exactly how many iterations you need.\n```javascript\nfor (let i = 0; i < 5; i++) {\n  console.log(`Iteration ${i}`);\n}\n```\n\n2. **While Loop**: Repeats code while a condition is true. Useful when the number of iterations isn't known beforehand.\n```javascript\nlet count = 0;\nwhile (count < 3) {\n  console.log(count);\n  count++;\n}\n```\n\n3. **forEach**: A specialized array method that executes a function once for each item in the array.\n```javascript\nconst items = ['React', 'Vue', 'Angular'];\nitems.forEach(item => console.log(item));\n```\n\nWould you like me to explain how to use `break` and `continue` inside loops, or how to avoid infinite loops?"
     },
     {
-      "keywords": ["array", "arrays", "object", "objects", "javascript arrays", "array methods", "map", "filter", "reduce"],
+      "keywords": [
+        "array",
+        "arrays",
+        "object",
+        "objects",
+        "javascript arrays",
+        "array methods",
+        "map",
+        "filter",
+        "reduce"
+      ],
       "answer": "**Arrays** and **Objects** are the primary data structures used to store collections of data in JavaScript.\n\n- **Array**: An ordered list of values, accessed by numeric indexes (starting at `0`). Used for lists of similar items.\n```javascript\nconst skills = ['HTML', 'CSS', 'JavaScript'];\nconsole.log(skills[0]); // Outputs 'HTML'\n```\n\n- **Object**: A collection of key-value pairs, accessed by custom keys. Used to represent structural entities.\n```javascript\nconst developer = {\n  name: 'Tonde',\n  role: 'Engineer',\n  yearsActive: 5\n};\nconsole.log(developer.role); // Outputs 'Engineer'\n```\n\n**POWERFUL ARRAY METHODS:**\n- `.map()`: Transforms each item in an array and returns a new array.\n- `.filter()`: Returns a new array containing only items that pass a test condition.\n- `.reduce()`: Condenses an array into a single summary value.\n\nWould you like to see examples of `.map()` or `.filter()` in action?"
     },
     {
-      "keywords": ["promise", "promises", "async", "await", "asynchronous", "callback", "fetch api", "async/await"],
+      "keywords": [
+        "promise",
+        "promises",
+        "async",
+        "await",
+        "asynchronous",
+        "callback",
+        "fetch api",
+        "async/await"
+      ],
       "answer": "**Asynchronous programming** in JavaScript allows time-consuming tasks (like fetching data, reading files, or talking to databases) to run in the background without freezing the webpage.\n\n**PROMISES:**\nA Promise represents the eventual completion (or failure) of an asynchronous operation and its resulting value. It has 3 states: Pending, Resolved (Success), or Rejected (Error).\n\n**ASYNC / AWAIT (Modern Syntax):**\nBuilt on top of promises, `async/await` makes asynchronous code look and behave like synchronous code, making it easier to read and debug.\n\n**CODE COMPARISON:**\n\n1. **Traditional Promise chain**:\n```javascript\nfetch('/api/user')\n  .then(res => res.json())\n  .then(user => console.log(user))\n  .catch(err => console.error(err));\n```\n\n2. **Modern Async/Await**:\n```javascript\nasync function getUser() {\n  try {\n    const res = await fetch('/api/user');\n    const user = await res.json();\n    console.log(user);\n  } catch (err) {\n    console.error(err);\n  }\n}\n```\n\nWould you like to write an async data fetching function or learn about **Callback Hell**?"
     },
     {
-      "keywords": ["cors", "cross-origin resource sharing", "cors error", "cors block"],
+      "keywords": [
+        "cors",
+        "cross-origin resource sharing",
+        "cors error",
+        "cors block"
+      ],
       "answer": "**CORS** (Cross-Origin Resource Sharing) is a browser security mechanism. It prevents webpages from making requests to a different domain than the one that served the webpage, unless the server explicitly permits it.\n\n**WHY CORS EXISTS:**\nTo protect users from malicious sites stealing sensitive credentials. For example, if you visit a malicious site, it shouldn't be allowed to fetch data from your online banking portal behind the scenes.\n\n**FIXING CORS ERRORS:**\nCORS must be configured on the **server**, not the browser. The server must send specific HTTP headers in its response:\n- `Access-Control-Allow-Origin: *` (Allows any website to request resources, common for public APIs).\n- `Access-Control-Allow-Origin: https://yoursite.com` (Allows only your specific domain to request resources).\n\nIf you are running Ollama locally, you enable CORS by running: `set OLLAMA_ORIGINS=*` followed by `ollama serve`.\n\nWould you like to know how to configure CORS headers in a Node.js Express server?"
     },
     {
-      "keywords": ["git", "github", "version control", "commit", "pull request", "branch", "git push", "repository"],
+      "keywords": [
+        "git",
+        "github",
+        "version control",
+        "commit",
+        "pull request",
+        "branch",
+        "git push",
+        "repository"
+      ],
       "answer": "**Git** and **GitHub** form the backbone of modern team collaboration and version control.\n\n- **Git**: A local tool that tracks changes in your code files. It allows you to save snapshots of your progress and revert back if anything breaks.\n- **GitHub**: A cloud hosting service where developers store their Git repositories to collaborate with others.\n\n**ESSENTIAL GIT COMMANDS:**\n1. `git init` -> Initialize a new local Git repository.\n2. `git add .` -> Stage all file changes for saving.\n3. `git commit -m \"message\"` -> Save staged changes with a descriptive snapshot message.\n4. `git push origin main` -> Send local commits to the remote GitHub repository.\n5. `git checkout -b new-branch` -> Create and switch to a new development branch.\n\nWould you like me to explain how Git branches work, or how to resolve a **merge conflict**?"
     },
     {
-      "keywords": ["react", "react.js", "state", "props", "components", "jsx", "react hooks"],
+      "keywords": [
+        "react",
+        "react.js",
+        "state",
+        "props",
+        "components",
+        "jsx",
+        "react hooks"
+      ],
       "answer": "**React** is a declarative, component-based JavaScript library developed by Facebook for building user interfaces.\n\n**CORE CONCEPTS:**\n\n1. **Components**: The building blocks of React. They are JavaScript functions that return UI elements (JSX).\n2. **JSX**: A syntax extension that lets you write HTML-like code directly in JavaScript.\n3. **Props** (Properties): Read-only data passed from a parent component to a child component.\n4. **State**: Data managed internally within a component that can change over time. When state changes, React automatically re-renders the component to display the new data.\n\n**SIMPLE COMPONENT EXAMPLE:**\n```jsx\nfunction Counter() {\n  const [count, setCount] = useState(0); // State\n\n  return (\n    <div>\n      <p>Count: {count}</p>\n      <button onClick={() => setCount(count + 1)}>Increment</button>\n    </div>\n  );\n}\n```\n\nWould you like me to explain how the `useEffect` hook works or build a simple React component?"
     },
     {
-      "keywords": ["node", "node.js", "express", "npm", "package.json", "backend basics"],
+      "keywords": [
+        "node",
+        "node.js",
+        "express",
+        "npm",
+        "package.json",
+        "backend basics"
+      ],
       "answer": "**Node.js** is a runtime environment that allows you to run JavaScript on the server (outside the browser). **Express** is a minimalist framework built on Node.js to create web servers and APIs.\n\n**SIMPLE EXPRESS SERVER EXAMPLE:**\n```javascript\nconst express = require('express');\nconst app = express();\nconst PORT = 3000;\n\n// Defining an API endpoint\napp.get('/api/greet', (req, res) => {\n  res.json({ message: 'Hello from Node.js!' });\n});\n\napp.listen(PORT, () => {\n  console.log(`Server running on port ${PORT}`);\n});\n```\n\n**NPM (Node Package Manager):**\nA tool that downloads and manages open-source packages and libraries (dependencies) for your Node.js projects, tracked in a `package.json` file.\n\nWould you like to build an Express API route with parameters or learn how to fetch data in Node?"
     },
     {
-      "keywords": ["typescript", "type", "interface", "static typing", "any type"],
+      "keywords": [
+        "typescript",
+        "type",
+        "interface",
+        "static typing",
+        "any type"
+      ],
       "answer": "**TypeScript** is a typed superset of JavaScript developed by Microsoft. It adds static type declarations to JavaScript, catching errors during development before the code runs.\n\n**WHY USE TYPESCRIPT?**\n- **Auto-completion**: Code editors understand the exact structure of your data.\n- **Error prevention**: Prevents common typos and runtime type mismatches.\n- **Maintainability**: Makes refactoring large codebases safer and faster.\n\n**CODE EXAMPLE:**\n```typescript\ninterface User {\n  id: number;\n  name: string;\n  email?: string; // Optional field\n}\n\nfunction getGreeting(user: User): string {\n  return `Hello, ${user.name}!`;\n}\n```\n\nWould you like me to explain the difference between `interface` and `type` or how to avoid using the `any` type?"
     },
     {
-      "keywords": ["what is gravity", "gravity", "physic basics"],
+      "keywords": [
+        "what is gravity",
+        "gravity",
+        "physic basics"
+      ],
       "answer": "Gravity is the fundamental force of attraction that pulls objects toward each other. It is what keeps our feet on the ground, pulls falling apples to the earth, and holds planets in their orbits around the sun. The more mass an object has, the stronger its gravitational pull."
     },
     {
-      "keywords": ["what is html", "explain html", "html basics"],
+      "keywords": [
+        "what is html",
+        "explain html",
+        "html basics"
+      ],
       "answer": "HTML stands for **HyperText Markup Language**. It's the structural backbone of any webpage. Think of it like the skeleton of a building—it defines where headers, paragraphs, links, and images go.\n\nExample:\n```html\n<h1>Welcome to my site</h1>\n<p>This is a paragraph!</p>\n```"
     },
     {
-      "keywords": ["what is css", "explain css", "css basics"],
+      "keywords": [
+        "what is css",
+        "explain css",
+        "css basics"
+      ],
       "answer": "CSS stands for **Cascading Style Sheets**. It defines the look and layout of a webpage. If HTML is the skeleton, CSS is the paint, styling, and decor. It handles colors, fonts, margins, positions, and animations.\n\nExample:\n```css\nh1 {\n  color: #2563eb; /* Royal Blue */\n  font-size: 24px;\n}\n```"
     },
     {
-      "keywords": ["what is javascript", "explain javascript", "js basics"],
+      "keywords": [
+        "what is javascript",
+        "explain javascript",
+        "js basics"
+      ],
       "answer": "JavaScript (JS) is the programming language of the web. It adds interactivity, logic, and behavior to webpages. While HTML is the structure and CSS is the style, JavaScript is the brain (e.g. what happens when you click a button or submit a form).\n\nExample:\n```javascript\nconst button = document.querySelector('button');\nbutton.addEventListener('click', () => {\n  alert('Hello World!');\n});\n```"
     },
     {
-      "keywords": ["what is python", "explain python", "python basics"],
+      "keywords": [
+        "what is python",
+        "explain python",
+        "python basics"
+      ],
       "answer": "Python is a powerful, high-level programming language known for being extremely readable and clean. It's widely used for web development (Django/Flask), scripting, automation, data science, and Artificial Intelligence.\n\nExample:\n```python\n# Clean and easy to read!\ndef greet(name):\n    return f\"Hello, {name}!\"\n\nprint(greet(\"Tonde\"))\n```"
     },
     {
-      "keywords": ["what is sql", "explain sql", "database basics", "sql basics"],
+      "keywords": [
+        "what is sql",
+        "explain sql",
+        "database basics",
+        "sql basics"
+      ],
       "answer": "SQL stands for **Structured Query Language**. It is the standard language used to communicate with relational databases (like PostgreSQL, MySQL, SQLite). It lets you create, retrieve, update, and delete database records.\n\nExample:\n```sql\nSELECT name, email \nFROM users \nWHERE role = 'developer';\n```"
     },
     {
-      "keywords": ["what is cloud", "what is cloud computing", "aws", "azure"],
+      "keywords": [
+        "what is cloud",
+        "what is cloud computing",
+        "aws",
+        "azure"
+      ],
       "answer": "Cloud computing is renting servers, storage, databases, and networking over the internet instead of buying and running your own physical servers. Giant providers like **AWS** (Amazon Web Services), **Google Cloud**, and **Microsoft Azure** manage the physical infrastructure for you."
     },
     {
-      "keywords": ["what is cybersecurity", "security basics", "how to stay safe"],
+      "keywords": [
+        "what is cybersecurity",
+        "security basics",
+        "how to stay safe"
+      ],
       "answer": "Cybersecurity is protecting computers, networks, programs, and data from unauthorized access, attacks, or damage. Important practices include:\n\n1. **Authentication**: Strong passwords and Multi-Factor Authentication (MFA).\n2. **Encryption**: Scrambling data so only authorized users can read it.\n3. **Validation**: Sanitizing user input to prevent injection attacks (like SQL injection or XSS)."
     },
     {
-      "keywords": ["yes", "ok", "okay", "sure", "yep", "true", "correct"],
+      "keywords": [
+        "yes",
+        "ok",
+        "okay",
+        "sure",
+        "yep",
+        "true",
+        "correct"
+      ],
       "answer": "Awesome! Let's keep moving. What concept or code snippet would you like to explore next?"
     },
     {
-      "keywords": ["no", "nope", "false", "incorrect", "nah"],
+      "keywords": [
+        "no",
+        "nope",
+        "false",
+        "incorrect",
+        "nah"
+      ],
       "answer": "No problem! We can adjust. Tell me what is confusing or what topic you would prefer to focus on, and we will get it sorted."
+    },
+    {
+      "keywords": [
+        "git workflow",
+        "git workflows",
+        "git branching",
+        "git branch",
+        "git checkout"
+      ],
+      "answer": "**Git Workflows** are recipes for using version control to collaborate efficiently in teams. \n\n**COMMON GIT WORKFLOWS:**\n1. **Feature Branching**: Developers create a new branch (e.g., `feature/login`) for every task, keeping the `main` branch pristine. Once complete, it's merged via a Pull Request (PR).\n2. **Git Flow**: A strict structure with `main` (production), `develop` (staging), `feature/*` (in-progress), `release/*` (prep), and `hotfix/*` (immediate production fixes).\n3. **Trunk-Based Development**: Developers merge small, frequent commits directly into the trunk (`main`), relying on feature flags and testing to prevent breakages.\n\n**USEFUL COMMANDS:**\n```bash\ngit checkout -b feature/awesome-ui   # Create and switch to branch\ngit checkout main                    # Switch back to main\ngit merge feature/awesome-ui         # Merge branch into current branch\n```\n\nWould you like me to explain how to resolve a **merge conflict** or explain **git rebase**?"
+    },
+    {
+      "keywords": [
+        "merge conflict",
+        "resolve conflict",
+        "git merge",
+        "conflicts"
+      ],
+      "answer": "A **merge conflict** occurs when Git cannot automatically reconcile differences between code changes from two branches. This usually happens when two developers modify the exact same lines of a file, or one deletes a file another is editing.\n\n**HOW TO RESOLVE A MERGE CONFLICT:**\n1. **Locate the conflict markers**: Git will modify the conflicting files, adding markers:\n   - `<<<<<<< HEAD` (your local branch changes)\n   - `=======` (separator line)\n   - `>>>>>>> branch-name` (incoming branch changes)\n2. **Edit the file**: Remove the markers and manually edit the code to combine the changes correctly.\n3. **Stage and commit**: Save the files, run `git add .`, then `git commit -m \"merge: resolve conflicts\"` to finish the merge.\n\nWould you like to know how to avoid conflicts using **git stash** or how to use a merge tool?"
+    },
+    {
+      "keywords": [
+        "jwt",
+        "json web token",
+        "token authentication",
+        "session authentication",
+        "auth token"
+      ],
+      "answer": "**JSON Web Token (JWT)** is an open standard used to securely transmit information between a client and server as a JSON object. It is stateless, meaning the server doesn't need to store session data in memory.\n\n**JWT STRUCTURE (Three parts separated by dots):**\n1. **Header**: Contains the type of token (JWT) and the signing algorithm (e.g., HS256).\n2. **Payload**: Contains the claims or user data (e.g., `userId`, `role`, expiration date).\n3. **Signature**: Created by combining the encoded header, payload, and a secret key on the server. This ensures the token wasn't tampered with.\n\n**TOKEN vs SESSION AUTHENTICATION:**\n- **Session Auth**: Server stores session ID in database/RAM and sends a cookie to the browser. Stateful.\n- **JWT Token Auth**: Server signs a token containing user details and sends it to the client. Client stores it in `localStorage` or `HttpOnly` cookies and sends it in the `Authorization: Bearer <token>` header. Stateless and scalable.\n\nWould you like to write a Node.js middleware for verifying JWTs?"
+    },
+    {
+      "keywords": [
+        "rest vs graphql",
+        "graphql vs rest",
+        "graphql",
+        "what is graphql"
+      ],
+      "answer": "**GraphQL** is a query language for APIs created by Facebook. Unlike REST, which exposes multiple endpoints for different resources, GraphQL exposes a **single endpoint** (usually `/graphql`) where clients request exactly what they need.\n\n**KEY DIFFERENCES:**\n1. **Data Fetching**: REST often causes **over-fetching** (getting more data than you need) or **under-fetching** (needing multiple network requests). GraphQL solves this by allowing you to define the exact shape of response data in the request query.\n2. **Endpoints**: REST has `/api/users`, `/api/posts`, etc. GraphQL has a single `/graphql` endpoint.\n3. **Schema**: GraphQL is strongly typed and uses a schema definition, while REST relies on API documentation (like Swagger).\n\n**GRAPHQL QUERY EXAMPLE:**\n```graphql\nquery {\n  user(id: \"123\") {\n    name\n    email\n    posts { title }\n  }\n}\n```\n\nWould you like to see how to set up a GraphQL Apollo Server or write a React Query query?"
+    },
+    {
+      "keywords": [
+        "websocket",
+        "websockets",
+        "real-time communication",
+        "socket.io"
+      ],
+      "answer": "**WebSockets** provide a persistent, two-way, real-time communication channel between a client (browser) and a server over a single TCP connection. \n\n**HOW WEBSOCKETS WORK:**\n1. **Handshake**: The client starts with a standard HTTP request requesting an upgrade to the WebSocket protocol (`ws://` or `wss://` for secure).\n2. **Connection**: Once the server accepts, the HTTP handshake is upgraded, and the connection remains open.\n3. **Data Exchange**: Both client and server can send messages instantly at any time without headers overhead, unlike traditional HTTP polling.\n\n**SOCKET.IO JAVASCRIPT EXAMPLE:**\n```javascript\n// Client-side\nconst socket = io('http://localhost:3000');\nsocket.emit('chatMessage', 'Hello Server!');\nsocket.on('messageReceived', (data) => console.log(data));\n```\n\nWould you like to build a simple Node.js WebSocket chat server?"
+    },
+    {
+      "keywords": [
+        "docker",
+        "kubernetes",
+        "container",
+        "containers",
+        "containerization",
+        "k8s"
+      ],
+      "answer": "**Docker** and **Kubernetes** are the foundations of modern cloud application deployments.\n\n- **Docker**: A containerization platform. It packages your code, runtime, system tools, libraries, and settings into a single **container**. This ensures your application runs exactly the same on your laptop, test server, and production environment.\n- **Kubernetes (K8s)**: An orchestration platform. When you have hundreds of Docker containers running across multiple server nodes, Kubernetes manages them. It handles scaling, automatic failover, load balancing, and self-healing.\n\n**SIMPLE DOCKERFILE EXAMPLE:**\n```dockerfile\nFROM node:18\nWORKDIR /app\nCOPY package*.json ./\nRUN npm install\nCOPY . .\nCMD [\"node\", \"server.js\"]\n```\n\nWould you like to write a Dockerfile or configure a Kubernetes deployment YAML?"
+    },
+    {
+      "keywords": [
+        "ci/cd",
+        "ci cd",
+        "continuous integration",
+        "github actions",
+        "pipelines"
+      ],
+      "answer": "**CI/CD** stands for Continuous Integration and Continuous Delivery/Deployment. It is the automated process of building, testing, and deploying code changes.\n\n- **Continuous Integration (CI)**: Automatically building and running tests whenever a developer pushes commits to GitHub (e.g., via GitHub Actions). This ensures new code doesn't break the build.\n- **Continuous Delivery/Deployment (CD)**: Automatically releasing and deploying the verified code changes to production servers (like AWS, Vercel, or Netlify) without manual steps.\n\n**GITHUB ACTIONS WORKFLOW EXAMPLE (`.github/workflows/ci.yml`):**\n```yaml\non: [push]\njobs:\n  build-and-test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v3\n      - run: npm install\n      - run: npm test\n```\n\nWould you like to customize a GitHub Actions CI pipeline?"
+    },
+    {
+      "keywords": [
+        "oop vs functional",
+        "functional programming",
+        "object oriented programming",
+        "programming paradigms"
+      ],
+      "answer": "**Object-Oriented Programming (OOP)** and **Functional Programming (FP)** are two dominant programming paradigms in software engineering.\n\n- **OOP**: Centers on **Objects** that contain both state (data/properties) and actions (methods). It relies on principles like encapsulation, inheritance, polymorphism, and abstraction.\n- **FP**: Centers on **pure functions** that avoid shared state, mutable data, and side effects. It emphasizes mathematical functions, immutability, and higher-order functions (like `map`, `filter`, `reduce`).\n\n**CODE EXAMPLE COMPARISON (Squaring numbers):**\n- **OOP Style**: `new NumberCollection([1, 2]).squareAll()`\n- **FP Style**: `const square = (nums) => nums.map(n => n * n);` (pure function)\n\nWould you like to dive deeper into **FP principles** or **OOP inheritance**?"
+    },
+    {
+      "keywords": [
+        "performance optimization",
+        "lazy loading",
+        "code splitting",
+        "optimize website",
+        "lighthouse"
+      ],
+      "answer": "**Web Performance Optimization** makes your web application load faster and feel responsive, which is critical for user engagement and SEO.\n\n**CORE TECHNIQUES:**\n1. **Code Splitting**: Breaking your codebase into smaller bundles loaded on-demand. In React, this is done using `React.lazy()` and `Suspense`.\n2. **Lazy Loading**: Delaying the loading of non-critical resources (like images below the fold) until they enter the viewport.\n3. **Image Optimization**: Using modern formats (WebP/AVIF), responsive image attributes (`srcset`), and compression.\n4. **Caching**: Setting appropriate HTTP cache headers and using Service Workers/CDNs.\n\n**REACT LAZY COMPONENT EXAMPLE:**\n```jsx\nconst HeavyComponent = React.lazy(() => import('./HeavyComponent'));\nfunction App() {\n  return (\n    <Suspense fallback={<div>Loading component...</div>}>\n      <HeavyComponent />\n    </Suspense>\n  );\n}\n```\n\nWould you like to run a Google Lighthouse audit or optimize a web page?"
+    },
+    {
+      "keywords": [
+        "web security",
+        "xss",
+        "csrf",
+        "sql injection",
+        "security vulnerabilities",
+        "owasp top 10"
+      ],
+      "answer": "**Web Security** involves protecting your website, servers, and users from malicious actions. \n\n**COMMON VULNERABILITIES (OWASP Top 10):**\n1. **XSS (Cross-Site Scripting)**: Attackers inject malicious client-side scripts into web pages. Prevent this by escaping/sanitizing user input and using a Content Security Policy (CSP).\n2. **CSRF (Cross-Site Request Forgery)**: Trick a user's browser into performing unwanted actions on a trusted site where they are logged in. Prevent this using anti-CSRF tokens and SameSite cookie attributes.\n3. **SQL Injection**: Attackers insert malicious SQL queries into inputs. Prevent this using parameterized queries/ORMs.\n\n**SQL INJECTION PREVENTION (Node pg client):**\n```javascript\n// SAFE: Parameterized query\ndb.query('SELECT * FROM users WHERE email = $1', [userInputEmail]);\n```\n\nWould you like to write secure input sanitizers or learn about secure JWT storage?"
+    },
+    {
+      "keywords": [
+        "interface vs type",
+        "type vs interface",
+        "typescript generics",
+        "generics"
+      ],
+      "answer": "In **TypeScript**, both `type` and `interface` define structure, but they have subtle distinctions.\n\n**INTERFACE vs TYPE ALIAS:**\n- **Interface**: Designed for object shapes. Supports **declaration merging** (adding properties by declaring the interface multiple times) and extension via `extends`.\n- **Type Alias**: More flexible. Can define primitives, unions (`type status = 'success' | 'fail'`), tuples, and intersections (`&`). Does not support declaration merging.\n\n**GENERIC TYPES (Reusable parameters):**\nGenerics act as type arguments. They allow functions/interfaces to work with various types while retaining type safety.\n\n**GENERIC FUNCTION EXAMPLE:**\n```typescript\nfunction getFirstElement<T>(arr: T[]): T {\n  return arr[0];\n}\nconst firstNum = getFirstElement([1, 2, 3]); // Type inferred as number\nconst firstStr = getFirstElement(['a', 'b']);  // Type inferred as string\n```\n\nWould you like to know how to create custom utility types?"
+    },
+    {
+      "keywords": [
+        "flexbox vs grid",
+        "grid vs flexbox",
+        "css layout",
+        "flexbox",
+        "grid"
+      ],
+      "answer": "**Flexbox** (Flexible Box Layout) and **CSS Grid** are the core layout systems of modern CSS.\n\n**KEY DIFFERENCES:**\n- **Flexbox (1-Dimensional)**: Excellent for laying out items in a single direction (row OR column). Great for headers, nav bars, menus, and centering items.\n- **CSS Grid (2-Dimensional)**: Designed for complex page structures with columns AND rows simultaneously. Great for full page layouts, dashboards, and photo galleries.\n\n**FLEXBOX vs GRID CSS DEFINITIONS:**\n```css\n/* Flexbox layout */\n.header-nav {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n\n/* Grid layout */\n.dashboard-grid {\n  display: grid;\n  grid-template-columns: 250px 1fr;\n  grid-template-rows: 60px auto;\n  gap: 15px;\n}\n```\n\nWould you like to build a responsive navbar or a card layout using CSS Grid?"
+    },
+    {
+      "keywords": [
+        "accessibility",
+        "a11y",
+        "semantic html",
+        "screen reader"
+      ],
+      "answer": "**Web Accessibility (a11y)** ensures that websites are usable by everyone, including people with physical, sensory, cognitive, or situational impairments.\n\n**ESSENTIAL PRACTICE CHECKLIST:**\n1. **Semantic HTML**: Use native tags like `<button>`, `<nav>`, `<header>`, and `<main>` instead of styled generic `<div>`s. Screen readers use these to navigate.\n2. **Image Alt Text**: Provide descriptive `alt` tags (`alt=\"Close button\"`) for images so visually impaired users hear what it represents.\n3. **Keyboard Navigation**: Ensure all interactive components are focusable using Tab keys and work with Enter/Spacebar.\n4. **Color Contrast**: Verify text meets WCAG AAA guidelines (at least 4.5:1 ratio) to ensure readability.\n\n**ACCESSIBLE MARKUP EXAMPLE:**\n```html\n<!-- ACCESSIBLE: Uses native semantic tag, focusable and screen-readable -->\n<button aria-label=\"Search site\" class=\"search-btn\">\n  <svg>...</svg>\n</button>\n```\n\nWould you like to learn about **ARIA roles** or how to use accessibility testing tools?"
     }
   ]
 }
