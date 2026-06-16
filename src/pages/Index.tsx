@@ -19,6 +19,7 @@ const Index = () => {
   const [activeContact, setActiveContact] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showSplash, setShowSplash] = useState(true);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   // Check for existing user session on app load
   useEffect(() => {
@@ -173,8 +174,8 @@ const Index = () => {
     saveActiveContact('frontend');
   };
 
-  const sendMessage = (text: string) => {
-    if (!activeContact || !text.trim()) return;
+  const sendMessage = async (text: string) => {
+    if (!activeContact || !text.trim() || isGenerating) return;
 
     const now = new Date();
     const dateString = now.toISOString().split('T')[0];
@@ -193,40 +194,55 @@ const Index = () => {
       [activeContact]: [...(messages[activeContact] || []), newMessage]
     };
 
-    const { mentorId: routedMentorId, response: aiResponseText } = routeAndGenerateAIResponse(text, activeContact);
-    const aiResponse: Message = {
-      id: (Date.now() + 1).toString(),
-      text: routedMentorId !== activeContact ? `${aiPersonalities[routedMentorId].name} says: ${aiResponseText}` : aiResponseText,
-      senderId: routedMentorId,
-      timestamp: new Date(now.getTime() + 1000),
-      isRead: false,
-      date: dateString
-    };
-    const finalMessages = {
-      ...updatedMessages,
-      [routedMentorId]: [...(updatedMessages[routedMentorId] || []), aiResponse]
-    };
-    setMessages(finalMessages);
-    saveMessages(finalMessages);
-    if (routedMentorId !== activeContact) {
-      setActiveContact(routedMentorId);
-      saveActiveContact(routedMentorId);
-    }
+    setMessages(updatedMessages);
+    saveMessages(updatedMessages);
+    setIsGenerating(true);
 
-    const updatedContacts = contacts.map(contact => {
-      if (contact.id === routedMentorId) {
-        return { 
-          ...contact, 
-          lastMessage: aiResponseText, 
-          lastSeen: new Date(),
-          unreadCount: 0
-        };
+    try {
+      const currentHistory = updatedMessages[activeContact] || [];
+      const { mentorId: routedMentorId, response: aiResponseText } = await routeAndGenerateAIResponse(text, activeContact, currentHistory);
+      
+      const aiResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        text: routedMentorId !== activeContact ? `${aiPersonalities[routedMentorId].name} says: ${aiResponseText}` : aiResponseText,
+        senderId: routedMentorId,
+        timestamp: new Date(),
+        isRead: false,
+        date: dateString
+      };
+      
+      const finalMessages = {
+        ...updatedMessages,
+        [routedMentorId]: [...(updatedMessages[routedMentorId] || []), aiResponse]
+      };
+      
+      setMessages(finalMessages);
+      saveMessages(finalMessages);
+      
+      if (routedMentorId !== activeContact) {
+        setActiveContact(routedMentorId);
+        saveActiveContact(routedMentorId);
       }
-      return contact;
-    });
-    
-    setContacts(updatedContacts);
-    saveContacts(updatedContacts);
+
+      const updatedContacts = contacts.map(contact => {
+        if (contact.id === routedMentorId) {
+          return { 
+            ...contact, 
+            lastMessage: aiResponseText, 
+            lastSeen: new Date(),
+            unreadCount: 0
+          };
+        }
+        return contact;
+      });
+      
+      setContacts(updatedContacts);
+      saveContacts(updatedContacts);
+    } catch (error) {
+      console.error('Error generating AI response:', error);
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const markAsRead = (contactId: string) => {
@@ -301,6 +317,7 @@ const Index = () => {
         onSendMessage={sendMessage}
         user={user}
         onLogout={handleLogout}
+        isGenerating={isGenerating}
       />
     </div>
   );

@@ -10,9 +10,10 @@ interface ChatAreaProps {
   messages: Message[];
   onSendMessage: (text: string) => void;
   onClearMessages: () => void;
+  isGenerating?: boolean;
 }
 
-const ChatArea = ({ contact, messages, onSendMessage }: ChatAreaProps) => {
+const ChatArea = ({ contact, messages, onSendMessage, isGenerating = false }: ChatAreaProps) => {
   const [inputText, setInputText] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -94,6 +95,16 @@ const ChatArea = ({ contact, messages, onSendMessage }: ChatAreaProps) => {
             </div>
           </div>
         ))}
+        {isGenerating && (
+          <div className="flex justify-start mb-2 px-2 sm:px-0 animate-pulse">
+            <div className="bg-white text-blue-900 px-4 py-3 rounded-2xl rounded-bl-md shadow-lg border border-blue-200 flex items-center space-x-1.5">
+              <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+              <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+              <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+              <span className="text-xs text-blue-500 font-medium ml-1.5">{contact.name} is thinking...</span>
+            </div>
+          </div>
+        )}
         <div ref={messagesEndRef} />
       </div>
 
@@ -108,8 +119,9 @@ const ChatArea = ({ contact, messages, onSendMessage }: ChatAreaProps) => {
                 value={inputText}
                 onChange={handleTextareaChange}
                 onKeyPress={handleKeyPress}
-                placeholder={`Ask ${contact.name} about ${contact.specialty.toLowerCase()}...`}
-                className="w-full bg-transparent resize-none focus:outline-none max-h-[120px] text-sm text-blue-900 placeholder-blue-400 min-h-[1.5rem] leading-relaxed"
+                disabled={isGenerating}
+                placeholder={isGenerating ? `${contact.name} is writing a response...` : `Ask ${contact.name} about ${contact.specialty.toLowerCase()}...`}
+                className="w-full bg-transparent resize-none focus:outline-none max-h-[120px] text-sm text-blue-900 placeholder-blue-400 min-h-[1.5rem] leading-relaxed disabled:opacity-55"
                 rows={1}
                 style={{ 
                   height: 'auto',
@@ -120,7 +132,7 @@ const ChatArea = ({ contact, messages, onSendMessage }: ChatAreaProps) => {
           </div>
           <button
             onClick={handleSend}
-            disabled={!inputText.trim()}
+            disabled={!inputText.trim() || isGenerating}
             className="bg-gradient-to-r from-blue-800 to-blue-900 hover:from-blue-900 hover:to-blue-800 disabled:from-gray-400 disabled:to-gray-500 text-white p-2.5 rounded-xl transition-all duration-200 shadow-lg disabled:shadow-none transform hover:scale-105 disabled:transform-none flex-shrink-0 active:scale-95"
           >
             <Send size={16} />

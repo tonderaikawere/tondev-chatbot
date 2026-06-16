@@ -5,6 +5,8 @@ import fullstackKB from '../knowledge/fullstack.json';
 import pythonKB from '../knowledge/python.json';
 import mobileKB from '../knowledge/mobile.json';
 import cloudopsKB from '../knowledge/cloudops.json';
+import { loadAISettings } from './aiSettings';
+import { Message } from '../types/chat';
 
 export const aiPersonalities = {
   'cyber-security': {
@@ -394,154 +396,388 @@ Would you like a Python project idea or more on web/data science?`
   }
 };
 
-export function generateAIResponse(message: string, mentorId: string): string {
-  const mentor = aiPersonalities[mentorId];
-  if (!mentor) return "I'm not sure how to help with that.";
+export function retrieveRAGContext(message: string, kb: any): string {
+  if (!kb) return '';
+  const queryTokens = message.toLowerCase().split(/\W+/).filter(Boolean);
+  if (queryTokens.length === 0) return '';
 
-  // Always use the nested knowledgeBase structure
+  const matchedItems: { content: string; score: number }[] = [];
+
+  // Search Core Concepts
+  if (kb.coreConcepts && Array.isArray(kb.coreConcepts)) {
+    for (const concept of kb.coreConcepts) {
+      let score = 0;
+      const question = concept.question.toLowerCase();
+      const answer = concept.answer.toLowerCase();
+      for (const token of queryTokens) {
+        if (question.includes(token)) score += 3;
+        if (answer.includes(token)) score += 1;
+      }
+      if (score > 0) {
+        matchedItems.push({
+          content: `Concept: ${concept.question}\nAnswer: ${concept.answer}`,
+          score
+        });
+      }
+    }
+  }
+
+  // Search FAQs
+  if (kb.faqs && Array.isArray(kb.faqs)) {
+    for (const faq of kb.faqs) {
+      let score = 0;
+      const question = faq.question.toLowerCase();
+      const answer = faq.answer.toLowerCase();
+      for (const token of queryTokens) {
+        if (question.includes(token)) score += 3;
+        if (answer.includes(token)) score += 1;
+      }
+      if (score > 0) {
+        matchedItems.push({
+          content: `FAQ: ${faq.question}\nAnswer: ${faq.answer}`,
+          score
+        });
+      }
+    }
+  }
+
+  // Search Code Examples
+  if (kb.codeExamples && Array.isArray(kb.codeExamples)) {
+    for (const ex of kb.codeExamples) {
+      let score = 0;
+      const name = ex.name.toLowerCase();
+      const desc = (ex.description || '').toLowerCase();
+      for (const token of queryTokens) {
+        if (name.includes(token)) score += 3;
+        if (desc.includes(token)) score += 1;
+      }
+      if (score > 0) {
+        matchedItems.push({
+          content: `Code Example: ${ex.name}\nDescription: ${ex.description}\nCode:\n\`\`\`\n${ex.code}\n\`\`\``,
+          score
+        });
+      }
+    }
+  }
+
+  matchedItems.sort((a, b) => b.score - a.score);
+  const topMatches = matchedItems.slice(0, 3);
+  if (topMatches.length === 0) return '';
+
+  return `\n[RELEVANT LOCAL REFERENCE KNOWLEDGE]\n` + 
+    topMatches.map(m => m.content).join('\n---\n') + '\n';
+}
+
+function buildSystemPrompt(mentor: any, ragContext: string): string {
+  return `You are ${mentor.name}, an expert AI mentor in ${mentor.specialty}.
+Your background: ${mentor.description}
+Your expertise: ${mentor.expertise.join(', ')}.
+
+TEACHING INSTRUCTION:
+You must behave as a highly patient, structured, and engaging master educator.
+When answering, do NOT just dump raw code or generic summaries. Follow these rules to "teach someone to understand":
+1. Explain complex technical terms in simple language, using everyday analogies where helpful.
+2. Break down your explanation step-by-step.
+3. If you provide code snippets, explain the key lines of code syntax simply so a beginner understands how it works.
+4. Keep your formatting beautiful and highly readable, using markdown bold, bullet lists, and syntax-highlighted code blocks.
+5. End your response with a single, gentle, interactive follow-up question related to the topic to test their understanding or prompt active learning.
+
+${ragContext}
+Always stay in character as ${mentor.name}. Explain things clearly, step-by-step.`;
+}
+
+// Smart Local Fallback matcher
+function generateLocalFallbackResponse(message: string, mentor: any, history: Message[]): string {
   const kb = mentor.knowledgeBase && mentor.knowledgeBase.knowledgeBase
     ? mentor.knowledgeBase.knowledgeBase
     : mentor.knowledgeBase;
-  console.log('[AI DEBUG] kb structure:', kb);
-  if (!kb) return "I'm still learning about this topic.";
+    
+  if (!kb) return "I'm still loading my knowledge base. Please try again in a moment.";
 
-  // Normalize user input
-  let userTopic = message.trim().toLowerCase();
-  const topicPattern = /(?:what\s+is|explain|tell\s+me\s+about|define|describe)\s+([a-zA-Z0-9\- ]+)/i;
-  const match = userTopic.match(topicPattern);
-  if (match) {
-    userTopic = match[1].replace(/[^a-zA-Z0-9\- ]/g, '').trim().toLowerCase();
-  }
-  const userNorm = userTopic.replace(/[^a-zA-Z0-9 ]/g, '');
-  const userWords = userNorm.split(' ').filter(Boolean);
-
-  // DEBUG LOGGING
-  console.log('[AI DEBUG] mentorId:', mentorId);
-  console.log('[AI DEBUG] userTopic:', userTopic);
-  console.log('[AI DEBUG] userNorm:', userNorm);
-  if (kb.coreConcepts) {
-    console.log('[AI DEBUG] coreConcepts questions:', kb.coreConcepts.map(c => c.question));
-  }
-
-  // 0. General mentor questions
-  if (mentor.generalResponses) {
-    const generalKeys = Object.keys(mentor.generalResponses);
-    for (const key of generalKeys) {
-      // Flexible: check if userNorm contains or is contained in the key
-      const keyNorm = key.replace(/[^a-zA-Z0-9 ]/g, '');
-      if (userNorm.includes(keyNorm) || keyNorm.includes(userNorm)) {
-        console.log('[AI DEBUG] Matched generalResponses:', key);
-        return mentor.generalResponses[key];
+  const userTopic = message.trim().toLowerCase();
+  
+  // Try dialog context handling: if user replies "yes" or "more"
+  if (history.length > 0) {
+    const lastAssistantMsg = [...history].reverse().find(msg => msg.senderId !== 'me');
+    if (lastAssistantMsg && (userTopic === 'yes' || userTopic === 'more' || userTopic.includes('roadmap') || userTopic.includes('example'))) {
+      const lastText = lastAssistantMsg.text.toLowerCase();
+      // Look for a concept mentioned in the last text
+      if (kb.codeExamples && Array.isArray(kb.codeExamples)) {
+        for (const ex of kb.codeExamples) {
+          if (lastText.includes(ex.name.toLowerCase())) {
+            return `Here is a practical code example for **${ex.name}** to help you understand:\n\n*${ex.description}*\n\n\`\`\`javascript\n${ex.code}\n\`\`\`\n\nDoes this code breakdown make sense? Let me know if you want me to explain any specific line!`;
+          }
+        }
       }
-    }
-    // Default general response for social/small talk
-    const socialWords = ['hi','hello','hey','howareyou','howistheweather','whatsup','whobuiltyou','whoisyourowner','whistondev','whistonde','whocreatedyou','joke','sleep','real','weather','owner','creator'];
-    if (socialWords.some(w => userNorm.includes(w))) {
-      return "I'm here for all your questions—tech or otherwise! Ask me about frontend, backend, security, Python, mobile, or cloud, or just say hi.";
-    }
-  }
-  if (userNorm.includes('introduction') || userNorm.includes('introduce')) {
-    console.log('[AI DEBUG] Matched introduction');
-    return mentor.introduction || '';
-  }
-
-  function isSimilar(a: string, b: string) {
-    const normA = a.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '');
-    const normB = b.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '');
-    if (normA === normB) return true;
-    if (normA.includes(normB) || normB.includes(normA)) return true;
-    const wordsA = normA.split(' ').filter(Boolean);
-    const wordsB = normB.split(' ').filter(Boolean);
-    return wordsA.every(w => wordsB.includes(w)) || wordsB.every(w => wordsA.includes(w));
-  }
-
-  // 1. coreConcepts
-  if (kb.coreConcepts && kb.coreConcepts.length > 0) {
-    let matchedConcept;
-    // Ultra-strict normalization: remove all non-alphanumeric, lowercase, no spaces
-    const userUltraNorm = userTopic.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-    matchedConcept = kb.coreConcepts.find(concept => {
-      const questionUltraNorm = concept.question.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-      console.log('[AI DEBUG] Ultra-strict compare:', userUltraNorm, 'vs', questionUltraNorm);
-      return userUltraNorm === questionUltraNorm;
-    });
-    if (!matchedConcept) {
-      if (userWords.length === 1) {
-        // Single word: match if word appears anywhere in the normalized question
-        matchedConcept = kb.coreConcepts.find(concept => {
-          const questionNorm = concept.question.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '');
-          console.log('[AI DEBUG] Checking single-word:', userWords[0], 'in', questionNorm);
-          return questionNorm.includes(userWords[0]);
-        });
-      } else {
-        // Multi-word: match if all user words are present in the normalized question
-        matchedConcept = kb.coreConcepts.find(concept => {
-          const questionNorm = concept.question.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '');
-          const allWordsPresent = userWords.every(word => questionNorm.includes(word));
-          console.log('[AI DEBUG] Checking multi-word:', userWords, 'in', questionNorm, '->', allWordsPresent);
-          return allWordsPresent;
-        });
-      }
-    }
-    if (matchedConcept) {
-      console.log('[AI DEBUG] Matched in coreConcepts:', matchedConcept.question);
-      return matchedConcept.answer;
-    }
-  }
-  // 2. faqs
-  if (kb.faqs && kb.faqs.length > 0) {
-    const matchedFaq = kb.faqs.find(faq => isSimilar(userTopic, faq.question));
-    if (matchedFaq) {
-      console.log('[AI DEBUG] Matched in faqs:', matchedFaq.question);
-      return matchedFaq.answer;
-    }
-  }
-  // 3. codeExamples
-  if (kb.codeExamples && kb.codeExamples.length > 0) {
-    const matchedExample = kb.codeExamples.find(example => isSimilar(userTopic, example.name));
-    if (matchedExample) {
-      console.log('[AI DEBUG] Matched in codeExamples:', matchedExample.name);
-      return (matchedExample.description || '') + (matchedExample.code ? `\n\nCode Example:\n${matchedExample.code}` : '');
-    }
-  }
-  // 4. bestPractices
-  if (kb.bestPractices) {
-    for (const section in kb.bestPractices) {
-      const items = kb.bestPractices[section];
-      if (Array.isArray(items)) {
-        const matched = items.find(item => isSimilar(userTopic, item));
-        if (matched) {
-          console.log('[AI DEBUG] Matched in bestPractices:', matched);
-          return matched;
+      
+      // Look for rich answers or roadmaps in general responses
+      if (mentor.followUps) {
+        for (const key of Object.keys(mentor.followUps)) {
+          if (lastText.includes(key)) {
+            return mentor.followUps[key];
+          }
         }
       }
     }
   }
-  // 5. resources (do NOT answer directly from resources)
-  // (Intentionally skipped)
-  // Fallback: list available questions/names from all sections
-  let available = [];
-  if (kb.coreConcepts) available = available.concat(kb.coreConcepts.map(c => c.question));
-  if (kb.faqs) available = available.concat(kb.faqs.map(f => f.question));
-  if (kb.codeExamples) available = available.concat(kb.codeExamples.map(e => e.name));
-  if (kb.commonPatterns) available = available.concat(kb.commonPatterns.map(p => p.name));
-  if (kb.developmentTools) available = available.concat(kb.developmentTools.map(t => t.name));
-  if (available.length > 0) {
-    console.log('[AI DEBUG] Fallback, available:', available.slice(0, 10));
-    return `Sorry, I couldn't find a direct answer. Here are some things I can help with: ${available.slice(0, 10).join(', ')}. Please ask about any of these.`;
-  } else {
-    console.log('[AI DEBUG] Fallback, no available topics');
-    return `Sorry, I couldn't find a direct answer. Please try rephrasing your question or ask about a specific topic in frontend, backend, security, Python, mobile, or cloud.`;
+
+  // General responses (social/small talk)
+  if (mentor.generalResponses) {
+    const userNorm = userTopic.replace(/[^a-zA-Z0-9 ]/g, '');
+    for (const key of Object.keys(mentor.generalResponses)) {
+      const keyNorm = key.replace(/[^a-zA-Z0-9 ]/g, '');
+      if (userNorm.includes(keyNorm) || keyNorm.includes(userNorm)) {
+        return mentor.generalResponses[key];
+      }
+    }
+    const socialWords = ['hi','hello','hey','how are you','how is the weather','what\'s up','who built you','who created you','joke','sleep','real'];
+    if (socialWords.some(w => userNorm.includes(w))) {
+      return `Hello! I'm ${mentor.name}, your ${mentor.specialty} mentor. I'm here to help you understand complex technical concepts in simple terms. Ask me a question about my specialty, and let's learn together!`;
+    }
   }
+
+  // Score matching questions
+  const queryTokens = userTopic.split(/\W+/).filter(Boolean);
+  let bestMatch: any = null;
+  let bestScore = 0;
+
+  if (kb.coreConcepts && Array.isArray(kb.coreConcepts)) {
+    for (const concept of kb.coreConcepts) {
+      let score = 0;
+      const question = concept.question.toLowerCase();
+      for (const token of queryTokens) {
+        if (question.includes(token)) score += 3;
+      }
+      if (score > bestScore) {
+        bestScore = score;
+        bestMatch = concept;
+      }
+    }
+  }
+
+  if (kb.faqs && Array.isArray(kb.faqs)) {
+    for (const faq of kb.faqs) {
+      let score = 0;
+      const question = faq.question.toLowerCase();
+      for (const token of queryTokens) {
+        if (question.includes(token)) score += 3;
+      }
+      if (score > bestScore) {
+        bestScore = score;
+        bestMatch = faq;
+      }
+    }
+  }
+
+  if (bestMatch && bestScore >= 2) {
+    const baseAnswer = bestMatch.answer || bestMatch.description;
+    
+    // Add teaching style to the offline fallback!
+    let response = `**${bestMatch.question || bestMatch.name}**\n\n${baseAnswer}`;
+    
+    // Check if there is an associated code example to offer
+    if (kb.codeExamples && Array.isArray(kb.codeExamples)) {
+      const matchedEx = kb.codeExamples.find((ex: any) => 
+        ex.name.toLowerCase().includes(userTopic) || 
+        userTopic.includes(ex.name.toLowerCase())
+      );
+      if (matchedEx) {
+        response += `\n\n### Practical Code Example:\n*${matchedEx.description}*\n\`\`\`javascript\n${matchedEx.code}\n\`\`\``;
+      }
+    }
+    
+    // Append a follow-up educational check
+    response += `\n\nWould you like me to break down this concept further or provide another example?`;
+    return response;
+  }
+
+  // Fallback if no matching topic
+  let available = [];
+  if (kb.coreConcepts) available = available.concat(kb.coreConcepts.map((c: any) => c.question));
+  if (kb.faqs) available = available.concat(kb.faqs.map((f: any) => f.question));
+  
+  if (available.length > 0) {
+    // Select 4 random questions to suggest
+    const shuffled = [...available].sort(() => 0.5 - Math.random());
+    const suggestions = shuffled.slice(0, 4);
+    return `I couldn't find a direct match for "${message}" in my offline files. 
+
+However, since we are learning together, here are some questions you can ask me about **${mentor.specialty}**:
+${suggestions.map(s => `- *${s}*`).join('\n')}
+
+Or, if you are online, go to the **Gear Settings** at the bottom of the sidebar to enable the **Google Gemini API Key (Free Tier)** for unlimited, intelligent ChatGPT-like responses!`;
+  }
+
+  return `I'm sorry, I couldn't process your request in offline fallback mode. Please check your AI Settings to enable the online Gemini model or connect to a local Ollama server.`;
 }
 
-/**
- * Routes the message to the best mentor and generates a response.
- * @param message The user's message
- * @param currentMentorId The currently selected mentor
- * @returns { mentorId, response }
- */
-export function routeAndGenerateAIResponse(message: string, currentMentorId: string): { mentorId: string, response: string } {
+export async function generateAIResponse(message: string, mentorId: string, history: Message[] = []): Promise<string> {
+  const mentor = aiPersonalities[mentorId];
+  if (!mentor) return "I'm not sure how to help with that.";
+
+  const settings = loadAISettings();
+  const kb = mentor.knowledgeBase && mentor.knowledgeBase.knowledgeBase
+    ? mentor.knowledgeBase.knowledgeBase
+    : mentor.knowledgeBase;
+
+  // Retrieve RAG Context
+  const ragContext = retrieveRAGContext(message, kb);
+  const systemPrompt = buildSystemPrompt(mentor, ragContext);
+
+  if (settings.aiMode === 'gemini') {
+    if (!settings.geminiApiKey) {
+      return "⚠️ **Gemini API Key is missing!**\n\nPlease click the **Settings Gear** icon at the bottom of the sidebar to enter your free Gemini API Key so I can answer your questions with advanced reasoning.";
+    }
+
+    try {
+      // Format chat history for Gemini API
+      // Keep only last 10 messages for token efficiency and speed
+      const recentHistory = history.slice(-10);
+      
+      const contents = recentHistory.map(msg => ({
+        role: msg.senderId === 'me' ? 'user' : 'model',
+        parts: [{ text: msg.text }]
+      }));
+
+      // Add the current message if not already present in history
+      const lastMsgInHistory = recentHistory[recentHistory.length - 1];
+      if (!lastMsgInHistory || lastMsgInHistory.text !== message) {
+        contents.push({
+          role: 'user',
+          parts: [{ text: message }]
+        });
+      }
+
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${settings.geminiApiKey}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            contents,
+            systemInstruction: {
+              parts: [{ text: systemPrompt }]
+            }
+          })
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        const errMessage = errorData.error?.message || `HTTP ${response.status}`;
+        throw new Error(errMessage);
+      }
+
+      const data = await response.json();
+      const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (replyText) return replyText;
+      throw new Error('Could not parse text response from Gemini.');
+    } catch (err: any) {
+      console.error('Gemini call failed:', err);
+      return `❌ **Gemini Connection Error**\n\nFailed to fetch response: ${err.message || 'Network error'}.\n\nPlease double-check your API Key in Settings or switch to **Smart Fallback** mode if you are offline.`;
+    }
+  }
+
+  if (settings.aiMode === 'ollama') {
+    try {
+      const recentHistory = history.slice(-10);
+      const messages = [
+        { role: 'system', content: systemPrompt },
+        ...recentHistory.map(msg => ({
+          role: msg.senderId === 'me' ? 'user' : 'assistant',
+          content: msg.text
+        }))
+      ];
+
+      // Add the current message if not already present in history
+      const lastMsgInHistory = recentHistory[recentHistory.length - 1];
+      if (!lastMsgInHistory || lastMsgInHistory.text !== message) {
+        messages.push({
+          role: 'user',
+          content: message
+        });
+      }
+
+      const response = await fetch(`${settings.ollamaUrl.replace(/\/$/, '')}/api/chat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: settings.ollamaModel,
+          messages,
+          stream: false
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Server returned HTTP ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (data.message && data.message.content) {
+        return data.message.content;
+      }
+      throw new Error('Invalid response structure from Ollama.');
+    } catch (err: any) {
+      console.error('Ollama call failed:', err);
+      return `❌ **Ollama Offline Error**\n\nCould not connect to Ollama at \`${settings.ollamaUrl}\`.\n\n**Troubleshooting steps:**\n1. Ensure the Ollama app is running locally on your computer.\n2. Ensure CORS is enabled on Ollama by running it with \`OLLAMA_ORIGINS="*" ollama serve\`.\n3. Verify your settings by clicking the Gear icon in the sidebar.`;
+    }
+  }
+
+  if (settings.aiMode === 'chrome') {
+    try {
+      const ai = (window as any).ai;
+      if (!ai) {
+        throw new Error('Chrome Built-in AI is not supported on this browser.');
+      }
+
+      let session;
+      if (ai.assistant) {
+        session = await ai.assistant.create({
+          systemPrompt: systemPrompt
+        });
+      } else if (ai.createTextSession) {
+        session = await ai.createTextSession({
+          systemPrompt: systemPrompt
+        });
+      } else {
+        throw new Error('Unsupported Prompt API version.');
+      }
+
+      // Feed dialogue context in text prompt
+      let promptText = "";
+      const recentHistory = history.slice(-6);
+      for (const msg of recentHistory) {
+        promptText += `\n${msg.senderId === 'me' ? 'User' : 'Assistant'}: ${msg.text}`;
+      }
+      
+      const lastMsgInHistory = recentHistory[recentHistory.length - 1];
+      if (!lastMsgInHistory || lastMsgInHistory.text !== message) {
+        promptText += `\nUser: ${message}`;
+      }
+      promptText += `\nAssistant:`;
+
+      const result = await session.prompt(promptText);
+      session.destroy(); // Clean up session memory
+      return result;
+    } catch (err: any) {
+      console.error('Chrome AI failed:', err);
+      return `❌ **Chrome Built-in AI Error**\n\nFailed to generate response: ${err.message || 'Unknown error'}.\n\nPlease open settings to troubleshoot or switch back to **Smart Fallback** mode.`;
+    }
+  }
+
+  // Default / Fallback Mode (100% Offline client-side string-matching)
+  return generateLocalFallbackResponse(message, mentor, history);
+}
+
+export async function routeAndGenerateAIResponse(
+  message: string, 
+  currentMentorId: string, 
+  history: Message[] = []
+): Promise<{ mentorId: string, response: string }> {
   const lowerMessage = message.toLowerCase();
   let bestMentorId = currentMentorId;
   let bestMatchScore = 0;
@@ -552,7 +788,7 @@ export function routeAndGenerateAIResponse(message: string, currentMentorId: str
     if (!mentor.knowledgeBase || !mentor.knowledgeBase.knowledgeBase) continue;
     const kb = mentor.knowledgeBase.knowledgeBase;
     if (!kb.coreConcepts) continue;
-    // Score: count of question keywords found in message
+    
     let score = 0;
     for (const concept of kb.coreConcepts) {
       if (
@@ -562,7 +798,7 @@ export function routeAndGenerateAIResponse(message: string, currentMentorId: str
         score++;
       }
     }
-    // Also check mentor expertise/keywords
+    
     if (mentor.expertise) {
       for (const skill of mentor.expertise) {
         if (lowerMessage.includes(skill.toLowerCase())) score++;
@@ -577,13 +813,13 @@ export function routeAndGenerateAIResponse(message: string, currentMentorId: str
   // If no strong match, try keyword-based routing (e.g. 'cyber', 'python', etc.)
   if (bestMatchScore === 0) {
     const routingKeywords = [
-      { id: 'cyber-security', keywords: ['cyber', 'security', 'hacking', 'vulnerability', 'phishing'] },
-      { id: 'frontend', keywords: ['frontend', 'react', 'html', 'css', 'javascript', 'ui', 'component'] },
-      { id: 'backend', keywords: ['backend', 'api', 'server', 'database', 'node', 'express'] },
+      { id: 'cyber-security', keywords: ['cyber', 'security', 'hacking', 'vulnerability', 'phishing', 'firewall'] },
+      { id: 'frontend', keywords: ['frontend', 'react', 'html', 'css', 'javascript', 'ui', 'component', 'dom'] },
+      { id: 'backend', keywords: ['backend', 'api', 'server', 'database', 'node', 'express', 'sql', 'mongodb'] },
       { id: 'fullstack', keywords: ['fullstack', 'full-stack', 'mern', 'jamstack'] },
-      { id: 'python', keywords: ['python', 'django', 'flask', 'pandas', 'numpy'] },
+      { id: 'python', keywords: ['python', 'django', 'flask', 'pandas', 'numpy', 'sensei'] },
       { id: 'mobile', keywords: ['mobile', 'android', 'ios', 'flutter', 'react native'] },
-      { id: 'cloudops', keywords: ['cloud', 'aws', 'azure', 'devops', 'docker', 'kubernetes'] },
+      { id: 'cloudops', keywords: ['cloud', 'aws', 'azure', 'devops', 'docker', 'kubernetes', 'ci/cd'] },
     ];
     for (const route of routingKeywords) {
       if (route.keywords.some(kw => lowerMessage.includes(kw))) {
@@ -594,7 +830,7 @@ export function routeAndGenerateAIResponse(message: string, currentMentorId: str
   }
 
   // Generate the response using the selected mentor
-  const response = generateAIResponse(message, bestMentorId);
+  const response = await generateAIResponse(message, bestMentorId, history);
   return { mentorId: bestMentorId, response };
 }
 
@@ -604,4 +840,5 @@ export function getMentorById(id: string) {
 
 export function getAllMentors() {
   return Object.values(aiPersonalities);
-} 
+}
+ 

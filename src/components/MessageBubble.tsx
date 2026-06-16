@@ -1,6 +1,7 @@
 
 import { Check, CheckCheck } from 'lucide-react';
 import { Message } from '../types/chat';
+import MarkdownRenderer from './MarkdownRenderer';
 
 interface MessageBubbleProps {
   message: Message;
@@ -25,7 +26,7 @@ const MessageBubble = ({ message, isOwn }: MessageBubbleProps) => {
             : 'bg-white text-blue-900 rounded-bl-md shadow-lg border border-blue-200 hover:shadow-xl'
         }`}
       >
-        <p className="text-sm sm:text-base leading-relaxed break-words whitespace-pre-wrap">{message.text}</p>
+        <MarkdownRenderer content={message.text} />
         <div className={`flex items-center justify-end mt-2 space-x-1 ${
           isOwn ? 'text-blue-200' : 'text-blue-500'
         }`}>

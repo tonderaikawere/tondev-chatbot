@@ -1,6 +1,9 @@
-import { Search, Code2, Cpu, Menu, X } from 'lucide-react';
+import { Search, Code2, Cpu, Menu, X, Settings } from 'lucide-react';
 import { Contact } from '../types/chat';
 import ContactItem from './ContactItem';
+import { useState, useEffect } from 'react';
+import SettingsDialog from './SettingsDialog';
+import { loadAISettings } from '../utils/aiSettings';
 
 interface SidebarProps {
   contacts: Contact[];
@@ -11,6 +14,12 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ contacts, activeContact, onContactSelect, isCollapsed = false, onToggle }: SidebarProps) => {
+  const [currentMode, setCurrentMode] = useState<string>('fallback');
+
+  useEffect(() => {
+    const settings = loadAISettings();
+    setCurrentMode(settings.aiMode);
+  }, []);
   return (
     <div className={`${isCollapsed ? 'w-0 lg:w-16' : 'w-80'} transition-all duration-300 bg-white border-r border-gray-200 flex flex-col shadow-lg overflow-hidden`}>
       {/* Header */}
@@ -67,13 +76,22 @@ const Sidebar = ({ contacts, activeContact, onContactSelect, isCollapsed = false
           </div>
 
           {/* Footer */}
-          <div className="p-3 bg-gradient-to-r from-blue-600 to-purple-600 text-center">
-            <p className="text-xs text-blue-100">
-              🚀 Powered by advanced AI technology
-            </p>
-            <p className="text-xs text-yellow-300 font-medium">
-              Software Engineering Excellence
-            </p>
+          <div className="p-3 bg-gradient-to-r from-blue-600 to-purple-600 text-center border-t border-blue-500/20">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[10px] text-blue-100 font-semibold uppercase tracking-wider">AI Engine:</span>
+              <span className="text-[10px] font-bold text-yellow-300 uppercase px-1.5 py-0.5 rounded bg-white/10 backdrop-blur-sm">
+                {currentMode === 'gemini' ? 'Gemini (Online)' : currentMode === 'ollama' ? 'Ollama (Local)' : currentMode === 'chrome' ? 'Chrome AI' : 'Fallback (Offline)'}
+              </span>
+            </div>
+            <SettingsDialog 
+              onSettingsSaved={() => setCurrentMode(loadAISettings().aiMode)}
+              trigger={
+                <button className="w-full flex items-center justify-center space-x-2 text-xs text-white bg-white/10 hover:bg-white/20 py-2 rounded-lg transition-all border border-white/15 hover:border-white/30 backdrop-blur-sm cursor-pointer shadow-sm hover:shadow active:scale-98">
+                  <Settings className="w-3.5 h-3.5 text-yellow-300 animate-spin-slow" />
+                  <span>Configure AI Brain</span>
+                </button>
+              }
+            />
           </div>
         </>
       )}
@@ -103,6 +121,19 @@ const Sidebar = ({ contacts, activeContact, onContactSelect, isCollapsed = false
               </span>
             </div>
           ))}
+          <div className="pt-4 border-t border-gray-200 w-full flex justify-center">
+            <SettingsDialog 
+              onSettingsSaved={() => setCurrentMode(loadAISettings().aiMode)}
+              trigger={
+                <button 
+                  className="w-10 h-10 rounded-full flex items-center justify-center bg-gray-100 hover:bg-blue-100 text-gray-600 transition-all duration-200"
+                  title="Configure AI Settings"
+                >
+                  <Settings className="w-5 h-5 text-blue-600" />
+                </button>
+              }
+            />
+          </div>
         </div>
       )}
     </div>

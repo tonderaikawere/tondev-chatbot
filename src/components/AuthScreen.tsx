@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -19,8 +18,8 @@ interface UserData {
 }
 
 const AuthScreen = ({ onLogin }: AuthScreenProps) => {
-  const [loginData, setLoginData] = useState({ email: '', password: '' });
-  const [signupData, setSignupData] = useState({ name: '', email: '', password: '', confirmPassword: '' });
+  const [loginData, setLoginData] = useState({ email: 'tondekawere@gmail.com', password: '' });
+  const [signupData, setSignupData] = useState({ name: '', email: 'tondekawere@gmail.com', password: '', confirmPassword: '' });
   const [loginError, setLoginError] = useState('');
   const [signupError, setSignupError] = useState('');
   const [backgroundCode, setBackgroundCode] = useState(0);

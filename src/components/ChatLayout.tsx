@@ -20,6 +20,7 @@ interface ChatLayoutProps {
   onSendMessage: (text: string) => void;
   user: User;
   onLogout: () => void;
+  isGenerating?: boolean;
 }
 
 const ChatLayout = ({
@@ -29,7 +30,8 @@ const ChatLayout = ({
   onContactSelect,
   onSendMessage,
   user,
-  onLogout
+  onLogout,
+  isGenerating = false
 }: ChatLayoutProps) => {
   const [filteredContacts, setFilteredContacts] = useState<Contact[]>(contacts);
   const [isSearching, setIsSearching] = useState(false);
@@ -177,6 +179,7 @@ const ChatLayout = ({
             messages={messages}
             onSendMessage={onSendMessage}
             onClearMessages={() => {}}
+            isGenerating={isGenerating}
           />
         ) : (
           <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-blue-50 p-4">
