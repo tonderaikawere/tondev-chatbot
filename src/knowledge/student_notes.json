@@ -1,0 +1,127 @@
+{
+  "name": "Full-Stack AI Engineering Course Notes",
+  "description": "Definitive student notes and laboratory reference guides covering Core Systems, AI Theory, Vector DBs, RAG pipelines, Event Loop internals, npm architecture, and mobile development.",
+  "version": "1.0.0",
+  "knowledgeBase": {
+    "coreConcepts": [
+      {
+        "question": "What is the JavaScript V8 engine compilation pipeline?",
+        "answer": "Google's V8 engine compiles JavaScript directly into native machine code. Stage pipeline:\n1. **Parser & Lexical Analysis**: Converts code chars to tokens, constructing an Abstract Syntax Tree (AST).\n2. **Ignition Interpreter**: Reads AST and generates byte code for immediate startup execution.\n3. **TurboFan Optimizing Compiler**: Monitors hot execution paths. If parameters share stable types, TurboFan compiles bytecode directly to optimized native machine code.\n4. **Inline Caching (ICs)**: Remembers offsets of properties on objects to speed up object property access.\n5. **Deoptimization**: If a parameter type changes after optimization, TurboFan discards native code and falls back to Ignition bytecode, introducing performance overhead."
+      },
+      {
+        "question": "What is the Node.js runtime and libuv thread pool architecture?",
+        "answer": "Node.js runs V8 on a single main thread (Call Stack). To run non-blocking operations without freezing the main thread, it delegates tasks to **libuv** (a C library):\n- **Asynchronous delegator**: Delegates network queries to native OS async handlers (`epoll` on Linux, `kqueue` on macOS, `IOCP` on Windows).\n- **Thread Pool**: Handles operations lacking native async support (e.g. cryptography, compression, file system access). Default size is 4 background threads, modifiable via environmental variable `UV_THREADPOOL_SIZE`."
+      },
+      {
+        "question": "What are the phases of the libuv Event Loop?",
+        "answer": "The Event Loop executes asynchronous callbacks across six execution phases in a continuous loop:\n1. **Timers**: Runs callbacks scheduled by `setTimeout()` and `setInterval()`.\n2. **Pending Callbacks**: Runs deferred I/O callbacks from previous iterations.\n3. **Idle, Prepare**: Used internally by the runtime.\n4. **Poll**: Retrieves new I/O events, executing callbacks. Blocks if poll queue is empty.\n5. **Check**: Runs callbacks scheduled by `setImmediate()`.\n6. **Close Callbacks**: Runs close event handlers (e.g., `socket.on('close')`)."
+      },
+      {
+        "question": "What are the microtask queues in Node.js and their execution priority?",
+        "answer": "The Microtask Queue has two priority sub-queues executed *between every phase* of the Event Loop:\n1. `process.nextTick()` callbacks (highest priority).\n2. Promise resolution callbacks (`.then`, `catch`, `await`).\n\nMicrotasks are drained completely before the Event Loop moves to the next phase. Recursive microtask scheduling will starve the loop, freezing general I/O operations."
+      },
+      {
+        "question": "What was Dependency Hell in early web development?",
+        "answer": "In the pre-package manager era, sharing libraries meant manually downloading files (e.g., `jquery.js`), pasting them locally, and linking script tags. Issues:\n1. **Dependency Ordering**: Script tags had to be in exact sequence (e.g. jquery before bootstrap), else code crashed.\n2. **Nested Dependencies**: If A needed B, and B needed C, developers had to resolve and download them manually.\n3. **Version Mismatches**: Upgrades to library A often broke library B due to undocumented API incompatibilities."
+      },
+      {
+        "question": "What is the difference between package.json and package-lock.json?",
+        "answer": "- **package.json**: Manifest declaring developer-facing direct dependencies (e.g. `express` in `dependencies`, `jest` in `devDependencies`), build scripts, metadata, and SemVer ranges.\n- **package-lock.json**: Cryptographically hashes (SHA-512) and locks down the exact version of all package dependencies (and nested dependencies) installed. Guarantees deterministic, reproducible installations (`npm ci`) across machines."
+      },
+      {
+        "question": "How does Semantic Versioning (SemVer) operate in npm?",
+        "answer": "Version schema is: `MAJOR.MINOR.PATCH`:\n- **PATCH**: Backward-compatible bug fixes.\n- **MINOR**: Backward-compatible new features.\n- **MAJOR**: Breaking changes that break backward-compatibility.\n\nOperators:\n- **Caret (`^`)**: Installs minor/patch updates, blocking major updates (e.g., `^1.8.2` allows `>=1.8.2 <2.0.0`). For pre-1.0.0 versions, it blocks minor updates too (e.g., `^0.2.3` allows `>=0.2.3 <0.3.0`).\n- **Tilde (`~`)**: Installs patch updates only (e.g., `~1.8.2` allows `>=1.8.2 <1.9.0`).\n- **Exact**: Installs only that specific version."
+      },
+      {
+        "question": "How does the Transformer Self-Attention mechanism work?",
+        "answer": "Unlike traditional sequential architectures (RNNs) that parse words step-by-step, the Transformer uses **Self-Attention** to calculate mathematical connections between all words in a sentence simultaneously. For each token, it computes Query (Q), Key (K), and Value (V) vectors. The attention score maps relevance (e.g. matching 'it' to 'database' in a sentence) using scaled dot-products of Q and K, passed through a softmax function, and multiplied by V."
+      },
+      {
+        "question": "What are tokens and token windows in LLMs?",
+        "answer": "LLMs tokenize input text using Byte Pair Encoding (BPE), parsing character combinations into numerical tokens (~4 chars per token). The **Token Window** is the model's total capacity (e.g., 128k tokens for Gemini 1.5). It includes system prompts, context files, history, user prompts, and the generated response. Exceeding this limit causes context overflow crashes. Model billing is measured per 1k input/output tokens."
+      },
+      {
+        "question": "What are the core prompt engineering strategies?",
+        "answer": "- **Role & Constraints**: Define persona boundaries and forbidden actions.\n- **Zero-Shot**: Standard task instruction without examples.\n- **Few-Shot**: Injecting input-output examples inside the prompt to guide styling.\n- **Chain-of-Thought (CoT)**: Prompting the model to 'think step-by-step' and write reasoning before generating outputs, improving logical accuracy.\n- **ReAct**: An execution loop where the model writes Thoughts, calls external tools (Actions), and parses results (Observations).\n- **Prompt Injection Defense**: Tag-wrapping user variables and applying strict system validation rules."
+      },
+      {
+        "question": "What is a vector embedding and Cosine Similarity?",
+        "answer": "An embedding is a vector list of decimal coordinates (usually 1536 dimensions) generated by a model representing semantic meaning. Meaning similarity is measured via **Cosine Similarity** (the cosine of the angle between two vectors):\n$$\\text{Cosine Similarity} = \\frac{A \\cdot B}{\\|A\\| \\|B\\|} = \\frac{\\sum A_i B_i}{\\sqrt{\\sum A_i^2} \\sqrt{\\sum B_i^2}}$$\nA score of `1.0` is identical meaning; `0.0` represents no semantic relationship."
+      },
+      {
+        "question": "How do Vector Databases like Pinecone handle index and namespaces?",
+        "answer": "Vector databases search high-dimensional spaces quickly using approximate nearest neighbors algorithms (like **HNSW - Hierarchical Navigable Small World**). Metadata is stored alongside vector values. **Namespaces** partition vectors within a single index to segregate user accounts/files, scoping search queries for speed, privacy, and permission controls."
+      },
+      {
+        "question": "What is the Retrieval-Augmented Generation (RAG) pipeline?",
+        "answer": "RAG connects private data to LLM reasoning:\n1. **Ingestion**: Load documents -> chunk them into blocks (e.g. 500 chars with 50-char overlap to preserve context) -> generate embeddings vectors -> store them in Pinecone with text metadata.\n2. **Retrieval**: User asks query -> generate query embedding -> query Pinecone for top K similar chunks -> inject retrieved text chunks as context in System Prompt -> send prompt to LLM for final generation."
+      },
+      {
+        "question": "What is Decoupled System Architecture and the CORS preflight handshake?",
+        "answer": "Decoupled architecture separates the browser client (React/CSS) from the backend server (Node/Express). Since they run on separate ports/origins, browsers trigger **CORS** security checks. Before a write request (POST, PUT, DELETE), the browser sends a preflight `OPTIONS` request. The server must reply with headers like `Access-Control-Allow-Origin`, `Access-Control-Allow-Methods`, and `Access-Control-Allow-Headers` to permit the transaction."
+      },
+      {
+        "question": "How do you normalize database schemas up to 3NF?",
+        "answer": "- **1NF**: Atomic cell values, no duplicate columns.\n- **2NF**: Meets 1NF, and eliminates partial dependencies (all non-key columns depend on the entire Primary Key).\n- **3NF**: Meets 2NF, and eliminates transitive dependencies (non-key columns must not depend on other non-key columns)."
+      },
+      {
+        "question": "What are ACID database transactions and PostgreSQL isolation levels?",
+        "answer": "Relational transactions enforce:\n- **Atomicity**: All operations succeed, or all roll back (all-or-nothing).\n- **Consistency**: Database transitions between valid states, preserving schemas.\n- **Isolation**: Concurrent transactions execute without interference.\n- **Durability**: Committed data persists, even during crashes.\n\nPostgres isolation levels:\n- **Read Committed**: Transaction sees only committed data before query start (default).\n- **Repeatable Read**: Transaction sees only data committed before transaction start.\n- **Serializable**: Enforces strict execution order, preventing phantom reads."
+      },
+      {
+        "question": "What is Prisma ORM, Prisma Client, and Migrate?",
+        "answer": "- **Prisma ORM**: A modern database toolkit.\n- **schema.prisma**: Declares connection settings, models, and relations.\n- **Prisma Client**: Autogenerated, type-safe API for JavaScript database queries.\n- **Prisma Migrate**: CLI tool (`npx prisma migrate dev`) tracking changes by building incremental SQL migration files."
+      },
+      {
+        "question": "How does Express middleware architecture operate?",
+        "answer": "Express uses sequential pipeline functions of signature `(req, res, next)`. If a middleware fails or does not call `next()`, request propagation halts. A global centralized error middleware is registered at the bottom of the stack with signature `(err, req, res, next)` to catch unhandled routing errors and log traces securely."
+      },
+      {
+        "question": "How do bcrypt password hashing and salting work?",
+        "answer": "Bcrypt hashes passwords using a Blowfish-based key stretching algorithm. It generates a random string (salt) for each password. By hashing the password dynamically with the salt over multiple rounds (e.g., 10), it increases compilation time, making dictionary and rainbow-table brute force attacks computationally impossible."
+      },
+      {
+        "question": "How does JWT stateless authentication operate?",
+        "answer": "JSON Web Tokens (JWT) enable stateless auth:\n1. **Issue**: Upon login, the server signs a cryptographic token (Header, Payload of claims, and Signature) using a server secret.\n2. **Storage**: Client stores JWT (in localStorage/cookies).\n3. **Request**: Client sends token in the `Authorization: Bearer <token>` header.\n4. **Guard Middleware**: Decodes and verifies signature, attaching user ID payload to `req.user`."
+      },
+      {
+        "question": "What is the difference between SPAs and MPAs?",
+        "answer": "- **MPA (Multi-Page)**: Server renders full HTML pages for each URL request, causing browser page reloads.\n- **SPA (Single-Page)**: Client loads a single HTML template. React Router updates DOM elements dynamically using JavaScript, providing instant transitions without browser refreshes."
+      },
+      {
+        "question": "How do React Reconciliation, Virtual DOM, and Fiber operate?",
+        "answer": "React maintains a Virtual DOM tree in memory. On state changes, it generates a new virtual tree. During **Reconciliation** (React Fiber engine), it compares (diffs) the new and old trees to calculate the minimum layout operations needed, and applies only those modifications to the real browser DOM, optimizing rendering speed."
+      },
+      {
+        "question": "How do cross-platform frameworks compile: React Native vs Flutter?",
+        "answer": "- **React Native**: Runs JS on a background thread (Hermes) and maps React components dynamically to native platform UI widgets via JSI/bridge interfaces, keeping native feel.\n- **Flutter**: Compiles Dart code directly to native machine binaries. Bypasses native platform widgets, rendering everything custom on a graphics canvas using its own engine (Skia/Impeller)."
+      },
+      {
+        "question": "What is Server-Sent Events (SSE) streaming?",
+        "answer": "Server-Sent Events (SSE) provide persistent HTTP unidirectional streams. The server sends chunked data by setting headers: `Content-Type: text/event-stream` and `Transfer-Encoding: chunked`. The client reads raw binary chunks sequentially from the stream reader and decodes them via `TextDecoder` to update text elements dynamically."
+      },
+      {
+        "question": "How do SQL Injection (SQLi) and Cross-Site Scripting (XSS) work?",
+        "answer": "- **SQLi**: Input strings are directly concatenated into SQL statements. Attackers execute arbitrary commands. Prevented by parameterized queries or ORMs.\n- **XSS**: Attackers inject scripts into database entries which render on other user clients. Prevented by script sanitization, escaping outputs, and Content Security Policy (CSP)."
+      }
+    ],
+    "faqs": [
+      {
+        "question": "How do I implement Lab 1: Initializing Express with Prisma & PostgreSQL?",
+        "answer": "Step-by-step setup:\n1. `mkdir backend && cd backend && npm init -y`\n2. `npm install express cors dotenv @prisma/client` and `npm install -D prisma nodemon`\n3. `npx prisma init`\n4. Update connection string in `.env` to: `DATABASE_URL=\"postgresql://postgres:password@localhost:5432/capstone\"`\n5. Define model in `schema.prisma`:\n```prisma\nmodel User {\n  id String @id @default(uuid())\n  email String @unique\n  password String\n  createdAt DateTime @default(now())\n}\n```\n6. Run migrations: `npx prisma migrate dev --name init`\n7. Write Express `server.js` health route:\n```javascript\napp.get('/health', async (req, res) => {\n  await prisma.$queryRaw`SELECT 1`;\n  res.json({ status: 'OK' });\n});\n```\n8. Run nodemon server."
+      },
+      {
+        "question": "How do I implement Lab 2: Creating a JWT Route Guard Middleware?",
+        "answer": "Step-by-step JWT middleware configuration:\n1. `npm install jsonwebtoken bcryptjs`. Add `JWT_SECRET=\"mysecretkey\"` to `.env`.\n2. Create middleware file `middleware/auth.js`:\n```javascript\nimport jwt from 'jsonwebtoken';\nexport function protect(req, res, next) {\n  const authHeader = req.headers.authorization;\n  if (!authHeader || !authHeader.startsWith('Bearer ')) {\n    return res.status(401).json({ error: 'Token missing' });\n  }\n  const token = authHeader.split(' ')[1];\n  try {\n    const decoded = jwt.verify(token, process.env.JWT_SECRET);\n    req.user = decoded;\n    next();\n  } catch (error) {\n    return res.status(401).json({ error: 'Token failed' });\n  }\n}\n```\n3. Protect route:\n```javascript\napp.get('/api/secure-data', protect, (req, res) => res.json({ user: req.user }));\n```"
+      },
+      {
+        "question": "How do I implement Lab 3: Document Chunking and Pinecone Vector Upserts?",
+        "answer": "Chunking and vector loaders setup:\n1. `npm install @pinecone-database/pinecone openai`\n2. Create file `ingest_docs.js`:\n```javascript\nimport { Pinecone } from '@pinecone-database/pinecone';\nimport { OpenAI } from 'openai';\nconst openai = new OpenAI();\nconst pc = new Pinecone({ apiKey: process.env.PINECONE_API_KEY });\nconst index = pc.Index('capstone-rag');\n\nasync function ingest() {\n  const chunk = \"React is a single-page app library.\";\n  const response = await openai.embeddings.create({\n    model: 'text-embedding-3-small',\n    input: chunk\n  });\n  const vector = response.data[0].embedding;\n  await index.namespace('course-material').upsert([{\n    id: 'react-chunk-1',\n    values: vector,\n    metadata: { text: chunk }\n  }]);\n}\ningest();\n```"
+      },
+      {
+        "question": "How do I implement Lab 4: Creating a Streamed SSE Chatbot Route?",
+        "answer": "Build a Server-Sent Events controller and consumer client:\n1. Server Stream handler:\n```javascript\napp.get('/api/ai/stream', async (req, res) => {\n  res.setHeader('Content-Type', 'text/event-stream');\n  res.setHeader('Cache-Control', 'no-cache');\n  res.setHeader('Connection', 'keep-alive');\n  const stream = await openai.chat.completions.create({\n    model: 'gpt-4o-mini',\n    messages: [{ role: 'user', content: req.query.prompt }],\n    stream: true,\n  });\n  for await (const chunk of stream) {\n    const content = chunk.choices[0]?.delta?.content || '';\n    res.write(`data: ${JSON.stringify({ content })}\\n\\n`);\n  }\n  res.end();\n});\n```\n2. React front-end stream reader:\n```javascript\nconst res = await fetch(`/api/ai/stream?prompt=${encodeURIComponent(input)}`);\nconst reader = res.body.getReader();\nconst decoder = new TextDecoder();\nwhile (true) {\n  const { done, value } = await reader.read();\n  if (done) break;\n  const text = decoder.decode(value);\n  const lines = text.split('\\n\\n');\n  for (const line of lines) {\n    if (line.startsWith('data: ')) {\n      const data = JSON.parse(line.slice(6));\n      setMessages(prev => updateMessage(prev, data.content));\n    }\n  }\n}\n```"
+      }
+    ]
+  }
+}

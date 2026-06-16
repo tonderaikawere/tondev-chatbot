@@ -65,6 +65,18 @@ const Index = () => {
   const initializeAIMentors = () => {
     const aiMentors: Contact[] = [
       {
+        id: 'tonde',
+        name: 'Tonde (Lead Instructor)',
+        avatar: '🎓',
+        lastMessage: 'Ready to build production-grade full-stack AI apps?',
+        lastSeen: new Date(),
+        unreadCount: 0,
+        isOnline: true,
+        specialty: 'Full-Stack & Generative AI',
+        description: 'Lead Instructor for Full-Stack AI Specialization',
+        expertise: ['Event Loop', 'RAG Pipelines', 'Databases', 'React/Mobile']
+      },
+      {
         id: 'cyber-security',
         name: 'CyberGuard AI',
         avatar: '🛡️',

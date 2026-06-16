@@ -253,10 +253,12 @@ const ChatLayout = ({
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
                 {[
-                  { icon: '🛡️', title: 'Cyber Security', id: 'cyber-security', desc: 'Threats & security concepts' },
+                  { icon: '🎓', title: 'Tonde (Lead Instructor)', id: 'tonde', desc: 'Event Loop, RAG, full-stack notes & labs' },
                   { icon: '🎨', title: 'Frontend master', id: 'frontend', desc: 'React, layouts & UI designs' },
                   { icon: '⚙️', title: 'Backend master', id: 'backend', desc: 'Server APIs & DB queries' },
-                  { icon: '🐍', title: 'Python sensei', id: 'python', desc: 'Data structures & scripts' }
+                  { icon: '🛡️', title: 'Cyber Security', id: 'cyber-security', desc: 'Threats & security concepts' },
+                  { icon: '🐍', title: 'Python sensei', id: 'python', desc: 'Data structures & scripts' },
+                  { icon: '🚀', title: 'CloudOps Architect', id: 'cloudops', desc: 'Docker, Kubernetes, CI/CD' }
                 ].map((item, index) => (
                   <button
                     key={index}

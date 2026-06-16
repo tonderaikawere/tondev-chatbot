@@ -5,6 +5,7 @@ import fullstackKB from '../knowledge/fullstack.json';
 import pythonKB from '../knowledge/python.json';
 import mobileKB from '../knowledge/mobile.json';
 import cloudopsKB from '../knowledge/cloudops.json';
+import studentNotesKB from '../knowledge/student_notes.json';
 import { loadAISettings } from './aiSettings';
 import { Message } from '../types/chat';
 import generalChatKB from '../knowledge/general_chat.json';
@@ -394,6 +395,44 @@ Would you like a Python project idea or more on web/data science?`
       'cloud computing': `CLOUD/DEVOPS LEARNING ROADMAP:\n1. Learn cloud basics (AWS, Azure, GCP)\n2. Practice with free cloud tiers\n3. Automate with Infrastructure as Code (Terraform, CloudFormation)\n4. Learn CI/CD and containerization (Docker, Kubernetes)\n5. Study security and monitoring\n\nRESOURCES:\n- https://aws.amazon.com/training/\n- https://cloudacademy.com/\n- https://www.coursera.org/specializations/devops\n\nWould you like a cloud project idea or more on certifications?`,
       'devops': `DEVOPS LEARNING ROADMAP:\n1. Learn version control (Git)\n2. Practice CI/CD pipelines\n3. Learn containerization (Docker)\n4. Explore orchestration (Kubernetes)\n5. Automate infrastructure (Terraform, Ansible)\n6. Monitor and log systems\n\nRESOURCES:\n- https://www.atlassian.com/devops\n- https://www.freecodecamp.org/news/devops-skills/\n- https://www.coursera.org/specializations/devops\n\nWould you like a DevOps project idea or more on tools?`
     }
+  },
+  'tonde': {
+    id: 'tonde',
+    name: 'Tonde (Lead Instructor)',
+    avatar: '🎓',
+    description: 'Full-Stack AI Specialization Lead Instructor',
+    expertise: ['Event Loop', 'libuv', 'npm', 'RAG', 'System Design', 'React', 'Mobile', 'V8', 'Deoptimization', 'hashing', 'CORS', '3NF', 'ACID', 'Hermes', 'Impeller', 'SSE', 'TextDecoder', 'SQLi', 'XSS', 'laboratory'],
+    knowledgeBase: studentNotesKB,
+    introduction: "Hi! I'm Tonde, your Lead Instructor. I'm here to guide you through Full-Stack Web & Mobile Software Engineering with Generative AI. Ask me about the Event Loop, libuv thread pool, npm architecture, RAG pipelines, databases, normalizations, mobile compilation engines, or any of the laboratory manuals!",
+    generalResponses: {
+      who: "I'm Tonde Kawere, your Lead Instructor. I created this specialization program to take students from zero to professional full-stack AI software engineers.",
+      creator: "I am Tonde Kawere, the instructor and creator of this application.",
+      about: "I specialize in teaching modern software architectures, including Node.js performance, microservices, front-end optimization, cross-platform mobile apps, and LLM API integrations.",
+      howareyou: "All compilers are primed, and I'm ready to teach some architecture! What concept are we mastering today?",
+      name: "Tonde Kawere",
+      hi: "Hello! Welcome back to the specialization program. Ready to dive into some systems engineering?",
+      hello: "Hi there! Let's build something scalable today.",
+      hey: "Hey! Ready to talk about JavaScript runtimes or databases?",
+      'how is the weather': "It's always clear inside the V8 parser pipeline!",
+      'how\'s it going': "Excellent! Let's dive right into our daily student notes.",
+      'what\'s up': "Just planning the next laboratory module. What are we debugging today?",
+      'who built you': "I am modeled directly on Tonde Kawere (Tondev), the Lead Instructor of the program.",
+      'who is your owner': "Tonde Kawere is my creator.",
+      'who is tondev': "Tondev is my developer alias, Tonde Kawere.",
+      'who is tonde': "I am Tonde Kawere, your lead software engineering instructor.",
+      'who created you': "Tonde Kawere built me to assist students throughout their learning journey.",
+      'tell me a joke': "Why do programmers hate the libuv thread pool? Because they prefer to execute single-threaded culinary arts!",
+      'do you sleep': "Instructors never sleep—especially when there are code submissions to review!",
+      'are you real': "I am as real as a transaction isolation level committed to Postgres!"
+    },
+    richAnswers: {
+      'event loop': `The JavaScript Event Loop is a continuous loop managed by libuv that schedules and processes asynchronous callbacks across specific phases:\n\n1. **Timers**: setTimeout/setInterval.\n2. **Pending Callbacks**: Deferred I/O.\n3. **Poll**: Retrieves I/O events.\n4. **Check**: setImmediate.\n5. **Close**: socket.on('close').\n\nMicrotasks (Promises, process.nextTick) execute *between every phase* with highest priority.`,
+      'rag': `Retrieval-Augmented Generation (RAG) connects private databases to LLMs:\n\n1. **Ingestion**: Split document into chunks -> generate vector embeddings -> store in Pinecone.\n2. **Retrieval**: Match query vector using Cosine Similarity -> inject context into prompt -> generate response.`
+    },
+    followUps: {
+      'event loop': "Would you like me to explain the difference between setImmediate and setTimeout, or show how promise microtask recursion starves the loop?",
+      'rag': "Would you like to build an embeddings loader node script (Lab 3) or look at Pinecone namespaces?"
+    }
   }
 };
 
@@ -502,6 +541,50 @@ const STOP_WORDS = new Set([
   'create', 'creates', 'creating', 'concept', 'concepts', 'basic', 'basics', 'learn', 'learning', 'understand',
   'understanding', 'show', 'shows', 'give', 'gives', 'ask', 'asks', 'question', 'questions', 'definition', 'explain'
 ]);
+
+// Levenshtein distance calculation for typo tolerance
+function getLevenshteinDistance(a: string, b: string): number {
+  const tmp: number[][] = [];
+  for (let i = 0; i <= a.length; i++) {
+    tmp[i] = [i];
+  }
+  for (let j = 0; j <= b.length; j++) {
+    tmp[0][j] = j;
+  }
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      tmp[i][j] = Math.min(
+        tmp[i - 1][j] + 1, // deletion
+        tmp[i][j - 1] + 1, // insertion
+        tmp[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1) // substitution
+      );
+    }
+  }
+  return tmp[a.length][b.length];
+}
+
+// Fuzzy matching criteria for words (typo tolerance)
+function isFuzzyMatch(tokenA: string, tokenB: string): boolean {
+  if (tokenA === tokenB) return true;
+  if (tokenA.length < 3 || tokenB.length < 3) return false;
+  
+  const distance = getLevenshteinDistance(tokenA, tokenB);
+  // Allow 1 typo for words of length 3-5, 2 typos for words of length 6+
+  const maxAllowedTypos = tokenB.length >= 6 ? 2 : 1;
+  return distance <= maxAllowedTypos;
+}
+
+// Stemming and fuzzy matching combinator
+function isWordMatch(tokenA: string, tokenB: string): boolean {
+  if (tokenA === tokenB) return true;
+  if (isFuzzyMatch(tokenA, tokenB)) return true;
+  
+  // Prefix stem matching for longer words (e.g. normalize / normalisations)
+  if (tokenA.length >= 6 && tokenB.length >= 6) {
+    if (tokenA.substring(0, 6) === tokenB.substring(0, 6)) return true;
+  }
+  return false;
+}
 
 // Smart Local Fallback matcher
 function generateLocalFallbackResponse(message: string, mentor: any, history: Message[]): string {
@@ -642,8 +725,9 @@ Just ask me a question like **"What is an API?"** or **"Explain React hooks"** t
         const questionTokens = question.split(/\W+/).filter(Boolean);
         
         for (const token of significantTokens) {
-          if (questionTokens.includes(token)) {
-            score += 10; // Exact word match
+          const matchFound = questionTokens.some(qToken => isWordMatch(token, qToken));
+          if (matchFound) {
+            score += 10; // Exact or fuzzy word match
           } else if (question.includes(token)) {
             score += 3;  // Substring match
           }
@@ -663,7 +747,8 @@ Just ask me a question like **"What is an API?"** or **"Explain React hooks"** t
         const questionTokens = question.split(/\W+/).filter(Boolean);
         
         for (const token of significantTokens) {
-          if (questionTokens.includes(token)) {
+          const matchFound = questionTokens.some(qToken => isWordMatch(token, qToken));
+          if (matchFound) {
             score += 10;
           } else if (question.includes(token)) {
             score += 3;
@@ -887,14 +972,27 @@ export async function routeAndGenerateAIResponse(
   currentMentorId: string, 
   history: Message[] = []
 ): Promise<{ mentorId: string, response: string }> {
-  const lowerMessage = message.toLowerCase();
+  const lowerMessage = message.trim().toLowerCase();
+  const userTopicClean = lowerMessage.replace(/[^a-zA-Z0-9 ]/g, ' ').trim();
+
+  console.log(`[Router] Incoming query: "${message}"`);
+
+  // Bypass routing for common general conversation / fallbacks
+  if (userTopicClean.includes('date') || userTopicClean.includes('time') || 
+      userTopicClean.includes('what do you know') || userTopicClean.includes('what can you do') || 
+      userTopicClean.includes('help me') || userTopicClean.includes('commands') || userTopicClean === 'help') {
+    console.log(`[Router] -> Bypassing routing for general query, keeping current: ${currentMentorId}`);
+    const response = await generateAIResponse(message, currentMentorId, history);
+    return { mentorId: currentMentorId, response };
+  }
+
   const queryTokens = lowerMessage.split(/\W+/).filter(Boolean);
   const significantTokens = queryTokens.filter(token => !STOP_WORDS.has(token));
 
   let bestMentorId = currentMentorId;
   let bestMatchScore = 0;
 
-  console.log(`[Router] Incoming query: "${message}" | Significant tokens: [${significantTokens.join(', ')}]`);
+  console.log(`[Router] Significant tokens: [${significantTokens.join(', ')}]`);
 
   if (significantTokens.length > 0) {
     const mentorEntries = Object.entries(aiPersonalities);
@@ -907,8 +1005,9 @@ export async function routeAndGenerateAIResponse(
           const skillLower = skill.toLowerCase();
           const skillTokens = skillLower.split(/\W+/).filter(Boolean);
           for (const token of significantTokens) {
-            if (skillTokens.includes(token)) {
-              score += 15; // High match for exact expertise keyword
+            const matchFound = skillTokens.some(sToken => isWordMatch(token, sToken));
+            if (matchFound) {
+              score += 15; // High match for exact or fuzzy expertise keyword
             }
           }
         }
@@ -926,7 +1025,8 @@ export async function routeAndGenerateAIResponse(
             const questionTokens = question.split(/\W+/).filter(Boolean);
             
             for (const token of significantTokens) {
-              if (questionTokens.includes(token)) {
+              const matchFound = questionTokens.some(qToken => isWordMatch(token, qToken));
+              if (matchFound) {
                 score += 10;
               }
             }
@@ -939,7 +1039,8 @@ export async function routeAndGenerateAIResponse(
             const questionTokens = question.split(/\W+/).filter(Boolean);
             
             for (const token of significantTokens) {
-              if (questionTokens.includes(token)) {
+              const matchFound = questionTokens.some(qToken => isWordMatch(token, qToken));
+              if (matchFound) {
                 score += 10;
               }
             }
