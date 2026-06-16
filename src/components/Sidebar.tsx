@@ -111,14 +111,6 @@ const Sidebar = ({ contacts, activeContact, onContactSelect, isCollapsed = false
               >
                 {contact.avatar}
               </button>
-              {/* Info button for collapsed sidebar */}
-              <span className="mt-1">
-                <ContactItem
-                  contact={contact}
-                  isActive={contact.id === activeContact}
-                  onClick={() => {}}
-                />
-              </span>
             </div>
           ))}
           <div className="pt-4 border-t border-[#1C2541] w-full flex justify-center">
