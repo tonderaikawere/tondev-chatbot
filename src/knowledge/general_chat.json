@@ -481,6 +481,160 @@
         "screen reader"
       ],
       "answer": "**Web Accessibility (a11y)** ensures that websites are usable by everyone, including people with physical, sensory, cognitive, or situational impairments.\n\n**ESSENTIAL PRACTICE CHECKLIST:**\n1. **Semantic HTML**: Use native tags like `<button>`, `<nav>`, `<header>`, and `<main>` instead of styled generic `<div>`s. Screen readers use these to navigate.\n2. **Image Alt Text**: Provide descriptive `alt` tags (`alt=\"Close button\"`) for images so visually impaired users hear what it represents.\n3. **Keyboard Navigation**: Ensure all interactive components are focusable using Tab keys and work with Enter/Spacebar.\n4. **Color Contrast**: Verify text meets WCAG AAA guidelines (at least 4.5:1 ratio) to ensure readability.\n\n**ACCESSIBLE MARKUP EXAMPLE:**\n```html\n<!-- ACCESSIBLE: Uses native semantic tag, focusable and screen-readable -->\n<button aria-label=\"Search site\" class=\"search-btn\">\n  <svg>...</svg>\n</button>\n```\n\nWould you like to learn about **ARIA roles** or how to use accessibility testing tools?"
+    },
+    {
+      "keywords": [
+        "imposter syndrome",
+        "i feel like a fraud",
+        "not good enough",
+        "imposter",
+        "doubt my skills",
+        "doubt myself"
+      ],
+      "answer": "❤️ **Overcoming Imposter Syndrome as a Developer**\n\nFirst, let me tell you this: **What you are feeling is incredibly common, and it does NOT mean you are incompetent.** Imposter syndrome is the persistent feeling of self-doubt and fear of being exposed as a \"fraud,\" despite evidence of your competence and achievements. It is especially prevalent in software engineering because of the sheer volume of technologies and the constant pace of change.\n\n### Why You Feel This Way:\n- **The \"Infinite Knowledge\" Illusion**: Because tech is vast, we mistakenly assume senior developers know everything. In reality, they are just better at searching docs and debugging.\n- **Dunning-Kruger Effect**: As you learn more, you realize how much you *don't* know, which temporarily drops your confidence.\n\n### Empathetic Strategies to Manage Imposter Syndrome:\n1. **Track a \"Brag Document\"**: Keep a private log of bugs you solved, features you shipped, and praise you received. Review it when self-doubt creeps in.\n2. **Compare Yourself Only to Your Past Self**: Look at code you wrote 6 months ago. You will see massive progress.\n3. **Embrace \"I Don't Know Yet\"**: Replace \"I don't know how to do this, I'm a fraud\" with \"I haven't learned this yet, but I can figure it out.\"\n\nRemember, senior developers aren't wizards; they've just failed more times than you have tried. You belong in this field, and you are fully capable of mastering it.\n\nWould you like to talk about a specific coding challenge that is making you feel stuck right now?"
+    },
+    {
+      "keywords": [
+        "burnout",
+        "exhausted",
+        "burnt out",
+        "tired of coding",
+        "no motivation",
+        "overwhelmed",
+        "stressed"
+      ],
+      "answer": "🌱 **Managing Burnout & Restoring Your Motivation**\n\nI hear you, and I want to validate how exhausting this can feel. Software development requires intense cognitive focus. When you push your brain too hard for too long without adequate recovery, burnout is a natural physiological and psychological response. \n\n### Recognizing Burnout Signs:\n- Feeling detached or frustrated by code that used to excite you.\n- Slower problem-solving speed and persistent brain fog.\n- Physical exhaustion, sleep disruption, or neck/shoulder tension.\n\n### Active Steps for Recovery:\n1. **Set strict digital boundaries**: Establish a hard stop time for coding each day. When the time hits, close the laptop.\n2. **The 20-20-20 Rule**: Every 20 minutes, look at something 20 feet away for at least 20 seconds to rest your eyes and reset.\n3. **Engage in offline hobbies**: Give your brain a chance to process things in the background while you walk, run, read a physical book, or cook.\n4. **Break tasks down**: If a project feels overwhelming, focus only on writing *one single function* or styling *one single button* today.\n\nYour worth as a developer is not tied to 12-hour coding days. Rest is not a reward for work; it is a prerequisite for high-quality work.\n\nWould you like to plan a simplified, step-by-step learning path for your current project so you can take things one small piece at a time?"
+    },
+    {
+      "keywords": [
+        "my code is broken",
+        "i want to quit",
+        "hate coding",
+        "frustrated",
+        "stuck on a bug",
+        "can't solve this",
+        "stupid mistake"
+      ],
+      "answer": "🤗 **Deep Breath: Let's Debug Together**\n\nI completely understand your frustration. Getting stuck on a bug for hours—only to find out it was a missing comma or a typo—can feel incredibly discouraging. But please remember: **This is a normal part of the development lifecycle.** Every great developer has felt this exact frustration.\n\n### How to Regain Control:\n1. **Walk Away (The 15-Minute Rule)**: Step away from your keyboard. Grab a glass of water, walk around the room, or stretch. Often, the brain solves the bug once you stop staring at it.\n2. **Explain it to a Duck (Rubber Duck Debugging)**: Explain what the code is *supposed* to do, line-by-line, to me (or an actual object). In the middle of explaining, you will often spot the flaw.\n3. **Isolate the Problem**: Comment out code until the error stops, or add console logs at every boundary to check your assumptions.\n\nYou are not a bad developer because of bugs. You are a developer *because* you solve bugs. Let's tackle it systematically. \n\nIf you want to paste the code snippet or error message here, I'll help you look at it objectively!"
+    },
+    {
+      "keywords": [
+        "code review",
+        "criticism",
+        "feedback",
+        "rejections",
+        "someone criticized my code"
+      ],
+      "answer": "🤝 **Handling Code Reviews with High EQ**\n\nReceiving feedback on code you worked hard on can sometimes feel like a personal attack. It is natural to feel defensive, but reframing how you view code reviews is one of the most powerful career accelerators for a developer.\n\n### High EQ Perspective Shift:\n- **Your Code is Not You**: A critique of your code is not a critique of your intelligence, value, or potential. It is just an opportunity to optimize a technical script.\n- **Shared Ownership**: The goal of a code review is to ensure the codebase remains maintainable for the entire team, not just to validate your approach.\n\n### Actionable Tips for Review Feedback:\n1. **Pause Before Replying**: If a comment triggers you, wait a few minutes before typing. Write with a collaborative tone.\n2. **Ask Clarifying Questions**: Instead of arguing, ask: *\"Can you explain the performance advantage of this approach? I'd love to learn.\"*\n3. **Say Thank You**: When someone points out an optimization, treat it as a free lesson.\n\nEvery senior developer was once corrected in code reviews. It is how they became senior.\n\nDo you want to share a piece of feedback you received so we can translate it into a constructive learning goal?"
+    },
+    {
+      "keywords": [
+        "solid principles",
+        "solid design",
+        "clean code principles",
+        "single responsibility"
+      ],
+      "answer": "📐 **SOLID Design Principles (Object-Oriented & Clean Code)**\n\nThe **SOLID** principles are five design guidelines that make software designs more understandable, flexible, and maintainable.\n\n### S - Single Responsibility Principle (SRP)\nA class or function should have **one, and only one, reason to change**.\n- *Incorrect*: A class that fetches user data, validates it, and writes it to a file.\n- *Correct*: Separate classes for fetching (`UserRepository`), validating (`UserValidator`), and logging/writing (`FileManager`).\n\n### O - Open-Closed Principle (OCP)\nSoftware entities should be **open for extension, but closed for modification**.\n- *Example*: Use polymorphic interfaces rather than checking classes with if/else.\n```typescript\ninterface Notification { send(msg: string): void; }\nclass EmailNotification implements Notification { send(msg: string) { /* email */ } }\nclass SMSNotification implements Notification { send(msg: string) { /* sms */ } }\n// Adding a new notification type doesn't modify existing code!\n```\n\n### L - Liskov Substitution Principle (LSP)\nSubtypes must be substitutable for their base types without breaking the application.\n\n### I - Interface Segregation Principle (ISP)\nClients should not be forced to depend on methods they do not use. Split fat interfaces into smaller, specific ones.\n\n### D - Dependency Inversion Principle (DIP)\nHigh-level modules should not depend on low-level modules; both should depend on abstractions (interfaces).\n\nWould you like to refactor a messy JavaScript class using SOLID principles?"
+    },
+    {
+      "keywords": [
+        "big o",
+        "time complexity",
+        "space complexity",
+        "algorithmic complexity",
+        "o(n)"
+      ],
+      "answer": "⏱️ **Big O Notation & Algorithmic Complexity**\n\n**Big O Notation** is a mathematical representation of how the runtime or space requirements of an algorithm grow as the input size ($n$) increases.\n\n### Core Time Complexities (Fastest to Slowest):\n\n| Complexity | Name | Typical Code Example |\n|---|---|---|\n| **O(1)** | Constant | Accessing an array item by index (`arr[5]`) |\n| **O(log n)** | Logarithmic | Binary search in a sorted array |\n| **O(n)** | Linear | A single loop through an array (`for (let i = 0; i < n; i++)`) |\n| **O(n log n)** | Linearithmic | Efficient sorting algorithms (Merge Sort, Quick Sort) |\n| **O(n²)** | Quadratic | Nested loops (`for` inside a `for`) |\n| **O(2^n)** | Exponential | Naive recursive Fibonacci calculator |\n\n### Example Comparison (Linear vs Quadratic)\n```javascript\n// O(n) - Linear Time: Prints each item once\nfunction printAll(arr) {\n  arr.forEach(item => console.log(item));\n}\n\n// O(n²) - Quadratic Time: Prints combinations\nfunction printPairs(arr) {\n  arr.forEach(item1 => {\n    arr.forEach(item2 => console.log(item1, item2));\n  });\n}\n```\n\nWould you like to analyze the Big O complexity of a custom algorithm you are writing?"
+    },
+    {
+      "keywords": [
+        "load balancer",
+        "cdn",
+        "system design load balancer",
+        "horizontal scaling",
+        "content delivery network"
+      ],
+      "answer": "🌐 **System Design: Load Balancers & CDNs**\n\nScaling web systems to millions of concurrent requests requires distributing traffic and assets efficiently.\n\n### 1. Load Balancer (LB)\nA Load Balancer sits in front of your servers and routes incoming client requests to backend nodes to prevent any single server from becoming overloaded.\n\n- **Algorithms**:\n  - **Round Robin**: Routes requests sequentially (Server A -> B -> C -> A).\n  - **Least Connections**: Sends requests to the server with the lowest current workload.\n  - **IP Hashing**: Hashes client IP to ensure the same user always hits the same server node (useful for stateful sessions).\n- **Horizontal Scaling**: Adding more server nodes (instances) behind a Load Balancer, as opposed to **Vertical Scaling** (adding RAM/CPU to a single server).\n\n### 2. CDN (Content Delivery Network)\nA CDN is a geographically distributed network of proxy servers that cache static assets (HTML, CSS, images, JS bundles) closer to the end-user.\n- **How it works**: When a user requests an image, the request hits the nearest edge server. If cached (Cache Hit), it serves it instantly. If not (Cache Miss), it fetches it from the origin server, caches it locally, and delivers it.\n\nWould you like to design a system architecture for a high-traffic e-commerce website?"
+    },
+    {
+      "keywords": [
+        "caching",
+        "redis",
+        "memcached",
+        "cache invalidation",
+        "cache policies"
+      ],
+      "answer": "⚡ **System Design: Caching & Redis**\n\n**Caching** stores copies of frequently accessed data in temporary, high-speed memory (RAM) so that future requests can be served faster than querying databases or disk storage.\n\n### Core Cache Strategies:\n1. **Cache-Aside (Lazy Loading)**:\n   - Application checks the cache.\n   - If data exists (Cache Hit), return it.\n   - If not (Cache Miss), query database, write to cache, and return.\n2. **Write-Through**:\n   - Write data to cache and database simultaneously. Ensures data consistency but adds latency to write operations.\n\n### Cache Eviction Policies:\nWhen cache memory fills up, the system discards items based on rules:\n- **LRU (Least Recently Used)**: Discards items that haven't been accessed for the longest time.\n- **LFU (Least Frequently Used)**: Discards items with the lowest total access counts.\n\n### Redis (Remote Dictionary Server)\nAn open-source, in-memory key-value data store frequently used as a database, cache, and message broker.\n\nWould you like to see a Node.js Express route implementing Redis caching?"
+    },
+    {
+      "keywords": [
+        "design patterns",
+        "singleton",
+        "factory pattern",
+        "observer pattern"
+      ],
+      "answer": "🧱 **Software Design Patterns**\n\nDesign patterns are typical solutions to common problems in software design. They are templates rather than copy-paste code.\n\n### 1. Singleton Pattern (Creational)\nGuarantees that a class has **only one instance** and provides a global access point to it. Used for DB connections, loggers, or config stores.\n```javascript\nclass DatabaseConnection {\n  constructor() {\n    if (DatabaseConnection.instance) return DatabaseConnection.instance;\n    this.connection = this.connect();\n    DatabaseConnection.instance = this;\n  }\n  connect() { /* db connection */ }\n}\nconst db1 = new DatabaseConnection();\nconst db2 = new DatabaseConnection();\nconsole.log(db1 === db2); // true!\n```\n\n### 2. Factory Pattern (Creational)\nProvides an interface for creating objects in a superclass, but allows subclasses to alter the type of objects that will be created.\n\n### 3. Observer Pattern (Behavioral)\nDefines a subscription mechanism to notify multiple objects (listeners) about events that happen to the object they are observing (subject).\n\nWould you like to build an Event Emitter class in JavaScript implementing the Observer Pattern?"
+    },
+    {
+      "keywords": [
+        "grammar tutorial",
+        "parts of speech",
+        "learn grammar",
+        "english grammar",
+        "noun verb adjective"
+      ],
+      "answer": "📚 **English Grammar Tutorial: Parts of Speech (with Code Analogies)**\n\nUnderstanding basic grammar structure helps you write clean technical documentation and communicate clearly with your team. Here are the core parts of speech explained with programming concepts:\n\n### 1. Nouns (Variables & Objects)\nA noun names a person, place, thing, or abstract idea.\n- *Examples*: `developer`, `computer`, `server`, `database`.\n- *Code Analogy*: Nouns are like **variable names** or **object instances**. They hold data and represent entities.\n  - `const user = 'Alice';` (`user` is a noun).\n\n### 2. Verbs (Functions & Methods)\nA verb expresses action, occurrence, or state of being.\n- *Examples*: `run`, `compile`, `fetch`, `render`, `debug`.\n- *Code Analogy*: Verbs are like **functions or methods**. They *do* things.\n  - `user.login();` (`login` is a verb).\n\n### 3. Adjectives (Object Properties / CSS styles)\nAn adjective modifies or describes a noun.\n- *Examples*: `clean`, `async`, `responsive`, `deprecated`.\n- *Code Analogy*: Adjectives are like **object properties** or **CSS declarations**.\n  - `const isOnline = true;` (`isOnline` describes status).\n  - `color: blue;` (`blue` describes the text).\n\n### 4. Adverbs (Parameters / Arguments)\nAn adverb modifies a verb, adjective, or another adverb. It answers *how*, *when*, *where*, or *how much*.\n- *Examples*: `quickly`, `asynchronously`, `locally`, `recursively`.\n- *Code Analogy*: Adverbs are like **function parameters or arguments** that modify how the action executes.\n  - `fetchData({ format: 'json' })` (`json` specifies *how* to fetch).\n\nWould you like to review how to structure complete sentences in technical documentation?"
+    },
+    {
+      "keywords": [
+        "english tenses",
+        "tenses",
+        "past present future",
+        "present perfect",
+        "past simple"
+      ],
+      "answer": "⏳ **Mastering English Tenses (Developer Edition)**\n\nTenses indicate *when* an action occurs. In software engineering, using the correct tense is vital for writing clean commit messages, documentation, and progress reports.\n\n### 1. Present Tense (For Current State & Status)\n- **Simple Present**: Used for facts, recurring settings, or current behaviors.\n  - *Example*: *\"The server listens on port 3000.\"*\n- **Present Continuous**: Used for actions happening right now.\n  - *Example*: *\"The system is indexing the database.\"*\n\n### 2. Past Tense (For Reports & Completed Actions)\n- **Simple Past**: Used for completed actions at a specific time.\n  - *Example*: *\"We refactored the auth route yesterday.\"*\n- **Present Perfect**: Used for completed actions that affect the present (with no specific time).\n  - *Example*: *\"I have deployed the security hotfix.\"* (The hotfix is live now).\n\n### 3. Future Tense (For roadmaps & Planned Features)\n- **Simple Future**: Used for planned implementations.\n  - *Example*: *\"We will migrate to AWS next month.\"*\n\n### Tenses in Commit Messages (Imperative Mood)\nBy convention, Git commit messages use the **imperative present tense** (acting as commands to the repository):\n- **Correct**: `feat: Add login validations` (as if command: \"Add login validations to repo\")\n- **Incorrect**: `feat: Added login validations` (past tense) or `feat: Adds login validations` (third-person present)\n\nWould you like a tutorial on writing standard Git commit messages and pull requests?"
+    },
+    {
+      "keywords": [
+        "punctuation guide",
+        "comma splice",
+        "semicolon usage",
+        "punctuation rules",
+        "how to use semicolon"
+      ],
+      "answer": "✍️ **English Punctuation Guide & Semicolon Mechanics**\n\nPunctuation marks are the \"syntax rules\" of English. Just like a missing semicolon can break a JavaScript file, incorrect punctuation can make your documentation confusing.\n\n### 1. The Semicolon ( `;` )\nIn grammar, a semicolon links two independent clauses (complete sentences) that are closely related in thought.\n- **Rules**: Do not use it like a comma. Use it to avoid separating two matching sentences with a full stop.\n  - *Correct*: *\"I love writing React code; it is incredibly declarative.\"*\n  - *Incorrect*: *\"I love writing React code; which is incredibly declarative.\"* (second half is not a complete sentence).\n\n### 2. The Comma Splice (Common Error)\nA comma splice occurs when you join two complete sentences with only a comma.\n- *Incorrect*: *\"The build failed, we need to inspect the logs.\"*\n- *Correct Options*:\n  - *\"The build failed. We need to inspect the logs.\"* (Full stop)\n  - *\"The build failed; we need to inspect the logs.\"* (Semicolon)\n  - *\"The build failed, so we need to inspect the logs.\"* (Comma + Coordinating Conjunction)\n\n### 3. Apostrophes ( `'` )\n- **Contractions**: `it's` = `it is` or `it has`.\n- **Possession**: `its` = belonging to it (e.g. *\"The server lost its database connection\"*).\n  - *Tip*: If you can replace the word with \"it is\", use the apostrophe. Otherwise, do not!\n\nWould you like to practice correcting some common punctuation mistakes?"
+    },
+    {
+      "keywords": [
+        "spelling rules",
+        "spelling tutorial",
+        "affect vs effect",
+        "there their they're",
+        "its vs it's",
+        "confused words"
+      ],
+      "answer": "🔤 **Commonly Confused Words & Spelling Rules**\n\nSpelling mistakes in code variables lead to bugs; spelling mistakes in README files or communication can distract readers. Here are the most commonly confused terms:\n\n### 1. Affect vs. Effect\n- **Affect** (usually a **Verb**): To influence or change something.\n  - *Example*: *\"Database outages affect our users.\"*\n- **Effect** (usually a **Noun**): The result or outcome of a change.\n  - *Example*: *\"The security patch had a positive effect.\"*\n\n### 2. Their vs. There vs. They're\n- **Their** (Possessive): Belonging to them.\n  - *Example*: *\"Developers updated their profiles.\"*\n- **There** (Location/State): A place or introduction.\n  - *Example*: *\"Please put the server logs there.\"* or *\"There is a bug in the code.\"*\n- **They're** (Contraction): They are.\n  - *Example*: *\"They're reviewing the code reviews.\"*\n\n### 3. Your vs. You're\n- **Your** (Possessive): Belonging to you.\n  - *Example*: *\"What is your Git username?\"*\n- **You're** (Contraction): You are.\n  - *Example*: *\"You're doing an amazing job learning this!\"*\n\n### 4. Spelling Rule: \"I Before E except after C\"\n- *Examples*: `believe`, `field`, `retrieve`.\n- *Exceptions (after C)*: `receive`, `ceiling`, `deceive`.\n\nWould you like me to quiz you on these confused words to test your understanding?"
+    },
+    {
+      "keywords": [
+        "technical writing",
+        "how to write readme",
+        "write documentation",
+        "jsdoc",
+        "commit messages"
+      ],
+      "answer": "📝 **Technical Documentation & Code Commenting (JSDoc)**\n\nTechnical writing is the art of explaining complex architectural concepts to other developers. Good documentation saves teams hundreds of hours of debugging.\n\n### 1. Writing JSDoc Comments\nJSDoc tags document JavaScript functions, parameters, and return values directly in your code so editors display helpful popups during typing.\n```javascript\n/**\n * Calculates the total cost of items in a user's cart.\n * \n * @param {Array<Object>} cart - List of purchase items.\n * @param {number} taxRate - Tax percentage (e.g. 0.15 for 15%).\n * @returns {number} The final calculated cost.\n * @throws {Error} If cart is empty.\n */\nfunction calculateTotal(cart, taxRate) {\n  if (!cart.length) throw new Error('Cart cannot be empty');\n  const total = cart.reduce((sum, item) => sum + item.price, 0);\n  return total * (1 + taxRate);\n}\n```\n\n### 2. Standard README.md Structure\nEvery repository should contain a clean `README.md` containing:\n1. **Title & Description**: High-level overview of what the app does.\n2. **Prerequisites**: Software needed (e.g., Node.js v18+).\n3. **Installation Steps**: CLI commands to get started (`npm install`).\n4. **Usage Instructions**: Commands to run local development servers (`npm run dev`).\n5. **Contributing Guidelines**: Brief contribution checklist.\n\nWould you like to write a README.md template for your current project?"
+    },
+    {
+      "keywords": [
+        "professional email",
+        "email templates",
+        "client communication",
+        "how to ask for help",
+        "write email"
+      ],
+      "answer": "📧 **Professional Email & Communication Templates**\n\nClear and polite communication is vital for remote software engineers. Here are templates for common workplace scenarios:\n\n### 1. Requesting Help with a Bug (To Senior/Colleague)\n*Keep it concise, list what you've tried, and link your code.*\n> **Subject**: Need assistance: [Brief bug description, e.g., JWT Auth failure on /login]\n>\n> Hi [Name],\n>\n> I hope you're doing well.\n>\n> I'm currently working on [Feature/Task] and have run into an issue with [describe the bug]. Specifically, [describe symptoms or paste error log].\n>\n> Here is what I have tried so far:\n> - Verified connection secrets are loaded.\n> - Tested signature validations locally.\n>\n> You can find my code on the branch `auth-migration` here: [Link to PR/Code].\n>\n> Whenever you have a few minutes, I would appreciate any pointers or suggestions you might have.\n>\n> Thank you,\n> [Your Name]\n\n### 2. Requesting a Pull Request Review\n> **Subject**: Review Request: feat/auth-migration [PR #123]\n>\n> Hi team,\n>\n> I have completed the migration of our authentication system to JWTs. The branch is ready for review here: [Link to Pull Request].\n>\n> **Key Changes**:\n> - Replaced session tokens with stateless crypt-signed JWTs.\n> - Secured Express routing with token validation middleware.\n>\n> All test suites pass locally. Please review and share any optimizations!\n>\n> Best,\n> [Your Name]\n\nWould you like to draft an email response to a manager explaining a project delay?"
     }
   ]
 }
