@@ -1,0 +1,87 @@
+{
+  "name": "General Knowledge Database",
+  "description": "Offline database of fundamental human knowledge across Science, Math, History, Philosophy, Geography, and Technology.",
+  "version": "1.0.0",
+  "knowledgeBase": {
+    "coreConcepts": [
+      {
+        "question": "What is gravity and general relativity?",
+        "answer": "In classical physics (Newton), **gravity** is an attractive force between two masses. In modern physics (Einstein's General Relativity), gravity is not a force but the **curvature of spacetime** caused by mass and energy. Massive objects (like the Sun) warp the fabric of space and time, and other objects (like Earth) move along the curved paths created by that warp, which we perceive as falling or orbiting."
+      },
+      {
+        "question": "What is quantum mechanics?",
+        "answer": "**Quantum Mechanics** is the branch of physics describing the behavior of matter and light at the atomic and subatomic scale (atoms, electrons, photons). Core concepts:\n- **Wave-Particle Duality**: Light and particles exhibit behavior of both waves and particles.\n- **Heisenberg Uncertainty Principle**: It is impossible to simultaneously measure both the exact position and momentum of a particle.\n- **Superposition**: A system exists in multiple states at once until it is observed (Schrödinger's Cat)."
+      },
+      {
+        "question": "How does photosynthesis work?",
+        "answer": "**Photosynthesis** is the process used by plants, algae, and some bacteria to convert solar energy into chemical energy (glucose) using water and carbon dioxide, releasing oxygen as a byproduct.\n- **Chemical Formula**:\n$$6\\text{CO}_2 + 6\\text{H}_2\\text{O} + \\text{Light} \\rightarrow \\text{C}_6\\text{H}_{12}\\text{O}_6 + 6\\text{O}_2$$\n- **Process**: Occurs inside chloroplasts. Chlorophyll absorbs sunlight, splitting water molecules (releasing oxygen) to generate ATP, which binds carbon dioxide into glucose."
+      },
+      {
+        "question": "What is DNA and genetic replication?",
+        "answer": "**DNA (Deoxyribonucleic Acid)** is the double-helix molecule carrying genetic instructions for all living organisms. It is composed of nucleotide base pairs:\n- **Adenine (A)** binds to **Thymine (T)**\n- **Cytosine (C)** binds to **Guanine (G)**\nDuring replication, the double helix unzips, and enzyme polymerases build a complementary strand for each side, creating two identical DNA copies."
+      },
+      {
+        "question": "What is the Big Bang Theory?",
+        "answer": "The **Big Bang Theory** is the prevailing cosmological model explaining the origin of the universe. It states that the universe began ~13.8 billion years ago from an extremely hot, dense point (singularity) and has been expanding and cooling ever since. Key evidence includes the cosmic microwave background radiation (CMB) and galactic redshift (galaxies moving away from us)."
+      },
+      {
+        "question": "What is calculus (differentiation and integration)?",
+        "answer": "**Calculus** is the mathematical study of continuous change. It has two main branches:\n1. **Differential Calculus (Derivatives)**: Measures the rate of change of a quantity. For example, the derivative of position is speed (how fast position changes over time).\n2. **Integral Calculus (Integrals)**: Calculates the accumulation of quantities, such as the total area under a curve or distance traveled over time.\nThese branches are connected by the Fundamental Theorem of Calculus."
+      },
+      {
+        "question": "What is the Fibonacci sequence and Golden Ratio?",
+        "answer": "- **Fibonacci Sequence**: An integer sequence where each number is the sum of the two preceding ones: $0, 1, 1, 2, 3, 5, 8, 13, 21, 34, \\dots$\n- **Golden Ratio (Phi, $\\phi$)**: The ratio of successive Fibonacci numbers ($F_n / F_{n-1}$) approaches the Golden Ratio: $\\phi \\approx 1.6180339887...$\nIt is found in nature (leaf arrangements, shells, spiral galaxies) and used in art and design for balanced proportions."
+      },
+      {
+        "question": "What is probability and normal distribution?",
+        "answer": "- **Probability**: The mathematical measure of the likelihood of an event occurring, scaled between 0 (impossible) and 1 (certain).\n- **Normal (Gaussian) Distribution**: A continuous probability distribution that is symmetrical, forming a bell curve. Most values cluster around the central mean, with variance tapering off. Evaluated by standard deviations (e.g. 68% of data falls within 1 deviation, 95% within 2, and 99.7% within 3)."
+      },
+      {
+        "question": "What was the Industrial Revolution?",
+        "answer": "The **Industrial Revolution** (starting in Britain in the late 18th century) was the transition from agrarian, handicraft economies to machine-driven, manufacturing industries. Key innovations included the steam engine, textile mechanization, and factory organization. It led to mass urbanization, class shifts, and paved the way for modern capitalist economies."
+      },
+      {
+        "question": "Who was Socrates and what is the Socratic Method?",
+        "answer": "**Socrates** (470–399 BC) was an Athenian philosopher credited as a founder of Western philosophy. He wrote nothing himself; his ideas are recorded in Plato's dialogues. The **Socratic Method** is a form of cooperative argumentative dialogue. By asking continuous questions, Socrates guided students to expose logical contradictions in their assumptions, seeking fundamental truths about justice, virtue, and morality."
+      },
+      {
+        "question": "What is Stoicism?",
+        "answer": "**Stoicism** is an ancient Greek philosophy (popularized in Rome by Seneca, Epictetus, and Marcus Aurelius). It teaches that we cannot control external events, only our responses to them. By accepting the present moment, avoiding emotional reactivity, and acting with virtue and reason, we can achieve inner peace (ataraxia) and resilience."
+      },
+      {
+        "question": "What is the difference between Rationalism and Empiricism?",
+        "answer": "- **Rationalism**: Philosophical stance that reason and intellect (innate ideas) are the primary sources of knowledge (e.g. Descartes, Spinoza, Leibniz). Core quote: *\"Cogito, ergo sum\"* (I think, therefore I am).\n- **Empiricism**: Stance that all knowledge originates from sensory experience and observation (e.g. Locke, Hume, Bacon). Locke described the mind at birth as a *tabula rasa* (blank slate)."
+      },
+      {
+        "question": "What are the continents and oceans of the world?",
+        "answer": "Earth has 7 continents and 5 oceans:\n- **Continents**: Asia (largest), Africa, North America, South America, Antarctica, Europe, Australia (smallest).\n- **Oceans**: Pacific (largest/deepest), Atlantic, Indian, Southern (Antarctic), Arctic (smallest/shallowest)."
+      },
+      {
+        "question": "What is the capital city of major countries?",
+        "answer": "Capital cities of prominent countries:\n- **United Kingdom**: London\n- **France**: Paris\n- **Germany**: Berlin\n- **Japan**: Tokyo\n- **United States**: Washington, D.C.\n- **China**: Beijing\n- **Australia**: Canberra\n- **Canada**: Ottawa\n- **Brazil**: Brasília\n- **South Africa**: Pretoria, Cape Town, Bloemfontein (three capitals)"
+      },
+      {
+        "question": "How does the Internet work?",
+        "answer": "The **Internet** is a global network of interconnected computers communicating via standardized protocols (TCP/IP). When you visit a website:\n1. **DNS Lookup**: Browser translates domain (`google.com`) to IP address (`172.217.16.14`) via Domain Name System.\n2. **TCP Connection**: Browser establishes a connection to the server.\n3. **HTTP Request**: Browser requests pages/resources.\n4. **Packet Routing**: Data is split into small packets, routed across routers globally, and reassembled at the destination."
+      },
+      {
+        "question": "Who were Alan Turing and Ada Lovelace?",
+        "answer": "- **Ada Lovelace** (1815–1852): Wrote the first computer algorithm in history for Charles Babbage's mechanical computer (the Analytical Engine), making her the world's first computer programmer.\n- **Alan Turing** (1912–1954): Mathematician who created the theoretical Turing Machine (formalizing algorithms) and cracked the Enigma code in WW2. Credited as a father of computer science and Artificial Intelligence."
+      }
+    ],
+    "faqs": [
+      {
+        "question": "What is the speed of light?",
+        "answer": "The speed of light in a vacuum ($c$) is a universal physical constant exactly equal to $299,792,458$ meters per second (approx. $300,000$ km/s or $186,000$ miles per second). According to Einstein's relativity, it is the absolute speed limit for information and matter travel."
+      },
+      {
+        "question": "What is the difference between a solar and lunar eclipse?",
+        "answer": "- **Solar Eclipse**: The Moon passes directly between the Sun and Earth, casting a shadow on Earth and blocking the Sun's light (occurs during a New Moon).\n- **Lunar Eclipse**: Earth passes directly between the Sun and Moon, casting its shadow on the Moon and making it appear dark/reddish (occurs during a Full Moon)."
+      },
+      {
+        "question": "What are prime numbers?",
+        "answer": "A **Prime Number** is a whole number greater than 1 that has no positive divisors other than 1 and itself. Examples: $2, 3, 5, 7, 11, 13, 17, 19, \\dots$ (2 is the only even prime). Prime numbers are the 'atoms' of arithmetic because every integer can be factored uniquely into a product of primes."
+      }
+    ]
+  }
+}

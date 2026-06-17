@@ -10,6 +10,7 @@ import { loadAISettings } from './aiSettings';
 import { Message } from '../types/chat';
 import generalChatKB from '../knowledge/general_chat.json';
 import offlineResources from '../knowledge/offline_resources.json';
+import generalKnowledgeKB from '../knowledge/general_knowledge.json';
 
 export const aiPersonalities = {
   'cyber-security': {
@@ -832,6 +833,68 @@ ${domainRes.markdown}
     // Append a follow-up educational check
     response += `\n\nWould you like me to break down this concept further or provide another example?`;
     return response;
+  }
+
+  // 4. Check offline general knowledge database if no mentor-specific match
+  if (generalKnowledgeKB && generalKnowledgeKB.knowledgeBase) {
+    const gk = generalKnowledgeKB.knowledgeBase;
+    let bestGKMatch: any = null;
+    let bestGKScore = 0;
+    
+    if (significantTokens.length > 0) {
+      if (gk.coreConcepts && Array.isArray(gk.coreConcepts)) {
+        for (const concept of gk.coreConcepts) {
+          let score = 0;
+          const question = concept.question.toLowerCase();
+          const questionTokens = question.split(/\W+/).filter(Boolean);
+          
+          for (const token of significantTokens) {
+            const matchFound = questionTokens.some(qToken => isWordMatch(token, qToken));
+            if (matchFound) {
+              score += 10;
+            } else if (question.includes(token)) {
+              score += 3;
+            }
+          }
+          if (score > bestGKScore) {
+            bestGKScore = score;
+            bestGKMatch = concept;
+          }
+        }
+      }
+      
+      if (gk.faqs && Array.isArray(gk.faqs)) {
+        for (const faq of gk.faqs) {
+          let score = 0;
+          const question = faq.question.toLowerCase();
+          const questionTokens = question.split(/\W+/).filter(Boolean);
+          
+          for (const token of significantTokens) {
+            const matchFound = questionTokens.some(qToken => isWordMatch(token, qToken));
+            if (matchFound) {
+              score += 10;
+            } else if (question.includes(token)) {
+              score += 3;
+            }
+          }
+          if (score > bestGKScore) {
+            bestGKScore = score;
+            bestGKMatch = faq;
+          }
+        }
+      }
+    }
+    
+    if (bestGKMatch && bestGKScore >= 8) {
+      return `🧠 **General Knowledge Offline Lookup**
+      
+**${bestGKMatch.question}**
+
+${bestGKMatch.answer}
+
+---
+*This information is loaded from the local offline general knowledge database.*`;
+    }
   }
 
   // Fallback if no matching topic
