@@ -56,6 +56,10 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
             Advanced AI-powered software development mentorship
           </p>
           
+          <p className="text-slate-400 text-[10px] sm:text-xs">
+            Sponsored by <a href="https://kawerifytech.com" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 font-semibold hover:underline">Kawerify Tech</a>
+          </p>
+          
           {/* Code Animation */}
           <div className="bg-[#0B132B]/50 backdrop-blur rounded-lg p-2 sm:p-3 md:p-4 font-mono text-left w-full max-w-[260px] sm:max-w-xs md:max-w-sm lg:max-w-md mx-auto border border-blue-500/20 overflow-hidden">
             <div className="flex items-center mb-1 sm:mb-2 border-b border-[#243B6B]/20 pb-1.5">

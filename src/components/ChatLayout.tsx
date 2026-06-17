@@ -289,6 +289,18 @@ const ChatLayout = ({
                 <p className="text-[10px] text-slate-400 mt-1">
                   Advanced AI mentors for software engineering excellence
                 </p>
+                <div className="w-full h-px bg-slate-800 my-2.5" />
+                <p className="text-[10px] text-slate-300">
+                  🚀 Sponsored by{' '}
+                  <a 
+                    href="https://kawerifytech.com" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-blue-400 font-bold hover:text-blue-300 hover:underline"
+                  >
+                    Kawerify Tech
+                  </a>
+                </p>
               </div>
             </div>
           </div>

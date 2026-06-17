@@ -272,10 +272,21 @@ const AuthScreen = ({ onLogin }: AuthScreenProps) => {
             </CardContent>
           </Card>
 
-          <div className="text-center mt-2 sm:mt-3 md:mt-4 px-2 flex-shrink-0">
+          <div className="text-center mt-2 sm:mt-3 md:mt-4 px-2 flex-shrink-0 space-y-1">
             <p className="text-slate-400 text-[9px] sm:text-[10px] md:text-xs leading-tight">
               💡 Developed with precision by{' '}
               <span className="text-blue-400 font-bold">Tonde Kawere</span>
+            </p>
+            <p className="text-slate-500 text-[8px] sm:text-[9px] md:text-[10px]">
+              Sponsored by{' '}
+              <a 
+                href="https://kawerifytech.com" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-blue-400 hover:underline font-semibold"
+              >
+                Kawerify Tech
+              </a>
             </p>
           </div>
         </div>
