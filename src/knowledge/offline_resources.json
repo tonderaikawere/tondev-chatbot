@@ -1,0 +1,250 @@
+[
+  {
+    "id": "react-docs",
+    "title": "React Official Docs & Reference Guides",
+    "category": "Documentation",
+    "domain": "reactjs.org",
+    "urls": [
+      "https://reactjs.org/",
+      "https://reactjs.org/docs/",
+      "https://reactjs.org/docs/getting-started.html",
+      "https://reactjs.org/docs/hooks-intro.html",
+      "https://reactjs.org/docs/hooks-overview.html",
+      "https://reactjs.org/docs/optimizing-performance.html",
+      "https://github.com/facebook/react",
+      "https://chrome.google.com/webstore/detail/react-developer-tools",
+      "https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi",
+      "https://addons.mozilla.org/en-US/firefox/addon/react-devtools/"
+    ],
+    "description": "Official guides, hooks APIs, performance tuning strategies, and developer tooling for React.",
+    "markdown": "# React Official Documentation & Guides\n\nReact is a declarative, efficient, and flexible JavaScript library for building user interfaces. It lets you compose complex UIs from small and isolated pieces of code called \"components\".\n\n## Core Concepts & Hooks Cheat Sheet\n\n### 1. Functional Components & State\nState allows React components to remember information (like input values or the current user).\n```javascript\nimport React, { useState } from 'react';\n\nfunction Counter() {\n  const [count, setCount] = useState(0);\n\n  return (\n    <div>\n      <p>Count: {count}</p>\n      <button onClick={() => setCount(count + 1)}>Increment</button>\n    </div>\n  );\n}\n```\n\n### 2. Side Effects (useEffect)\n`useLayoutEffect` or `useEffect` handles data fetching, subscriptions, or manual DOM manipulations.\n```javascript\nimport React, { useState, useEffect } from 'react';\n\nfunction DataFetcher() {\n  const [data, setData] = useState(null);\n\n  useEffect(() => {\n    fetch('https://api.example.com/data')\n      .then(res => res.json())\n      .then(data => setData(data));\n  }, []); // Empty dependency array runs effect once on mount\n\n  return <div>{data ? JSON.stringify(data) : 'Loading...'}</div>;\n}\n```\n\n## React Performance Optimization\n- **React.memo**: Memoizes components to prevent unnecessary re-renders when parent state changes.\n- **useMemo**: Caches computation outputs between renders.\n- **useCallback**: Memoizes callback functions to prevent recreation of function references.\n\n## Official Tooling\n- **React Developer Tools**: Extension for Chrome and Firefox. Lets you inspect the React component trees in the browser DevTools, view state, props, and profile performance."
+  },
+  {
+    "id": "nodejs-docs",
+    "title": "Node.js Core Documentation",
+    "category": "Documentation",
+    "domain": "nodejs.org",
+    "urls": [
+      "https://nodejs.org/en/docs/",
+      "https://nodejs.org/en/community/",
+      "https://github.com/nodejs/node",
+      "https://discord.gg/nodejs",
+      "https://stackoverflow.com/questions/tagged/node.js"
+    ],
+    "description": "Core API guides, Event Loop specs, File System module details, and Node.js community connections.",
+    "markdown": "# Node.js Core API & Runtime Manual\n\nNode.js is an open-source, cross-platform JavaScript runtime environment that executes JavaScript code outside a web browser, powered by the V8 Engine and libuv.\n\n## Key APIs & Core Modules\n\n### 1. File System (fs)\nRead/write files asynchronously with promises.\n```javascript\nconst fs = require('fs/promises');\n\nasync function readConfig() {\n  try {\n    const data = await fs.readFile('./config.json', 'utf8');\n    const parsed = JSON.parse(data);\n    console.log('Database Host:', parsed.dbHost);\n  } catch (err) {\n    console.error('Failed to read config:', err);\n  }\n}\n```\n\n### 2. HTTP Server\nCreate a native HTTP server.\n```javascript\nconst http = require('http');\n\nconst server = http.createServer((req, res) => {\n  res.writeHead(200, { 'Content-Type': 'application/json' });\n  res.end(JSON.stringify({ status: 'success', data: 'Hello from Node.js!' }));\n});\n\nserver.listen(3000, () => {\n  console.log('Server listening on port 3000');\n});\n```\n\n## Runtime Best Practices\n- **Never block the main thread**: Avoid CPU-intensive synchronous calls like `fs.readFileSync()` in heavy servers. Use background helper processes or Worker Threads instead.\n- **UV_THREADPOOL_SIZE**: By default, libuv has a thread pool size of 4. For file/crypto/compression-heavy apps, increase it (e.g. `process.env.UV_THREADPOOL_SIZE = 12`)."
+  },
+  {
+    "id": "express-docs",
+    "title": "Express.js Framework Guide",
+    "category": "Documentation",
+    "domain": "expressjs.com",
+    "urls": [
+      "https://expressjs.com/"
+    ],
+    "description": "Routing, middleware systems, and standard REST API design practices for Express.js.",
+    "markdown": "# Express.js Web Framework Reference\n\nExpress is a minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications.\n\n## Express Route & Middleware Setup\n```javascript\nconst express = require('express');\nconst app = express();\n\n// Parse JSON request bodies\napp.use(express.json());\n\n// Logger Middleware\napp.use((req, res, next) => {\n  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);\n  next();\n});\n\n// User Endpoint\napp.get('/api/users/:id', (req, res) => {\n  const userId = req.params.id;\n  res.status(200).json({ id: userId, name: 'Alice', role: 'Developer' });\n});\n\n// Error handling Middleware\napp.use((err, req, res, next) => {\n  console.error(err.stack);\n  res.status(500).json({ error: 'Something went wrong!' });\n});\n\napp.listen(3000, () => console.log('Express app running on port 3000'));\n```\n\n## Common Middleware Tools\n- **cors**: Enables cross-origin resource sharing.\n- **helmet**: Secures HTTP response headers.\n- **morgan**: HTTP request logging."
+  },
+  {
+    "id": "mdn-docs",
+    "title": "MDN Web Docs (JavaScript & DOM)",
+    "category": "Documentation",
+    "domain": "developer.mozilla.org",
+    "urls": [
+      "https://developer.mozilla.org/en-US/docs/Web",
+      "https://developer.mozilla.org/en-US/docs/Web/JavaScript"
+    ],
+    "description": "The premier web reference site for HTML, CSS, JavaScript, Web APIs, and DOM manipulation.",
+    "markdown": "# MDN Web Docs Reference\n\nMozilla Developer Network (MDN) is the definitive documentation resource for open web technologies, including HTML, CSS, JavaScript, and Web APIs.\n\n## Modern JS Reference Cheat Sheet\n\n### 1. Array Array Methods\n```javascript\nconst users = [\n  { id: 1, name: 'Alice', active: true },\n  { id: 2, name: 'Bob', active: false },\n  { id: 3, name: 'Charlie', active: true }\n];\n\n// 1. Filter: Filter items matching criteria\nconst activeUsers = users.filter(u => u.active);\n\n// 2. Map: Transform items into something else\nconst userNames = users.map(u => u.name);\n\n// 3. Reduce: Reduce array to single value\nconst totalUsers = users.reduce((acc, current) => acc + 1, 0);\n```\n\n### 2. Promises & Async/Await\nHandle asynchronous execution flow cleanly.\n```javascript\n// Fetch user details from network\nasync function fetchUser(id) {\n  try {\n    const response = await fetch(`https://api.example.com/users/${id}`);\n    if (!response.ok) throw new Error('Network error');\n    const user = await response.json();\n    return user;\n  } catch (error) {\n    console.error('Fetch failed:', error);\n  }\n}\n```"
+  },
+  {
+    "id": "owasp-security",
+    "title": "OWASP Foundation Security Standards",
+    "category": "Documentation",
+    "domain": "owasp.org",
+    "urls": [
+      "https://owasp.org/www-project-top-ten/",
+      "https://owasp.org/www-project-web-security-testing-guide/",
+      "https://owasp.org/www-community/",
+      "https://owasp.org/index.php/Main_Page",
+      "https://cheatsheetseries.owasp.org/",
+      "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html"
+    ],
+    "description": "Web application vulnerability categories (OWASP Top 10), mitigation blueprints, and authentication checklists.",
+    "markdown": "# OWASP Web Application Security Reference\n\nThe Open Web Application Security Project (OWASP) is a non-profit foundation that works to improve the security of software.\n\n## OWASP Top 10 Vulnerabilities Summary\n\n### 1. A01:2021-Broken Access Control\nUsers can access resources outside their intended privileges.\n- **Prevention**: Enforce denylist-by-default access, use UUIDs/cryptographic keys instead of incremental integers (IDOR defense), and perform server-side privilege checks on every request.\n\n### 2. A03:2021-Injection\nUntrusted data is sent to an interpreter as part of a command or query (e.g. SQL Injection, XSS).\n- **Prevention**: Use parameterized queries (prepared statements), sanitize inputs, and use Context-Aware Output Encoding.\n\n### 3. A07:2021-Identification and Authentication Failures\nWeaknesses in login, password recovery, or session token management.\n- **Mitigation Checklist**:\n  - Implement Multi-Factor Authentication (MFA).\n  - Enforce password strength guidelines (minimum 8-10 chars, complexity).\n  - Use cryptographically strong session cookies with `HttpOnly`, `Secure`, and `SameSite=Strict` flags.\n  - Implement rate limiting on login attempts."
+  },
+  {
+    "id": "databases",
+    "title": "Database Guides: PostgreSQL & MongoDB",
+    "category": "Documentation",
+    "domain": "postgresql.org",
+    "urls": [
+      "https://www.postgresql.org/docs/",
+      "https://docs.mongodb.com/",
+      "https://www.mongodb.com/docs/",
+      "https://www.mongodb.com/mern-stack"
+    ],
+    "description": "Official manuals, SQL query design, connection pooling guides, and MERN stack MongoDB architectures.",
+    "markdown": "# PostgreSQL & MongoDB Database Guide\n\nThis guide compiles essential knowledge for PostgreSQL (Relational DBMS) and MongoDB (Document/NoSQL Database).\n\n## PostgreSQL SQL Operations & Schema Design\nPostgreSQL is a powerful, open-source object-relational database system.\n\n### ACID Transactions\n- **Atomicity**: Entire transaction succeeds or entire transaction is rolled back.\n- **Consistency**: Transition moves schema from one valid state to another.\n- **Isolation**: Concurrent transactions run independently without collisions.\n- **Durability**: Committed data survives system crashes.\n\n### PostgreSQL Migration Example (Knex.js)\n```javascript\nexports.up = function(knex) {\n  return knex.schema.createTable('users', table => {\n    table.increments('id').primary();\n    table.string('email').unique().notNullable();\n    table.string('password_hash').notNullable();\n    table.timestamps(true, true);\n  });\n};\n```\n\n## MongoDB Document Store & Schema Modeling\nMongoDB is a document database designed for scalability and developer speed.\n\n### Mongoose Connection Setup\n```javascript\nconst mongoose = require('mongoose');\n\nasync function connectDB() {\n  try {\n    await mongoose.connect(process.env.MONGODB_URI, {\n      useNewUrlParser: true,\n      useUnifiedTopology: true\n    });\n    console.log('MongoDB connection successful');\n  } catch (err) {\n    console.error('Database connection failure:', err);\n  }\n}\n```"
+  },
+  {
+    "id": "devops-tools",
+    "title": "Docker & Kubernetes Deployment Guides",
+    "category": "Developer Tools",
+    "domain": "docker.com",
+    "urls": [
+      "https://docs.docker.com/",
+      "https://docs.docker.com/compose/",
+      "https://www.docker.com/",
+      "https://kubernetes.io/",
+      "https://kubernetes.io/docs/",
+      "https://kubernetes.io/tutorials/"
+    ],
+    "description": "Containerization configurations, multi-container compose settings, and Kubernetes orchestration architectures.",
+    "markdown": "# Docker & Kubernetes Containerization Reference\n\nContainerization allows packaging an application with all of its dependencies into a single deployment artifact.\n\n## Dockerfile Setup\nCreate a standardized container image for Node.js.\n```dockerfile\n# Base image\nFROM node:18-alpine\n\n# Set working directory\nWORKDIR /usr/src/app\n\n# Install dependencies\nCOPY package*.json ./\nRUN npm ci --only=production\n\n# Copy application source\nCOPY . .\n\n# Expose server port and run\nEXPOSE 3000\nCMD [ \"node\", \"server.js\" ]\n```\n\n## Docker Compose Configuration (`docker-compose.yml`)\nRun web servers and databases simultaneously.\n```yaml\nversion: '3.8'\nservices:\n  web:\n    build: .\n    ports:\n      - \"3000:3000\"\n    environment:\n      - DATABASE_URL=postgres://db_user:password@db:5432/my_db\n    depends_on:\n      - db\n  db:\n    image: postgres:15-alpine\n    environment:\n      POSTGRES_USER: db_user\n      POSTGRES_PASSWORD: password\n      POSTGRES_DB: my_db\n    volumes:\n      - pgdata:/var/lib/postgresql/data\n\nvolumes:\n  pgdata:\n```\n\n## Kubernetes Pod Configuration (`pod.yaml`)\n```yaml\napiVersion: v1\nkind: Pod\nmetadata:\n  name: express-app-pod\n  labels:\n    app: express-web\nspec:\n  containers:\n  - name: web-container\n    image: express-app:latest\n    ports:\n    - containerPort: 3000\n```"
+  },
+  {
+    "id": "iac-terraform",
+    "title": "Terraform Infrastructure as Code Guides",
+    "category": "Developer Tools",
+    "domain": "terraform.io",
+    "urls": [
+      "https://www.terraform.io/",
+      "https://www.terraform.io/docs/",
+      "https://www.terraform.io/intro/index.html",
+      "https://learn.hashicorp.com/terraform",
+      "https://discuss.hashicorp.com/"
+    ],
+    "description": "HashiCorp Terraform syntax, configuration files, and AWS CloudFormation comparisons.",
+    "markdown": "# Terraform & Infrastructure As Code Reference\n\nTerraform is an open-source infrastructure as code software tool created by HashiCorp. It enables users to define and provision a datacenter infrastructure using a declarative configuration language.\n\n## Basic AWS Terraform Template (`main.tf`)\n```hcl\nterraform {\n  required_providers {\n    aws = {\n      source  = \"hashicorp/aws\"\n      version = \"~> 4.16\"\n    }\n  }\n  required_version = \">= 1.2.0\"\n}\n\nprovider \"aws\" {\n  region  = \"us-west-2\"\n}\n\nresource \"aws_instance\" \"app_server\" {\n  ami           = \"ami-830c94e3\"\n  instance_type = \"t2.micro\"\n\n  tags = {\n    Name = \"ExampleAppServerInstance\"\n  }\n}\n```\n\n## Core CLI Commands\n- `terraform init`: Prepares the workspace, installing provider plugins.\n- `terraform plan`: Shows what physical infrastructure changes will occur.\n- `terraform apply`: Deploys the resources to the cloud provider.\n- `terraform destroy`: Removes all cloud resources defined in the configuration."
+  },
+  {
+    "id": "github-cicd",
+    "title": "Git, GitHub & Jenkins CI/CD",
+    "category": "Developer Tools",
+    "domain": "github.com",
+    "urls": [
+      "https://github.com/",
+      "https://docs.github.com/en/actions",
+      "https://www.jenkins.io/",
+      "https://www.jenkins.io/doc/"
+    ],
+    "description": "Version control workflows, GitHub Actions CI/CD automation pipelines, and Jenkins servers.",
+    "markdown": "# Git & CI/CD Automation Manual\n\nVersion control and automation form the core of modern DevOps release pipelines.\n\n## Git Command Reference\n- **Clone repository**: `git clone <repo-url>`\n- **Create local branch**: `git checkout -b <branch-name>`\n- **View changes**: `git status`\n- **Stage & commit**: `git add . && git commit -m \"commit message\"`\n- **Push commits**: `git push origin <branch-name>`\n- **Rebase main**: `git checkout main && git pull && git checkout - && git rebase main`\n\n## GitHub Actions CI/CD Pipeline (`.github/workflows/ci.yml`)\nAutomate code testing and linting on every branch push.\n```yaml\nname: Node CI Pipeline\n\non:\n  push:\n    branches: [ main, dev ]\n  pull_request:\n    branches: [ main ]\n\njobs:\n  build-and-test:\n    runs-on: ubuntu-latest\n    steps:\n    - name: Checkout Code\n      uses: actions/checkout@v3\n      \n    - name: Setup Node.js\n      uses: actions/setup-node@v3\n      with:\n        node-node: 18\n        cache: 'npm'\n        \n    - name: Install Dependencies\n      run: npm ci\n      \n    - name: Run Linter\n      run: npm run lint\n      \n    - name: Run Unit Tests\n      run: npm run test\n```"
+  },
+  {
+    "id": "freecodecamp-tutorials",
+    "title": "freeCodeCamp Technical Learning",
+    "category": "Tutorials & Learning",
+    "domain": "freecodecamp.org",
+    "urls": [
+      "https://www.freecodecamp.org/news/devops-skills/",
+      "https://www.freecodecamp.org/news/how-to-learn-backend-development/",
+      "https://www.freecodecamp.org/news/how-to-learn-devops/",
+      "https://www.freecodecamp.org/news/how-to-learn-web-development/",
+      "https://www.freecodecamp.org/news/skills-backend-developer/",
+      "https://www.freecodecamp.org/news/skills-frontend-developer/"
+    ],
+    "description": "Consolidated guidelines on frontend skills, backend paths, and devops roadmaps from freeCodeCamp.",
+    "markdown": "# freeCodeCamp Roadmaps & Skill Guides\n\nfreeCodeCamp.org is a free, open-source community learning platform that helps students learn to code through interactive modules and technical tutorials.\n\n## Frontend Engineering Checklist\n1. **HTML & CSS**: Flexbox, CSS Grid layouts, semantic markup, and responsive media queries.\n2. **JavaScript**: Dynamic DOM events, array utilities, ES6 scopes, and fetch API operations.\n3. **Frameworks**: React components, hooks (useState, useEffect), and global context states.\n4. **Tooling**: Node, npm package manager, Git/GitHub, and code editors.\n\n## Backend Engineering Checklist\n1. **Programming Core**: Object-oriented scripting, asynchronous callbacks, and data structures.\n2. **Servers**: Node.js, Express web servers, routing, middleware, CORS, and response headers.\n3. **Databases**: Relational PostgreSQL (tables, indices) and NoSQL MongoDB (JSON collections).\n4. **Security**: Password crypt hashing (bcrypt), JSON Web Tokens (JWT), and injection sanitization."
+  },
+  {
+    "id": "smashing-magazine",
+    "title": "Smashing Magazine Engineering Deep Dives",
+    "category": "Tutorials & Learning",
+    "domain": "smashingmagazine.com",
+    "urls": [
+      "https://www.smashingmagazine.com/2020/01/back-end-challenges-2020/",
+      "https://www.smashingmagazine.com/2020/01/back-end-tools-2020/",
+      "https://www.smashingmagazine.com/2020/01/devops-challenges-2020/",
+      "https://www.smashingmagazine.com/2020/01/devops-tools-2020/",
+      "https://www.smashingmagazine.com/2020/01/front-end-challenges-2020/",
+      "https://www.smashingmagazine.com/2020/01/front-end-tools-2020/"
+    ],
+    "description": "Deep-dives into modern toolsets, scalability issues, and performance challenges facing developers.",
+    "markdown": "# Smashing Magazine Technical Summaries\n\nSmashing Magazine provides design and development articles, coding tips, and challenges for digital creatives and web developers.\n\n## Current Web Application Challenges\n\n### 1. Frontend Performance & Core Web Vitals\n- **LCP (Largest Contentful Paint)**: Measures loading performance. Optimize image sizes and prevent render-blocking resources.\n- **FID (First Input Delay)**: Measures interactivity. Keep main execution tasks short, split long tasks.\n- **CLS (Cumulative Layout Shift)**: Measures visual stability. Always define dimension size ratios on images and components.\n\n### 2. Microservice Architectures & Distributed Backend\n- **Data consistency**: Managing transactions across multiple microservice databases (Saga Pattern).\n- **Service Discovery**: Resolving dynamically changing network IP locations for dockerized backend containers (Consul, Kubernetes DNS).\n- **Monitoring & Tracing**: Debugging server execution pipelines across network routes (Jaeger, OpenTelemetry)."
+  },
+  {
+    "id": "realpython-tutorials",
+    "title": "Real Python Technical References",
+    "category": "Tutorials & Learning",
+    "domain": "realpython.com",
+    "urls": [
+      "https://realpython.com/",
+      "https://realpython.com/learn-python-basics/",
+      "https://realpython.com/primer-on-python-decorators/",
+      "https://realpython.com/python-profiling/",
+      "https://realpython.com/python-tools/",
+      "https://realpython.com/skills-for-python-developers/"
+    ],
+    "description": "Python syntax primers, decorator mechanics, memory/speed profiling, and coding tools from Real Python.",
+    "markdown": "# Real Python Reference & Code Guidelines\n\nReal Python provides high-quality tutorials, reference materials, and video courses for developers learning Python.\n\n## Core Python Features & Syntax\n\n### 1. Decorator Mechanics\nDecorators allow modifying the behavior of a function without directly changing its code.\n```python\nimport time\n\ndef timer_decorator(func):\n    def wrapper(*args, **kwargs):\n        start = time.time()\n        result = func(*args, **kwargs)\n        end = time.time()\n        print(f\"Executed {func.__name__} in {end - start:.4f} seconds\")\n        return result\n    return wrapper\n\n@timer_decorator\ndef heavy_computation():\n    sum(i * i for i in range(1000000))\n\nheavy_computation()\n```\n\n### 2. Python Virtual Environments (venv)\nKeep project dependencies isolated.\n```bash\n# Create virtual environment\npython -m venv .venv\n\n# Activate venv (Windows)\n.venv\\Scripts\\activate\n\n# Install dependencies from manifest\npip install -r requirements.txt\n```\n\n## Code Performance Profiling\n- **cProfile**: Native Python library to analyze runtime and identify performance bottlenecks.\n  ```bash\n  python -m cProfile script.py\n  ```"
+  },
+  {
+    "id": "career-guidance",
+    "title": "Career Portals & Job Market Statistics",
+    "category": "Career & Jobs",
+    "domain": "coursera.org",
+    "urls": [
+      "https://www.coursera.org/articles/a-day-in-the-life-of-a-front-end-developer",
+      "https://www.coursera.org/articles/a-day-in-the-life-of-a-back-end-developer",
+      "https://www.coursera.org/articles/a-day-in-the-life-of-a-devops-engineer",
+      "https://www.coursera.org/articles/a-day-in-the-life-of-a-python-developer",
+      "https://www.coursera.org/articles/frontend-developer",
+      "https://www.coursera.org/articles/backend-developer",
+      "https://www.coursera.org/articles/devops-engineer",
+      "https://www.coursera.org/articles/python-developer",
+      "https://www.coursera.org/articles/cybersecurity-career-guide",
+      "https://www.codecademy.com/learn/paths/front-end-engineer-career-path",
+      "https://www.codecademy.com/learn/paths/back-end-engineer-career-path",
+      "https://www.codecademy.com/learn/paths/devops-engineer-career-path",
+      "https://www.codecademy.com/learn/paths/python-developer",
+      "https://www.bls.gov/ooh/computer-and-information-technology/software-developers.htm",
+      "https://www.bls.gov/ooh/computer-and-information-technology/web-developers.htm"
+    ],
+    "description": "Job scopes, career path roadmaps, and Bureau of Labor Statistics data for software engineering roles.",
+    "markdown": "# Software Engineering Career Roadmaps & Statistics\n\nA guide compiling roles, daily operations, and job market metrics for software developers.\n\n## Roles & Responsibilities\n\n| Role | Core Focus | Common Technologies | US Job Growth (BLS) |\n|---|---|---|---|\n| **Frontend Developer** | User Interfaces & Experiences | React, Next.js, HTML/CSS, TypeScript | 16% (Much faster than average) |\n| **Backend Developer** | Server logic, Database, API systems | Node.js, Python, PostgreSQL, REST APIs | 25% (Much faster than average) |\n| **DevOps Engineer** | Automation, Infrastructure & Deployment | Docker, Kubernetes, Terraform, CI/CD | 25% (Much faster than average) |\n| **Cybersecurity Expert** | Auditing, Network Protection, Pen Testing | Wireshark, Burp Suite, Zap, Metasploit | 35% (Extremely high demand) |\n\n## A Day in the Life\n- **Software Engineers**: Writing modular code, debugging pipeline integrations, reviewing pull requests, participating in agile stand-up meetings, and writing system unit tests.\n- **DevOps Engineers**: Provisioning cloud networks, fixing container registry builds, scaling server pods, and optimizing automated delivery scripts."
+  },
+  {
+    "id": "cybersecurity-career",
+    "title": "Cybersecurity Pathways (Cyberseek)",
+    "category": "Career & Jobs",
+    "domain": "cyberseek.org",
+    "urls": [
+      "https://www.cyberseek.org/entry-level.html",
+      "https://www.cyberseek.org/heatmap.html",
+      "https://www.cyberseek.org/pathway.html",
+      "https://www.cyberdegrees.org/resources/a-day-in-the-life-of-a-cybersecurity-professional/"
+    ],
+    "description": "Vulnerability analysis paths, certification checklists (CISSP, CEH), and workforce heatmaps from Cyberseek.",
+    "markdown": "# Cybersecurity Career Pathway Reference\n\nDetailed career information, training metrics, and certification pathways compiled from Cyberseek.org and Cyber Degrees.\n\n## Interactive Career Pathways\n\n### 1. Entry-Level Roles\n- **Cybersecurity Specialist / Technician**: Monitor logs, analyze events, configure firewall rules, and patch known server flaws.\n- **Incident Responder**: Handle active breaches, perform forensics, isolate compromised server containers, and restore backups.\n\n### 2. Mid-Level Roles\n- **Penetration Tester (Ethical Hacker)**: Find vulnerabilities in application APIs and corporate networks before malicious hackers do.\n- **Cybersecurity Consultant**: Audit architecture designs, assess compliance with security benchmarks (e.g. ISO 27001, SOC2).\n\n## Core Certification Targets\n- **CompTIA Security+**: Entry-level baseline credential covering security concepts and operations.\n- **Certified Ethical Hacker (CEH)**: Covers scan strategies, system penetration, threat vectors, and hacking utilities.\n- **CISSP (Certified Information Systems Security Professional)**: Advanced architecture-level credential focusing on policy, management, risk, and security governance."
+  },
+  {
+    "id": "mobile-development",
+    "title": "Mobile App Architectures (Apple & Android)",
+    "category": "Documentation",
+    "domain": "developer.android.com",
+    "urls": [
+      "https://developer.android.com/docs",
+      "https://developer.android.com/studio",
+      "https://developer.android.com/studio/intro",
+      "https://developer.android.com/community",
+      "https://developer.android.com/training/data-storage/room",
+      "https://developer.apple.com/documentation",
+      "https://developer.apple.com/xcode/",
+      "https://developer.apple.com/documentation/xcode",
+      "https://developer.apple.com/documentation/coredata",
+      "https://developer.apple.com/forums/",
+      "https://flutter.dev/docs",
+      "https://flutter.dev/docs/development/tools",
+      "https://flutter.dev/docs/get-started/flutter-for/react-native-devs",
+      "https://flutter.dev/community",
+      "https://reactnative.dev/docs",
+      "https://reactnative.dev/docs/getting-started",
+      "https://reactnative.dev/docs/environment-setup",
+      "https://reactnative.dev/community"
+    ],
+    "description": "Native SDKs (Android Room, iOS CoreData), cross-platform mobile compilers (Flutter vs React Native), and tools.",
+    "markdown": "# Mobile Software Development Manual\n\nThis resource compiles documentation and guides for Android (Kotlin/Java), iOS (Swift), and cross-platform mobile frameworks (React Native and Flutter).\n\n## Native Database Storage Options\n\n### 1. Android Room Database (SQLite Wrapper)\n```kotlin\n@Entity\ndata class User(\n    @PrimaryKey val id: Int,\n    @ColumnInfo(name = \"user_name\") val userName: String?\n)\n\n@Dao\ninterface UserDao {\n    @Query(\"SELECT * FROM user\")\n    fun getAll(): List<User>\n\n    @Insert\n    fun insertAll(vararg users: User)\n}\n```\n\n### 2. iOS CoreData\nApple's local object graph and persistence framework. Used to store user preferences, cache assets, and manage offline data structures.\n\n## Cross-Platform Compiler Engines\n\n### 1. React Native\n- **Runtime Compilation**: JavaScript thread communicates with native threads via a bridge or the newer JSI (JavaScript Interface) using the Hermes engine.\n- **Layout**: Uses Yoga layout engine to translate CSS Flexbox properties to native platform views.\n\n### 2. Flutter\n- **Direct Compilation**: Compiles Dart code ahead-of-time (AOT) to native ARM machine code.\n- **Rendering**: Skips native wrappers entirely, rendering UI layouts directly on screen using Skia or Impeller graphics engines."
+  }
+]

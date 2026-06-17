@@ -5,6 +5,7 @@ import ChatArea from './ChatArea';
 import SearchBar from './SearchBar';
 import { Search, Sparkles, Key } from 'lucide-react';
 import { loadAISettings, saveAISettings } from '../utils/aiSettings';
+import OfflineResourcesHub from './OfflineResourcesHub';
 
 interface User {
   id: string;
@@ -36,6 +37,7 @@ const ChatLayout = ({
   const [filteredContacts, setFilteredContacts] = useState<Contact[]>(contacts);
   const [settings, setSettings] = useState(() => loadAISettings());
   const [tempKey, setTempKey] = useState('');
+  const [isResourcesHubOpen, setIsResourcesHubOpen] = useState(false);
 
   const hasGeminiKey = !!settings.geminiApiKey;
 
@@ -96,6 +98,7 @@ const ChatLayout = ({
           onContactSelect={handleContactSelect}
           isCollapsed={isSidebarCollapsed}
           onToggle={toggleSidebar}
+          onOpenResourcesHub={() => setIsResourcesHubOpen(true)}
         />
       </div>
 
@@ -110,6 +113,10 @@ const ChatLayout = ({
           activeContact={activeContact}
           onContactSelect={handleContactSelect}
           onToggle={() => setIsMobileSidebarOpen(false)}
+          onOpenResourcesHub={() => {
+            setIsResourcesHubOpen(true);
+            setIsMobileSidebarOpen(false);
+          }}
         />
       </div>
 
@@ -287,6 +294,12 @@ const ChatLayout = ({
           </div>
         )}
       </div>
+
+      {/* Offline Resources Hub Modal */}
+      <OfflineResourcesHub 
+        isOpen={isResourcesHubOpen} 
+        onClose={() => setIsResourcesHubOpen(false)} 
+      />
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { Search, Code2, Cpu, Menu, X, Settings } from 'lucide-react';
+import { Search, Code2, Cpu, Menu, X, Settings, BookOpen } from 'lucide-react';
 import { Contact } from '../types/chat';
 import ContactItem from './ContactItem';
 import { useState, useEffect } from 'react';
@@ -11,9 +11,10 @@ interface SidebarProps {
   onContactSelect: (contactId: string) => void;
   isCollapsed?: boolean;
   onToggle?: () => void;
+  onOpenResourcesHub: () => void;
 }
 
-const Sidebar = ({ contacts, activeContact, onContactSelect, isCollapsed = false, onToggle }: SidebarProps) => {
+const Sidebar = ({ contacts, activeContact, onContactSelect, isCollapsed = false, onToggle, onOpenResourcesHub }: SidebarProps) => {
   const [currentMode, setCurrentMode] = useState<string>('fallback');
 
   useEffect(() => {
@@ -83,11 +84,18 @@ const Sidebar = ({ contacts, activeContact, onContactSelect, isCollapsed = false
                 {currentMode === 'gemini' ? 'Gemini (Online)' : currentMode === 'ollama' ? 'Ollama (Local)' : currentMode === 'chrome' ? 'Chrome AI' : 'Fallback (Offline)'}
               </span>
             </div>
+            <button 
+              onClick={onOpenResourcesHub}
+              className="w-full flex items-center justify-center space-x-2 text-xs text-white bg-[#0B132B] hover:bg-blue-900/40 py-2 rounded-lg transition-all border border-[#243B6B]/40 hover:border-blue-500 shadow-md cursor-pointer active:scale-98 font-semibold mb-2"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-blue-400" />
+              <span>Offline Resources Hub</span>
+            </button>
             <SettingsDialog 
               onSettingsSaved={() => setCurrentMode(loadAISettings().aiMode)}
               trigger={
                 <button className="w-full flex items-center justify-center space-x-2 text-xs text-white bg-blue-600 hover:bg-blue-700 py-2 rounded-lg transition-all border border-blue-500 hover:border-blue-400 shadow-md cursor-pointer active:scale-98 font-semibold">
-                  <Settings className="w-3.5 h-3.5 text-white animate-spin-slow" />
+                  <Settings className="w-3.5 h-3.5 text-white" />
                   <span>Configure AI Brain</span>
                 </button>
               }
@@ -113,7 +121,14 @@ const Sidebar = ({ contacts, activeContact, onContactSelect, isCollapsed = false
               </button>
             </div>
           ))}
-          <div className="pt-4 border-t border-[#1C2541] w-full flex justify-center">
+          <div className="pt-4 border-t border-[#1C2541] w-full flex flex-col items-center space-y-3">
+            <button 
+              onClick={onOpenResourcesHub}
+              className="w-10 h-10 rounded-full flex items-center justify-center bg-[#1C2541] hover:bg-blue-600 hover:text-white text-blue-400 transition-all duration-200"
+              title="Offline Resources Hub"
+            >
+              <BookOpen className="w-5 h-5" />
+            </button>
             <SettingsDialog 
               onSettingsSaved={() => setCurrentMode(loadAISettings().aiMode)}
               trigger={
@@ -129,6 +144,7 @@ const Sidebar = ({ contacts, activeContact, onContactSelect, isCollapsed = false
         </div>
       )}
     </div>
+
   );
 };
 

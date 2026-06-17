@@ -9,6 +9,7 @@ import studentNotesKB from '../knowledge/student_notes.json';
 import { loadAISettings } from './aiSettings';
 import { Message } from '../types/chat';
 import generalChatKB from '../knowledge/general_chat.json';
+import offlineResources from '../knowledge/offline_resources.json';
 
 export const aiPersonalities = {
   'cyber-security': {
@@ -610,6 +611,54 @@ function generateLocalFallbackResponse(message: string, mentor: any, history: Me
 - **Tools**: Git version control, GitHub workflows, package managers, TypeScript configuration.
 
 Just ask me a question like **"What is an API?"** or **"Explain React hooks"** to begin!`;
+  }
+
+  // Intercept offline resources queries (e.g. "show me resources for react", "what is at reactjs.org", specific URL paste)
+  if (userTopicClean.includes('resource') || userTopicClean.includes('documentation') || userTopicClean.includes('docs') || userTopicClean.includes('link')) {
+    const matchedRes = offlineResources.find(res => 
+      userTopic.includes(res.domain) || 
+      res.urls.some(url => userTopic.includes(url)) ||
+      res.title.toLowerCase().split(/\W+/).some(tWord => tWord.length > 3 && userTopic.includes(tWord))
+    );
+
+    if (matchedRes) {
+      return `📚 **Offline Library Match: ${matchedRes.title}**
+
+I found an offline documentation guide for **${matchedRes.title}** (${matchedRes.domain}) in my local resources hub! Here is the compiled reference guide:
+
+${matchedRes.markdown}
+
+---
+*To search and browse all 183+ offline developer resource websites visually, click the **Offline Resources Hub** book button in the sidebar footer!*`;
+    }
+
+    return `📚 **Offline Resources Library**
+
+I have a built-in Offline Library containing summaries, cheat sheets, and guidelines for 183+ developer documentation sites!
+
+Here are some categories you can browse offline:
+- **Documentation**: React Docs, Node.js Core, Express.js Guide, MDN Web Docs, PostgreSQL & MongoDB.
+- **Developer Tools**: Docker & Kubernetes, Terraform IaC, Git & GitHub Actions CI/CD.
+- **Tutorials & Learning**: freeCodeCamp guides, Smashing Magazine deep-dives, Real Python tutorials.
+- **Career & Jobs**: BLS statistics, Coursera role descriptions, Cyberseek cybersecurity pathways.
+
+*To open the library and explore these guides, click the **Offline Resources Hub** book button in the sidebar footer!*`;
+  }
+
+  // Intercept direct domain matches without "resource" keyword
+  const domainRes = offlineResources.find(res => 
+    userTopic.includes(res.domain) || 
+    res.urls.some(url => userTopic.includes(url))
+  );
+  if (domainRes) {
+    return `📚 **Offline Library Match: ${domainRes.title}**
+
+I found an offline documentation guide for **${domainRes.title}** (${domainRes.domain}) in my local resources hub! Here is the compiled reference guide:
+
+${domainRes.markdown}
+
+---
+*To search and browse all 183+ offline developer resource websites visually, click the **Offline Resources Hub** book button in the sidebar footer!*`;
   }
 
   const queryTokens = userTopic.split(/\W+/).filter(Boolean);
