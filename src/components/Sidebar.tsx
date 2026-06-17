@@ -94,12 +94,15 @@ const Sidebar = ({ contacts, activeContact, onContactSelect, isCollapsed = false
             <SettingsDialog 
               onSettingsSaved={() => setCurrentMode(loadAISettings().aiMode)}
               trigger={
-                <button className="w-full flex items-center justify-center space-x-2 text-xs text-white bg-blue-600 hover:bg-blue-700 py-2 rounded-lg transition-all border border-blue-500 hover:border-blue-400 shadow-md cursor-pointer active:scale-98 font-semibold">
+                <button className="w-full flex items-center justify-center space-x-2 text-xs text-white bg-blue-600 hover:bg-blue-700 py-2 rounded-lg transition-all border border-blue-500 hover:border-blue-400 shadow-md cursor-pointer active:scale-98 font-semibold mb-2">
                   <Settings className="w-3.5 h-3.5 text-white" />
                   <span>Configure AI Brain</span>
                 </button>
               }
             />
+            <div className="text-[9px] text-slate-400 pt-1.5 border-t border-[#243B6B]/20">
+              Sponsored by <a href="https://kawerifytech.com" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 hover:underline font-semibold">Kawerify Tech</a>
+            </div>
           </div>
         </>
       )}
