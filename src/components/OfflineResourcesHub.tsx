@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { Search, X, BookOpen, FileText, Wrench, GraduationCap, Users, Briefcase, Copy, Check, ExternalLink, ArrowLeft, ArrowRight } from 'lucide-react';
 import offlineResources from '../knowledge/offline_resources.json';
 import MarkdownRenderer from './MarkdownRenderer';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from './ui/dialog';
 
 interface OfflineResourcesHubProps {
   isOpen: boolean;
@@ -58,8 +59,6 @@ export default function OfflineResourcesHub({ isOpen, onClose }: OfflineResource
     }
   };
 
-  if (!isOpen) return null;
-
   const getCategoryIcon = (category: string) => {
     switch (category) {
       case 'Documentation':
@@ -81,8 +80,10 @@ export default function OfflineResourcesHub({ isOpen, onClose }: OfflineResource
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/70 backdrop-blur-sm animate-fade-in">
-      <div className="flex flex-col bg-[#0B132B] w-full max-w-6xl h-[90vh] sm:h-[85vh] rounded-2xl border border-[#243B6B]/40 text-white overflow-hidden shadow-2xl animate-scale-in">
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="max-w-6xl w-[95vw] h-[90vh] sm:h-[85vh] bg-[#0B132B] border border-[#243B6B]/40 text-white p-0 overflow-hidden flex flex-col shadow-2xl [&>button]:hidden">
+        <DialogTitle className="sr-only">Offline Library & Course Modules</DialogTitle>
+        <DialogDescription className="sr-only">Interactive developer modules covering frontend, backend, tools, and careers</DialogDescription>
         
         {/* Header */}
         <div className="p-4 sm:p-5 border-b border-[#243B6B]/20 flex items-center justify-between bg-[#0B132B]">
@@ -310,7 +311,7 @@ export default function OfflineResourcesHub({ isOpen, onClose }: OfflineResource
           </div>
 
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }
