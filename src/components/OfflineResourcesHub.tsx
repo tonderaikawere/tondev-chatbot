@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react';
-import { Search, X, BookOpen, FileText, Wrench, GraduationCap, Users, Briefcase, Copy, Check, ExternalLink, ArrowLeft } from 'lucide-react';
+import { useState, useMemo, useEffect } from 'react';
+import { Search, X, BookOpen, FileText, Wrench, GraduationCap, Users, Briefcase, Copy, Check, ExternalLink, ArrowLeft, ArrowRight } from 'lucide-react';
 import offlineResources from '../knowledge/offline_resources.json';
 import MarkdownRenderer from './MarkdownRenderer';
 
@@ -12,10 +12,16 @@ export default function OfflineResourcesHub({ isOpen, onClose }: OfflineResource
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState<string>('All');
   const [selectedId, setSelectedId] = useState<string>(offlineResources[0]?.id || '');
+  const [activeModuleIndex, setActiveModuleIndex] = useState<number>(0);
   const [copied, setCopied] = useState(false);
   const [viewMode, setViewMode] = useState<'list' | 'detail'>('list'); // Responsive toggle for mobile
 
   const categories = ['All', 'Documentation', 'Developer Tools', 'Tutorials & Learning', 'Career & Jobs'];
+
+  // Reset active module index when changing selected resource
+  useEffect(() => {
+    setActiveModuleIndex(0);
+  }, [selectedId]);
 
   // Filter resources based on search term and active category
   const filteredResources = useMemo(() => {
@@ -25,8 +31,10 @@ export default function OfflineResourcesHub({ isOpen, onClose }: OfflineResource
         res.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         res.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
         res.domain.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        res.markdown.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        res.urls.some(url => url.toLowerCase().includes(searchTerm.toLowerCase()));
+        res.modules.some(mod => 
+          mod.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          mod.content.toLowerCase().includes(searchTerm.toLowerCase())
+        );
       return matchesCategory && matchesSearch;
     });
   }, [searchTerm, activeCategory]);
@@ -34,6 +42,11 @@ export default function OfflineResourcesHub({ isOpen, onClose }: OfflineResource
   const selectedResource = useMemo(() => {
     return offlineResources.find(res => res.id === selectedId);
   }, [selectedId]);
+
+  const activeModule = useMemo(() => {
+    if (!selectedResource || !selectedResource.modules) return null;
+    return selectedResource.modules[activeModuleIndex] || selectedResource.modules[0];
+  }, [selectedResource, activeModuleIndex]);
 
   const handleCopy = async (text: string) => {
     try {
@@ -69,17 +82,17 @@ export default function OfflineResourcesHub({ isOpen, onClose }: OfflineResource
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/70 backdrop-blur-sm animate-fade-in">
-      <div className="flex flex-col bg-[#0B132B] w-full max-w-5xl h-[90vh] sm:h-[85vh] rounded-2xl border border-[#243B6B]/40 text-white overflow-hidden shadow-2xl animate-scale-in">
+      <div className="flex flex-col bg-[#0B132B] w-full max-w-6xl h-[90vh] sm:h-[85vh] rounded-2xl border border-[#243B6B]/40 text-white overflow-hidden shadow-2xl animate-scale-in">
         
         {/* Header */}
         <div className="p-4 sm:p-5 border-b border-[#243B6B]/20 flex items-center justify-between bg-[#0B132B]">
           <div className="min-w-0 pr-4">
             <h2 className="text-base sm:text-lg font-bold tracking-tight text-white flex items-center">
               <BookOpen className="w-5 h-5 text-blue-500 mr-2 flex-shrink-0" />
-              <span className="truncate">Offline Library & Resources Hub</span>
+              <span className="truncate">Offline Library & Course Modules</span>
             </h2>
             <p className="text-[10px] sm:text-xs text-slate-400 mt-0.5 truncate">
-              Access local summaries, cheat sheets, and guidelines compiled from 183+ resource sites.
+              Comprehensive offline learning modules and cheat sheets compiled from 183+ resource sites.
             </p>
           </div>
           <button
@@ -116,7 +129,7 @@ export default function OfflineResourcesHub({ isOpen, onClose }: OfflineResource
         {/* Content Area */}
         <div className="flex-1 flex overflow-hidden">
           
-          {/* Left Panel: List of Resources (Responsive visibility) */}
+          {/* Left Panel: List of Resources */}
           <div className={`w-full sm:w-80 flex-shrink-0 border-r border-[#1C2541] flex flex-col bg-[#0B132B]/30 ${
             viewMode === 'detail' ? 'hidden sm:flex' : 'flex'
           }`}>
@@ -165,7 +178,7 @@ export default function OfflineResourcesHub({ isOpen, onClose }: OfflineResource
             </div>
           </div>
 
-          {/* Right Panel: Content Viewer (Responsive visibility) */}
+          {/* Right Panel: Content Viewer */}
           <div className={`flex-1 flex flex-col bg-[#0B132B] overflow-hidden ${
             viewMode === 'list' ? 'hidden sm:flex' : 'flex'
           }`}>
@@ -173,9 +186,7 @@ export default function OfflineResourcesHub({ isOpen, onClose }: OfflineResource
               <div className="flex-1 flex flex-col overflow-hidden">
                 
                 {/* Viewer Header */}
-                <div className="p-4 border-b border-[#1C2541] bg-[#0B132B]/50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                  
-                  {/* Back to list button on Mobile */}
+                <div className="p-4 border-b border-[#1C2541] bg-[#0B132B]/50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 flex-shrink-0">
                   <div className="min-w-0 flex-1">
                     <button
                       onClick={() => setViewMode('list')}
@@ -197,9 +208,9 @@ export default function OfflineResourcesHub({ isOpen, onClose }: OfflineResource
 
                   <div className="flex items-center space-x-2 flex-shrink-0">
                     <button
-                      onClick={() => handleCopy(selectedResource.markdown)}
+                      onClick={() => handleCopy(activeModule?.content || '')}
                       className="flex items-center space-x-1.5 bg-blue-600 hover:bg-blue-700 border border-blue-500 text-white py-1.5 px-3 rounded-lg text-xs font-semibold transition-all cursor-pointer active:scale-98 shadow-sm"
-                      title="Copy guide markdown"
+                      title="Copy module markdown"
                     >
                       {copied ? (
                         <>
@@ -209,41 +220,85 @@ export default function OfflineResourcesHub({ isOpen, onClose }: OfflineResource
                       ) : (
                         <>
                           <Copy className="w-3.5 h-3.5" />
-                          <span>Copy Doc</span>
+                          <span>Copy Module</span>
                         </>
                       )}
                     </button>
                   </div>
                 </div>
 
-                {/* Viewer Body */}
-                <div className="flex-1 overflow-y-auto p-4 sm:p-6 text-slate-100 max-w-none bg-[#0B132B]">
+                {/* Mobile Modules Horizontal Selector */}
+                <div className="sm:hidden flex overflow-x-auto bg-[#0B132B]/60 p-2 gap-1 border-b border-[#1C2541] scrollbar-none flex-shrink-0">
+                  {selectedResource.modules.map((mod, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setActiveModuleIndex(idx)}
+                      className={`px-3 py-1.5 rounded-lg text-[10px] font-bold whitespace-nowrap transition-all ${
+                        activeModuleIndex === idx
+                          ? 'bg-blue-600 text-white shadow-sm'
+                          : 'bg-[#1C2541]/40 text-slate-300 hover:text-white'
+                      }`}
+                    >
+                      {mod.title.split(':')[0]}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Body split-pane for Modules list (Desktop) + Content Viewer */}
+                <div className="flex-1 flex overflow-hidden">
                   
-                  {/* Matched URLs subsection */}
-                  <div className="mb-6 bg-[#1C2541]/40 rounded-xl p-4 border border-[#243B6B]/30">
-                    <h4 className="text-xs font-bold text-slate-200 mb-2 flex items-center">
-                      <ExternalLink className="w-3.5 h-3.5 mr-1 text-blue-400" />
-                      <span>Original Documentation Links:</span>
-                    </h4>
-                    <div className="flex flex-col gap-1.5 max-h-24 overflow-y-auto pr-1">
-                      {selectedResource.urls.map((url, idx) => (
-                        <a
+                  {/* Left Column: Modules list (Desktop only) */}
+                  <div className="hidden sm:flex w-56 flex-shrink-0 border-r border-[#1C2541]/70 bg-[#0B132B]/30 flex-col overflow-y-auto">
+                    <div className="p-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-[#1C2541]/30">
+                      Course Modules
+                    </div>
+                    <div className="flex-1 py-1">
+                      {selectedResource.modules.map((mod, idx) => (
+                        <button
                           key={idx}
-                          href={url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-[10px] text-blue-400 hover:text-blue-300 hover:underline break-all truncate flex items-center space-x-1 font-mono"
+                          onClick={() => setActiveModuleIndex(idx)}
+                          className={`w-full text-left px-4 py-3 text-xs flex flex-col border-l-4 transition-all cursor-pointer ${
+                            activeModuleIndex === idx
+                              ? 'bg-blue-600/10 border-blue-500 text-white font-bold'
+                              : 'border-transparent text-slate-300 hover:text-white hover:bg-white/5'
+                          }`}
                         >
-                          <span>• {url}</span>
-                        </a>
+                          <span className="leading-snug">{mod.title}</span>
+                        </button>
                       ))}
                     </div>
                   </div>
 
-                  {/* Render Markdown with isOwn={true} to force high-contrast white text */}
-                  <div className="pr-1">
-                    <MarkdownRenderer content={selectedResource.markdown} isOwn={true} />
+                  {/* Right Column: Content Viewer */}
+                  <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-[#0B132B] flex flex-col justify-between">
+                    <div>
+                      {/* Active Module Title */}
+                      <h2 className="text-base sm:text-xl font-extrabold text-white mb-4 border-b border-[#1C2541] pb-2 leading-tight">
+                        {activeModule?.title}
+                      </h2>
+
+                      {/* Content Renderer */}
+                      <div className="pr-1 text-slate-100">
+                        {activeModule && (
+                          <MarkdownRenderer content={activeModule.content} isOwn={true} />
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Navigation Flow Button at bottom */}
+                    {activeModuleIndex < selectedResource.modules.length - 1 && (
+                      <div className="mt-8 pt-4 border-t border-[#1C2541] flex justify-end">
+                        <button
+                          onClick={() => setActiveModuleIndex(prev => prev + 1)}
+                          className="flex items-center space-x-1.5 bg-[#1C2541] hover:bg-blue-600 text-blue-400 hover:text-white border border-[#243B6B]/40 hover:border-blue-500 py-2 px-4 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-md active:scale-95"
+                        >
+                          <span>Next Module</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    )}
                   </div>
+
                 </div>
               </div>
             ) : (

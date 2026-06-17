@@ -12,12 +12,35 @@
       "https://reactjs.org/docs/hooks-overview.html",
       "https://reactjs.org/docs/optimizing-performance.html",
       "https://github.com/facebook/react",
-      "https://chrome.google.com/webstore/detail/react-developer-tools",
-      "https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi",
-      "https://addons.mozilla.org/en-US/firefox/addon/react-devtools/"
+      "https://chrome.google.com/webstore/detail/react-developer-tools"
     ],
     "description": "Official guides, hooks APIs, performance tuning strategies, and developer tooling for React.",
-    "markdown": "# React Official Documentation & Guides\n\nReact is a declarative, efficient, and flexible JavaScript library for building user interfaces. It lets you compose complex UIs from small and isolated pieces of code called \"components\".\n\n## Core Concepts & Hooks Cheat Sheet\n\n### 1. Functional Components & State\nState allows React components to remember information (like input values or the current user).\n```javascript\nimport React, { useState } from 'react';\n\nfunction Counter() {\n  const [count, setCount] = useState(0);\n\n  return (\n    <div>\n      <p>Count: {count}</p>\n      <button onClick={() => setCount(count + 1)}>Increment</button>\n    </div>\n  );\n}\n```\n\n### 2. Side Effects (useEffect)\n`useLayoutEffect` or `useEffect` handles data fetching, subscriptions, or manual DOM manipulations.\n```javascript\nimport React, { useState, useEffect } from 'react';\n\nfunction DataFetcher() {\n  const [data, setData] = useState(null);\n\n  useEffect(() => {\n    fetch('https://api.example.com/data')\n      .then(res => res.json())\n      .then(data => setData(data));\n  }, []); // Empty dependency array runs effect once on mount\n\n  return <div>{data ? JSON.stringify(data) : 'Loading...'}</div>;\n}\n```\n\n## React Performance Optimization\n- **React.memo**: Memoizes components to prevent unnecessary re-renders when parent state changes.\n- **useMemo**: Caches computation outputs between renders.\n- **useCallback**: Memoizes callback functions to prevent recreation of function references.\n\n## Official Tooling\n- **React Developer Tools**: Extension for Chrome and Firefox. Lets you inspect the React component trees in the browser DevTools, view state, props, and profile performance."
+    "modules": [
+      {
+        "title": "Module 1: Introduction to Declarative UI & JSX",
+        "content": "### Declarative vs Imperative UI\n- **Imperative UI**: Direct DOM modifications step-by-step (e.g. `document.createElement`, `button.addEventListener`).\n- **Declarative UI**: You describe *what* the UI should look like based on the current state, and React handles updates.\n\n### Virtual DOM & Reconciliation\nReact maintains a lightweight representation of the real DOM in memory called the **Virtual DOM**.\n1. State changes -> React generates a new Virtual DOM tree.\n2. Diffing Algorithm: React compares the new tree with the previous Virtual DOM tree (O(n) heuristic diffing).\n3. Batched Updates: React calculates the minimum operations to update the real DOM and applies them in a batch."
+      },
+      {
+        "title": "Module 2: State & Props Data Flow",
+        "content": "### Uni-Directional Data Flow\nData flows downward from parent components to child components via read-only **Props**.\n- **Props**: Immutable configuration parameters passed down from a parent.\n- **State**: Mutable local data maintained inside a component instance.\n\n### Immutability Principle\nNever mutate state directly! React detects changes by checking object reference references.\n```javascript\n// INCORRECT\nuser.name = 'Bob'; \nsetUser(user); // React won't re-render (same reference)\n\n// CORRECT\nsetUser({ ...user, name: 'Bob' }); // New object reference!\n```"
+      },
+      {
+        "title": "Module 3: Hooks API Deep Dive",
+        "content": "### Core Hooks Overview\n\n- **useState**: Registers local state variable.\n- **useEffect**: Manages side effects (data fetching, subscriptions).\n- **useContext**: Consumes shared global values from a React Context.\n- **useReducer**: Alternative state management for complex logic using actions and reducers.\n\n### Rules of Hooks\n1. Only call Hooks at the **top level** (never inside loops, conditions, or nested functions).\n2. Only call Hooks from **React Function Components** or **Custom Hooks**."
+      },
+      {
+        "title": "Module 4: Component Lifecycles & Side Effects",
+        "content": "### Lifecycle Phases\n1. **Mounting**: Component created and inserted in the DOM. Runs constructor -> render -> useEffect.\n2. **Updating**: Prop or state changes trigger re-render -> useEffect dependency checks.\n3. **Unmounting**: Component removed from DOM -> runs cleanups.\n\n### Cleanups in useEffect\nAlways clean up listeners, intervals, or fetch controllers to avoid memory leaks.\n```javascript\nuseEffect(() => {\n  const handleResize = () => console.log(window.innerWidth);\n  window.addEventListener('resize', handleResize);\n  \n  // Cleanup function\n  return () => window.removeEventListener('resize', handleResize);\n}, []);\n```"
+      },
+      {
+        "title": "Module 5: Performance Tuning & Memoization",
+        "content": "### Optimization Tools\n\n- **React.memo**: Memoizes a component; skips re-rendering if props are unchanged.\n- **useMemo**: Caches computed values between renders.\n- **useCallback**: Caches function instances to prevent child component re-renders when parent states shift.\n\n### Code Splitting\n```jsx\nimport React, { lazy, Suspense } from 'react';\nconst HeavyCharts = lazy(() => import('./HeavyCharts'));\n\nfunction Dashboard() {\n  return (\n    <Suspense fallback={<div>Loading charts...</div>}>\n      <HeavyCharts />\n    </Suspense>\n  );\n}\n```"
+      },
+      {
+        "title": "Module 6: Advanced Patterns & Context API",
+        "content": "### Context API Setup\nAvoid prop-drilling by providing data to a subtree.\n```jsx\nconst ThemeContext = React.createContext('dark');\n\nfunction App() {\n  return (\n    <ThemeContext.Provider value=\"light\">\n      <Toolbar />\n    </ThemeContext.Provider>\n  );\n}\n\nfunction Toolbar() {\n  const theme = React.useContext(ThemeContext);\n  return <button className={theme}>Button</button>;\n}\n```"
+      }
+    ]
   },
   {
     "id": "nodejs-docs",
@@ -27,12 +50,35 @@
     "urls": [
       "https://nodejs.org/en/docs/",
       "https://nodejs.org/en/community/",
-      "https://github.com/nodejs/node",
-      "https://discord.gg/nodejs",
-      "https://stackoverflow.com/questions/tagged/node.js"
+      "https://github.com/nodejs/node"
     ],
     "description": "Core API guides, Event Loop specs, File System module details, and Node.js community connections.",
-    "markdown": "# Node.js Core API & Runtime Manual\n\nNode.js is an open-source, cross-platform JavaScript runtime environment that executes JavaScript code outside a web browser, powered by the V8 Engine and libuv.\n\n## Key APIs & Core Modules\n\n### 1. File System (fs)\nRead/write files asynchronously with promises.\n```javascript\nconst fs = require('fs/promises');\n\nasync function readConfig() {\n  try {\n    const data = await fs.readFile('./config.json', 'utf8');\n    const parsed = JSON.parse(data);\n    console.log('Database Host:', parsed.dbHost);\n  } catch (err) {\n    console.error('Failed to read config:', err);\n  }\n}\n```\n\n### 2. HTTP Server\nCreate a native HTTP server.\n```javascript\nconst http = require('http');\n\nconst server = http.createServer((req, res) => {\n  res.writeHead(200, { 'Content-Type': 'application/json' });\n  res.end(JSON.stringify({ status: 'success', data: 'Hello from Node.js!' }));\n});\n\nserver.listen(3000, () => {\n  console.log('Server listening on port 3000');\n});\n```\n\n## Runtime Best Practices\n- **Never block the main thread**: Avoid CPU-intensive synchronous calls like `fs.readFileSync()` in heavy servers. Use background helper processes or Worker Threads instead.\n- **UV_THREADPOOL_SIZE**: By default, libuv has a thread pool size of 4. For file/crypto/compression-heavy apps, increase it (e.g. `process.env.UV_THREADPOOL_SIZE = 12`)."
+    "modules": [
+      {
+        "title": "Module 1: V8 Engine & JS Runtime",
+        "content": "### V8 Parser & Interpreter\nGoogle V8 engine compiles JavaScript directly to native machine code:\n1. **Parser**: Analyzes source code and constructs an Abstract Syntax Tree (AST).\n2. **Ignition Interpreter**: Compiles AST into bytecode for fast execution startup.\n3. **TurboFan**: Monitors runtime profiles. If code is run frequently (\"hot\"), compiles it to optimized machine code.\n\n### Inline Caching\nV8 caches properties locations on custom objects to enable direct memory access, bypassing slow hash lookups."
+      },
+      {
+        "title": "Module 2: The Event Loop & libuv",
+        "content": "### Six Event Loop Phases\n1. **Timers**: Executes callbacks from `setTimeout()` and `setInterval()`.\n2. **Pending Callbacks**: Executes I/O errors and TCP system errors.\n3. **Idle, Prepare**: Used internally by runtime.\n4. **Poll**: Retrieves I/O events, executing callbacks. Blocks if empty.\n5. **Check**: Executes callbacks from `setImmediate()`.\n6. **Close Callbacks**: Executes close events (e.g. `socket.on('close')`).\n\n### Microtask Queue\nContains `process.nextTick()` and Promise callbacks. Executed between every phase of the Event Loop."
+      },
+      {
+        "title": "Module 3: Non-Blocking I/O & Streams",
+        "content": "### Core Buffer & Stream API\nStreams handle chunk-based transfers without loading entire files into RAM.\n```javascript\nconst fs = require('fs');\nconst readableStream = fs.createReadStream('./huge.log');\nconst writableStream = fs.createWriteStream('./dest.log');\n\n// Pipe streams together\nreadableStream.pipe(writableStream);\n```\n\n### Event Emitter Pattern\n```javascript\nconst EventEmitter = require('events');\nconst myEmitter = new EventEmitter();\n\nmyEmitter.on('buildSuccess', () => console.log('Deploy ready!'));\nmyEmitter.emit('buildSuccess');\n```"
+      },
+      {
+        "title": "Module 4: Cluster Module & Multithreading",
+        "content": "### Cluster Module (Horizontal Scaling)\nForks multiple Node.js processes sharing the same port using Round-Robin routing.\n```javascript\nconst cluster = require('cluster');\nconst http = require('http');\nconst numCPUs = require('os').cpus().length;\n\nif (cluster.isMaster) {\n  for (let i = 0; i < numCPUs; i++) cluster.fork();\n} else {\n  http.createServer((req, res) => res.end('Done')).listen(8000);\n}\n```\n\n### Worker Threads\nRuns CPU-intensive operations (crypto, image rendering) on background threads, bypassing single-thread blockages."
+      },
+      {
+        "title": "Module 5: File System & Path APIs",
+        "content": "### Async File Operations\nUse Promises instead of blocking synchronous operations:\n```javascript\nconst fs = require('fs/promises');\nconst path = require('path');\n\nasync function readLog() {\n  const filePath = path.join(__dirname, 'server.log');\n  const data = await fs.readFile(filePath, 'utf8');\n  console.log(data);\n}\nreadLog();\n```\n\n### Streams vs Buffers\n- **Buffer**: Loads entire file into memory (limited to ~2GB).\n- **Stream**: Processes small, manageable data chunks."
+      },
+      {
+        "title": "Module 6: Security & Cryptography",
+        "content": "### Cryptography Module\nSignatures, verification, symmetric/asymmetric encryptions:\n```javascript\nconst crypto = require('crypto');\n\n// Hash password\nconst salt = crypto.randomBytes(16).toString('hex');\nconst hash = crypto.pbkdf2Sync('password123', salt, 1000, 64, 'sha512').toString('hex');\nconsole.log(hash);\n```\n\n### Insecure Randomness\nNever use `Math.random()` for secure keys, token generations, or passwords. Always use `crypto.randomBytes()` for cryptographically secure pseudo-random numbers (CSPRNG)."
+      }
+    ]
   },
   {
     "id": "express-docs",
@@ -43,7 +89,32 @@
       "https://expressjs.com/"
     ],
     "description": "Routing, middleware systems, and standard REST API design practices for Express.js.",
-    "markdown": "# Express.js Web Framework Reference\n\nExpress is a minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications.\n\n## Express Route & Middleware Setup\n```javascript\nconst express = require('express');\nconst app = express();\n\n// Parse JSON request bodies\napp.use(express.json());\n\n// Logger Middleware\napp.use((req, res, next) => {\n  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);\n  next();\n});\n\n// User Endpoint\napp.get('/api/users/:id', (req, res) => {\n  const userId = req.params.id;\n  res.status(200).json({ id: userId, name: 'Alice', role: 'Developer' });\n});\n\n// Error handling Middleware\napp.use((err, req, res, next) => {\n  console.error(err.stack);\n  res.status(500).json({ error: 'Something went wrong!' });\n});\n\napp.listen(3000, () => console.log('Express app running on port 3000'));\n```\n\n## Common Middleware Tools\n- **cors**: Enables cross-origin resource sharing.\n- **helmet**: Secures HTTP response headers.\n- **morgan**: HTTP request logging."
+    "modules": [
+      {
+        "title": "Module 1: Routing & HTTP Methods",
+        "content": "### Routing Basics\nExpress matches routes using HTTP methods (GET, POST, PUT, DELETE) and URL parameters.\n```javascript\nconst express = require('express');\nconst app = express();\n\napp.get('/users/:userId/posts/:postId', (req, res) => {\n  const { userId, postId } = req.params;\n  res.send(`User ${userId}, Post ${postId}`);\n});\n```"
+      },
+      {
+        "title": "Module 2: Middleware Architecture",
+        "content": "### Middleware Pipeline\nMiddleware functions have access to the Request (`req`), Response (`res`), and next function (`next`).\n```javascript\n// Custom Middleware\napp.use((req, res, next) => {\n  req.requestTime = Date.now();\n  next(); // Pass control to next function in stack\n});\n\n// Error-handling Middleware (takes 4 parameters)\napp.use((err, req, res, next) => {\n  res.status(500).json({ error: err.message });\n});\n```"
+      },
+      {
+        "title": "Module 3: REST API Design",
+        "content": "### REST Architectural Principles\n- **Uniform Interface**: Resources are defined by nouns in URLs, not actions (e.g. GET `/users` not GET `/getAllUsers`).\n- **HTTP Methods**: GET (read), POST (create), PUT (update), DELETE (remove).\n- **Stateless**: Each request contains all information needed to process it.\n\n### Standard Response Codes\n- `200 OK`: Success.\n- `201 Created`: Successful POST setup.\n- `400 Bad Request`: Invalid request inputs.\n- `401 Unauthorized`: Missing authentication keys.\n- `403 Forbidden`: Authenticated but lacks permissions.\n- `404 Not Found`: Resource missing."
+      },
+      {
+        "title": "Module 4: Security Hardening (Helmet & CORS)",
+        "content": "### CORS (Cross-Origin Resource Sharing)\nSecurity block by browsers that halts script requests to different domains unless headers permit.\n```javascript\nconst cors = require('cors');\napp.use(cors({\n  origin: 'https://trustedapp.com',\n  methods: ['GET', 'POST']\n}));\n```\n\n### Helmet.js Configuration\nHelmet sets HTTP response headers to defend against clickjacking, XSS, and sniff attacks.\n```javascript\nconst helmet = require('helmet');\napp.use(helmet());\n```"
+      },
+      {
+        "title": "Module 5: Data Validation & Sanitization",
+        "content": "### express-validator Setup\nPrevent malicious parameters from reaching controller functions:\n```javascript\nconst { body, validationResult } = require('express-validator');\n\napp.post('/register', [\n  body('email').isEmail().normalizeEmail(),\n  body('password').isLength({ min: 6 })\n], (req, res) => {\n  const errors = validationResult(req);\n  if (!errors.isEmpty()) {\n    return res.status(400).json({ errors: errors.array() });\n  }\n  res.send('Success!');\n});\n```"
+      },
+      {
+        "title": "Module 6: Authentication & Session Management",
+        "content": "### Stateless JWT Auth Flow\nAuthenticate Express requests using tokens:\n```javascript\nconst jwt = require('jsonwebtoken');\n\nfunction authenticateToken(req, res, next) {\n  const authHeader = req.headers['authorization'];\n  const token = authHeader && authHeader.split(' ')[1];\n  \n  if (!token) return res.sendStatus(401);\n  \n  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {\n    if (err) return res.sendStatus(403);\n    req.user = user;\n    next();\n  });\n}\n```"
+      }
+    ]
   },
   {
     "id": "mdn-docs",
@@ -55,7 +126,32 @@
       "https://developer.mozilla.org/en-US/docs/Web/JavaScript"
     ],
     "description": "The premier web reference site for HTML, CSS, JavaScript, Web APIs, and DOM manipulation.",
-    "markdown": "# MDN Web Docs Reference\n\nMozilla Developer Network (MDN) is the definitive documentation resource for open web technologies, including HTML, CSS, JavaScript, and Web APIs.\n\n## Modern JS Reference Cheat Sheet\n\n### 1. Array Array Methods\n```javascript\nconst users = [\n  { id: 1, name: 'Alice', active: true },\n  { id: 2, name: 'Bob', active: false },\n  { id: 3, name: 'Charlie', active: true }\n];\n\n// 1. Filter: Filter items matching criteria\nconst activeUsers = users.filter(u => u.active);\n\n// 2. Map: Transform items into something else\nconst userNames = users.map(u => u.name);\n\n// 3. Reduce: Reduce array to single value\nconst totalUsers = users.reduce((acc, current) => acc + 1, 0);\n```\n\n### 2. Promises & Async/Await\nHandle asynchronous execution flow cleanly.\n```javascript\n// Fetch user details from network\nasync function fetchUser(id) {\n  try {\n    const response = await fetch(`https://api.example.com/users/${id}`);\n    if (!response.ok) throw new Error('Network error');\n    const user = await response.json();\n    return user;\n  } catch (error) {\n    console.error('Fetch failed:', error);\n  }\n}\n```"
+    "modules": [
+      {
+        "title": "Module 1: Scope & Closures",
+        "content": "### Scopes in JS\n- **Global Scope**: Accessible everywhere.\n- **Function Scope**: Declared via `var`, bound to the containing function block.\n- **Block Scope**: Declared via `let` and `const`, bound to the closest brace block `{}`.\n\n### Closures\nA closure is the combination of a function bundled together with references to its surrounding state (lexical environment). Closures let inner functions access outer function variables.\n```javascript\nfunction outer() {\n  const secrets = 'hash123';\n  return () => console.log(secrets); // Captures secrets variable\n}\nconst myFunc = outer();\nmyFunc(); // logs 'hash123'\n```"
+      },
+      {
+        "title": "Module 2: Prototypes & Classes",
+        "content": "### Prototype Chain\nEvery object in JavaScript has an internal property link called its Prototype. Properties lookups travel up this chain until found or root is reached (`null`).\n\n### ES6 Class sugar\nClasses are syntactic sugar over prototypal inheritance.\n```javascript\nclass Developer {\n  constructor(name) { this.name = name; }\n  code() { console.log('Typing...'); }\n}\nconst dev = new Developer('Alice');\ndev.code();\nconsole.log(Object.getPrototypeOf(dev) === Developer.prototype); // true\n```"
+      },
+      {
+        "title": "Module 3: Asynchronous JavaScript",
+        "content": "### Promise Combinators\n\n- **Promise.all**: Waits for all promises to resolve. Fails if *any* reject.\n- **Promise.allSettled**: Waits for all promises to resolve or reject, returning full outcomes statuses.\n- **Promise.race**: Resolves or rejects as soon as the *first* promise resolves/rejects.\n- **Promise.any**: Resolves as soon as the *first* promise resolves. Fails only if all reject.\n\n```javascript\n// async/await error handling\nasync function load() {\n  try {\n    const data = await fetch('url').then(r => r.json());\n  } catch (err) {\n    console.error(err);\n  }\n}\n```"
+      },
+      {
+        "title": "Module 4: DOM Manipulation & Events",
+        "content": "### Event Flow Cycles\n1. **Capturing Phase**: Event trickles down from Document to Target node.\n2. **Target Phase**: Event triggers on targeted element.\n3. **Bubbling Phase**: Event bubbles back up to Document (default triggers behavior).\n\n### Event Delegation\nAttach a single listener to a parent element to handle events on dynamic child structures.\n```javascript\ndocument.querySelector('#parent-list').addEventListener('click', (e) => {\n  if (e.target.tagName === 'LI') {\n    console.log('Clicked item:', e.target.textContent);\n  }\n});\n```"
+      },
+      {
+        "title": "Module 5: Modern ES6+ Features",
+        "content": "### Essential ES6 Syntaxes\n\n- **Destructuring**: Extract values easily.\n  `const { name, email } = user;`\n- **Spread Operator**: Duplicate array/object references.\n  `const clone = { ...original };`\n- **Rest Parameters**: Gather arguments into arrays.\n  `function sum(...nums) { return nums.reduce((a,b)=>a+b); }`\n- **Arrow Functions**: Syntactic shorthand that retains lexical `this` scope."
+      },
+      {
+        "title": "Module 6: Browser Storage APIs",
+        "content": "### Storage Comparison\n\n| API | Capacity | Duration | Access |\n|---|---|---|---|\n| **LocalStorage** | ~5-10MB | Persistent | Synchronous |\n| **SessionStorage**| ~5MB | Window tab close | Synchronous |\n| **IndexedDB** | Unlimited | Persistent | Asynchronous |\n| **Cookies** | ~4KB | Expire dates set | Included in HTTP queries |"
+      }
+    ]
   },
   {
     "id": "owasp-security",
@@ -67,11 +163,35 @@
       "https://owasp.org/www-project-web-security-testing-guide/",
       "https://owasp.org/www-community/",
       "https://owasp.org/index.php/Main_Page",
-      "https://cheatsheetseries.owasp.org/",
-      "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html"
+      "https://cheatsheetseries.owasp.org/"
     ],
     "description": "Web application vulnerability categories (OWASP Top 10), mitigation blueprints, and authentication checklists.",
-    "markdown": "# OWASP Web Application Security Reference\n\nThe Open Web Application Security Project (OWASP) is a non-profit foundation that works to improve the security of software.\n\n## OWASP Top 10 Vulnerabilities Summary\n\n### 1. A01:2021-Broken Access Control\nUsers can access resources outside their intended privileges.\n- **Prevention**: Enforce denylist-by-default access, use UUIDs/cryptographic keys instead of incremental integers (IDOR defense), and perform server-side privilege checks on every request.\n\n### 2. A03:2021-Injection\nUntrusted data is sent to an interpreter as part of a command or query (e.g. SQL Injection, XSS).\n- **Prevention**: Use parameterized queries (prepared statements), sanitize inputs, and use Context-Aware Output Encoding.\n\n### 3. A07:2021-Identification and Authentication Failures\nWeaknesses in login, password recovery, or session token management.\n- **Mitigation Checklist**:\n  - Implement Multi-Factor Authentication (MFA).\n  - Enforce password strength guidelines (minimum 8-10 chars, complexity).\n  - Use cryptographically strong session cookies with `HttpOnly`, `Secure`, and `SameSite=Strict` flags.\n  - Implement rate limiting on login attempts."
+    "modules": [
+      {
+        "title": "Module 1: Broken Access Control & IDOR",
+        "content": "### Insecure Direct Object References (IDOR)\nIDOR occurs when a server exposes database primary keys or file paths directly in parameters, allowing attackers to access other records by changing IDs.\n- *Insecure Route*: `GET /api/invoices/1001` (user changes to `1002`).\n- *Secure Fix*: Bind users ownership directly in query conditions:\n  ```javascript\n  // SELECT * FROM invoices WHERE id = $1 AND owner_id = $2\n  db.query(queryStr, [invoiceId, req.user.id]);\n  ```"
+      },
+      {
+        "title": "Module 2: Cryptographic Failures",
+        "content": "### Hashing vs Encryption\n- **Hashing**: One-way mathematical transformation (e.g. bcrypt, Argon2). Used for passwords. Cannot be reversed.\n- **Encryption**: Two-way operation with keys. Used to secure data during transit or storage. Requires keys to decrypt.\n\n### Secure Transport Rules\n- Enforce HTTPS across all domains.\n- Configure HTTP Strict Transport Security (HSTS) headers.\n- Set `Secure` flag on cookies."
+      },
+      {
+        "title": "Module 3: Injection Attacks (SQLi, Command Injection)",
+        "content": "### SQL Injection (SQLi)\nAttackers submit SQL fragments inside inputs to run arbitrary queries.\n- *Insecure*: `db.query('SELECT * FROM users WHERE email = ' + req.body.email)`\n- *Secure*: Use parameters or ORM/query builders.\n  ```javascript\n  db.query('SELECT * FROM users WHERE email = $1', [req.body.email]);\n  ```"
+      },
+      {
+        "title": "Module 4: Cross-Site Scripting (XSS) & CSRF",
+        "content": "### XSS Attacks\nScript injections executed on victims' browsers.\n- **Reflected**: Injected scripts reflect off query parameters.\n- **Stored**: Script saved directly in database (e.g. comments board).\n- **DOM-based**: Faulty client JS processes user input directly.\n\n### XSS Mitigations\n- Context-aware sanitizations.\n- Enforce strict Content Security Policies (CSP).\n- Store session identifiers in `HttpOnly` cookies."
+      },
+      {
+        "title": "Module 5: Security Misconfigurations & XML",
+        "content": "### Common Misconfigurations\n- Default database passwords left unaltered.\n- Directory listing enabled on production servers.\n- Stack traces and verbose database connection strings exposed to public users in production error responses.\n\n### XML External Entity (XXE)\nInsecure parsers expand entity markers to leak local files (`/etc/passwd`). Always disable DND/external entity parsing on XML packages."
+      },
+      {
+        "title": "Module 6: Vulnerable Components & Logging",
+        "content": "### Software Bill of Materials (SBOM)\nMonitor dependencies using automated vulnerability scans:\n```bash\nnpm audit\n```\n\n### Insufficient Logging & Auditing\n- Log security events (login failures, policy triggers).\n- Secure logs against injection (sanitize user-provided data before logging).\n- Implement central logging monitors (SIEM systems)."
+      }
+    ]
   },
   {
     "id": "databases",
@@ -81,11 +201,35 @@
     "urls": [
       "https://www.postgresql.org/docs/",
       "https://docs.mongodb.com/",
-      "https://www.mongodb.com/docs/",
-      "https://www.mongodb.com/mern-stack"
+      "https://www.mongodb.com/docs/"
     ],
     "description": "Official manuals, SQL query design, connection pooling guides, and MERN stack MongoDB architectures.",
-    "markdown": "# PostgreSQL & MongoDB Database Guide\n\nThis guide compiles essential knowledge for PostgreSQL (Relational DBMS) and MongoDB (Document/NoSQL Database).\n\n## PostgreSQL SQL Operations & Schema Design\nPostgreSQL is a powerful, open-source object-relational database system.\n\n### ACID Transactions\n- **Atomicity**: Entire transaction succeeds or entire transaction is rolled back.\n- **Consistency**: Transition moves schema from one valid state to another.\n- **Isolation**: Concurrent transactions run independently without collisions.\n- **Durability**: Committed data survives system crashes.\n\n### PostgreSQL Migration Example (Knex.js)\n```javascript\nexports.up = function(knex) {\n  return knex.schema.createTable('users', table => {\n    table.increments('id').primary();\n    table.string('email').unique().notNullable();\n    table.string('password_hash').notNullable();\n    table.timestamps(true, true);\n  });\n};\n```\n\n## MongoDB Document Store & Schema Modeling\nMongoDB is a document database designed for scalability and developer speed.\n\n### Mongoose Connection Setup\n```javascript\nconst mongoose = require('mongoose');\n\nasync function connectDB() {\n  try {\n    await mongoose.connect(process.env.MONGODB_URI, {\n      useNewUrlParser: true,\n      useUnifiedTopology: true\n    });\n    console.log('MongoDB connection successful');\n  } catch (err) {\n    console.error('Database connection failure:', err);\n  }\n}\n```"
+    "modules": [
+      {
+        "title": "Module 1: Relational Schema & ACID",
+        "content": "### Database Normalization\n- **1NF**: Atomic cell values, unique row entries.\n- **2NF**: Meets 1NF, no partial dependency (all columns depend on the primary key).\n- **3NF**: Meets 2NF, no transitive dependency (non-key columns do not depend on other non-key columns).\n\n### ACID Properties\n- **Atomicity**: Complete rollback or complete commit.\n- **Consistency**: Data adheres to constraints (types, foreign keys).\n- **Isolation**: Concurrent queries execute without data pollution.\n- **Durability**: Committed data is stored persistently."
+      },
+      {
+        "title": "Module 2: SQL Query Optimization",
+        "content": "### Database Indices\nIndices speed up searches but slow down insert/update queries.\n```sql\nCREATE INDEX idx_users_email ON users(email);\n```\n\n### EXPLAIN Query Analyze\nPrepend `EXPLAIN ANALYZE` to your queries to inspect execution plans, check if scans use indices (Index Scan) or check entire tables sequentially (Seq Scan)."
+      },
+      {
+        "title": "Module 3: MongoDB Document Modeling",
+        "content": "### Modeling Data: Embedding vs Referencing\n- **Embedded Document**: Nesting objects inside a document. Best for 1-to-1 relationships and static logs. Faster read latency.\n- **Reference Document**: Storing object IDs of documents in other collections. Best for 1-to-many or many-to-many relationships that grow infinitely."
+      },
+      {
+        "title": "Module 4: NoSQL Aggregation Pipeline",
+        "content": "### Aggregations Flow\nProcess data sets through multiple transformer pipelines:\n```javascript\nconst stats = await Order.aggregate([\n  { $match: { status: 'completed' } },\n  { $group: { _id: '$userId', totalSpent: { $sum: '$price' } } },\n  { $sort: { totalSpent: -1 } }\n]);\n```"
+      },
+      {
+        "title": "Module 5: Connection Pooling & Drivers",
+        "content": "### Connection Pools\nEstablishing database connections takes time. A **Connection Pool** maintains a set of open, reusable connections.\n- **Node-pg client configuration**:\n  ```javascript\n  const pool = new Pool({\n    max: 20, // Keep up to 20 client connections open\n    idleTimeoutMillis: 30000\n  });\n  ```"
+      },
+      {
+        "title": "Module 6: Replication & Sharding",
+        "content": "### Scaling Databases\n- **Primary-Secondary Replication**: Reads go to secondary replicas; writes go to the primary node. Provides high availability.\n- **Sharding**: Horizontally splits database records across separate server nodes based on a partition key (shard key)."
+      }
+    ]
   },
   {
     "id": "devops-tools",
@@ -96,12 +240,35 @@
       "https://docs.docker.com/",
       "https://docs.docker.com/compose/",
       "https://www.docker.com/",
-      "https://kubernetes.io/",
-      "https://kubernetes.io/docs/",
-      "https://kubernetes.io/tutorials/"
+      "https://kubernetes.io/"
     ],
     "description": "Containerization configurations, multi-container compose settings, and Kubernetes orchestration architectures.",
-    "markdown": "# Docker & Kubernetes Containerization Reference\n\nContainerization allows packaging an application with all of its dependencies into a single deployment artifact.\n\n## Dockerfile Setup\nCreate a standardized container image for Node.js.\n```dockerfile\n# Base image\nFROM node:18-alpine\n\n# Set working directory\nWORKDIR /usr/src/app\n\n# Install dependencies\nCOPY package*.json ./\nRUN npm ci --only=production\n\n# Copy application source\nCOPY . .\n\n# Expose server port and run\nEXPOSE 3000\nCMD [ \"node\", \"server.js\" ]\n```\n\n## Docker Compose Configuration (`docker-compose.yml`)\nRun web servers and databases simultaneously.\n```yaml\nversion: '3.8'\nservices:\n  web:\n    build: .\n    ports:\n      - \"3000:3000\"\n    environment:\n      - DATABASE_URL=postgres://db_user:password@db:5432/my_db\n    depends_on:\n      - db\n  db:\n    image: postgres:15-alpine\n    environment:\n      POSTGRES_USER: db_user\n      POSTGRES_PASSWORD: password\n      POSTGRES_DB: my_db\n    volumes:\n      - pgdata:/var/lib/postgresql/data\n\nvolumes:\n  pgdata:\n```\n\n## Kubernetes Pod Configuration (`pod.yaml`)\n```yaml\napiVersion: v1\nkind: Pod\nmetadata:\n  name: express-app-pod\n  labels:\n    app: express-web\nspec:\n  containers:\n  - name: web-container\n    image: express-app:latest\n    ports:\n    - containerPort: 3000\n```"
+    "modules": [
+      {
+        "title": "Module 1: Containers vs Virtual Machines",
+        "content": "### Virtual Machines (VMs)\nInclude the guest operating system, virtual drivers, and bin libraries. Run on a Hypervisor. Heavy size, slow starts.\n\n### Containers\nShare the host operating system kernel, running isolated user spaces using Linux Namespaces and Cgroups. Lightweight size, starts in milliseconds."
+      },
+      {
+        "title": "Module 2: Dockerfile Mechanics",
+        "content": "### Layer Caching\nEach instruction in a Dockerfile creates a read-only filesystem layer. Order instructions from least-frequently changed to most-frequently changed to speed up builds:\n```dockerfile\nFROM node:18-alpine\nWORKDIR /app\nCOPY package*.json ./\nRUN npm ci --only=production\nCOPY . .\nCMD [\"node\", \"app.js\"]\n```"
+      },
+      {
+        "title": "Module 3: Multi-Container Apps (Compose)",
+        "content": "### Docker Compose File (`docker-compose.yml`)\nDefine and orchestrate multi-container application stacks.\n```yaml\nversion: '3.8'\nservices:\n  web:\n    build: .\n    ports:\n      - \"3000:3000\"\n    depends_on:\n      - database\n  database:\n    image: postgres:15\n    environment:\n      POSTGRES_PASSWORD: secretPassword\n```"
+      },
+      {
+        "title": "Module 4: Kubernetes Architecture",
+        "content": "### Control Plane (Master Node) Components\n- **API Server**: Entry gateway for administrative commands.\n- **etcd**: Consistent, highly-available key-value store for cluster metadata state.\n- **Scheduler**: Allocates pods to worker node servers.\n- **Controller Manager**: Manages replicas and node lifecycles."
+      },
+      {
+        "title": "Module 5: Pods, Services & Deployments",
+        "content": "### Kubernetes Deployments\nManages Pod replicas lifecycle and handles rollouts/rollbacks:\n```yaml\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: web-app-deployment\nspec:\n  replicas: 3\n  selector:\n    matchLabels:\n      app: web-node\n  template:\n    metadata:\n      labels:\n        app: web-node\n    spec:\n      containers:\n      - name: express-server\n        image: myapp:v1.0.0\n```"
+      },
+      {
+        "title": "Module 6: Storage & Configurations",
+        "content": "### K8s ConfigMaps & Secrets\n- **ConfigMap**: Stores non-confidential configuration key-value strings.\n- **Secret**: Stores base64 encoded sensitive keys, tokens, or passwords.\n- **Persistent Volumes (PV)**: Decoupled cluster storage assets that survive pod restarts."
+      }
+    ]
   },
   {
     "id": "iac-terraform",
@@ -111,12 +278,35 @@
     "urls": [
       "https://www.terraform.io/",
       "https://www.terraform.io/docs/",
-      "https://www.terraform.io/intro/index.html",
-      "https://learn.hashicorp.com/terraform",
-      "https://discuss.hashicorp.com/"
+      "https://learn.hashicorp.com/terraform"
     ],
     "description": "HashiCorp Terraform syntax, configuration files, and AWS CloudFormation comparisons.",
-    "markdown": "# Terraform & Infrastructure As Code Reference\n\nTerraform is an open-source infrastructure as code software tool created by HashiCorp. It enables users to define and provision a datacenter infrastructure using a declarative configuration language.\n\n## Basic AWS Terraform Template (`main.tf`)\n```hcl\nterraform {\n  required_providers {\n    aws = {\n      source  = \"hashicorp/aws\"\n      version = \"~> 4.16\"\n    }\n  }\n  required_version = \">= 1.2.0\"\n}\n\nprovider \"aws\" {\n  region  = \"us-west-2\"\n}\n\nresource \"aws_instance\" \"app_server\" {\n  ami           = \"ami-830c94e3\"\n  instance_type = \"t2.micro\"\n\n  tags = {\n    Name = \"ExampleAppServerInstance\"\n  }\n}\n```\n\n## Core CLI Commands\n- `terraform init`: Prepares the workspace, installing provider plugins.\n- `terraform plan`: Shows what physical infrastructure changes will occur.\n- `terraform apply`: Deploys the resources to the cloud provider.\n- `terraform destroy`: Removes all cloud resources defined in the configuration."
+    "modules": [
+      {
+        "title": "Module 1: IaC Declarative Paradigm",
+        "content": "### Declarative Infrastructure\nYou describe the desired final state of your infrastructure in configuration files. Terraform calculates the diff against physical cloud state and performs adjustments.\n\n### HashiCorp Configuration Language (HCL)\nHCL is a declarative, human-readable language designed for provisioning resources."
+      },
+      {
+        "title": "Module 2: Providers & Resources",
+        "content": "### Provider Registries\nProviders translate HCL definitions to cloud API requests (e.g. AWS, Azure, GCP).\n```hcl\n# Resource block\nresource \"aws_vpc\" \"main_vpc\" {\n  cidr_block = \"10.0.0.0/16\"\n  tags = {\n    Name = \"prod-vpc\"\n  }\n}\n```"
+      },
+      {
+        "title": "Module 3: Variables & Outputs",
+        "content": "### Variable Input parameters\n```hcl\nvariable \"instance_type\" {\n  type    = string\n  default = \"t2.micro\"\n}\n\n# Accessing variable\nresource \"aws_instance\" \"app\" {\n  instance_type = var.instance_type\n  ami           = \"ami-123456\"\n}\n```"
+      },
+      {
+        "title": "Module 4: Terraform State Management",
+        "content": "### State File (`terraform.tfstate`)\nTerraform stores the mapping between your configuration files and the actual physical resources created.\n- **Remote State**: Storing state files in cloud object stores (like AWS S3) with locking features (DynamoDB) to avoid concurrent applies."
+      },
+      {
+        "title": "Module 5: Modular Infrastructure",
+        "content": "### Terraform Modules\nModules group resources together to create reusable blocks.\n```hcl\nmodule \"network\" {\n  source   = \"./modules/vpc\"\n  vpc_name = \"staging-vpc\"\n  ip_range = \"10.1.0.0/16\"\n}\n```"
+      },
+      {
+        "title": "Module 6: Production Workflows",
+        "content": "### Production Workflows\n\n- `terraform init`: Downloads providers, modules, and configures backend.\n- `terraform plan`: Generates execution steps, displaying additions, modifications, and deletions.\n- `terraform apply`: Runs the plan.\n- `terraform destroy`: Removes all resources."
+      }
+    ]
   },
   {
     "id": "github-cicd",
@@ -126,11 +316,35 @@
     "urls": [
       "https://github.com/",
       "https://docs.github.com/en/actions",
-      "https://www.jenkins.io/",
-      "https://www.jenkins.io/doc/"
+      "https://www.jenkins.io/"
     ],
     "description": "Version control workflows, GitHub Actions CI/CD automation pipelines, and Jenkins servers.",
-    "markdown": "# Git & CI/CD Automation Manual\n\nVersion control and automation form the core of modern DevOps release pipelines.\n\n## Git Command Reference\n- **Clone repository**: `git clone <repo-url>`\n- **Create local branch**: `git checkout -b <branch-name>`\n- **View changes**: `git status`\n- **Stage & commit**: `git add . && git commit -m \"commit message\"`\n- **Push commits**: `git push origin <branch-name>`\n- **Rebase main**: `git checkout main && git pull && git checkout - && git rebase main`\n\n## GitHub Actions CI/CD Pipeline (`.github/workflows/ci.yml`)\nAutomate code testing and linting on every branch push.\n```yaml\nname: Node CI Pipeline\n\non:\n  push:\n    branches: [ main, dev ]\n  pull_request:\n    branches: [ main ]\n\njobs:\n  build-and-test:\n    runs-on: ubuntu-latest\n    steps:\n    - name: Checkout Code\n      uses: actions/checkout@v3\n      \n    - name: Setup Node.js\n      uses: actions/setup-node@v3\n      with:\n        node-node: 18\n        cache: 'npm'\n        \n    - name: Install Dependencies\n      run: npm ci\n      \n    - name: Run Linter\n      run: npm run lint\n      \n    - name: Run Unit Tests\n      run: npm run test\n```"
+    "modules": [
+      {
+        "title": "Module 1: Git Version Control Core",
+        "content": "### Git Three Areas\n1. **Working Directory**: Physical modified files on your drive.\n2. **Staging Area (Index)**: Manifest log of changes staged for the next commit.\n3. **Git Directory (Repository)**: Permanent database of commits (blobs, trees, commit graphs)."
+      },
+      {
+        "title": "Module 2: Advanced Git Workflows",
+        "content": "### Rebase vs Merge\n- **Merge**: Creates a new merge commit combining branches history. Preserves exact history.\n- **Rebase**: Moves your commits to the tip of the target branch. Rewrites history for a clean, linear git graph.\n  ```bash\n  git checkout feature\n  git rebase main\n  ```"
+      },
+      {
+        "title": "Module 3: Branching Strategies",
+        "content": "### GitFlow vs Trunk-based\n- **GitFlow**: Multi-branch approach (develop, release, hotfix, master). Better for scheduled releases.\n- **Trunk-Based**: Developers commit directly to a single branch (`main`) using short-lived branches. Better for continuous integration."
+      },
+      {
+        "title": "Module 4: GitHub Actions Pipelines",
+        "content": "### Actions Yaml Setup\n```yaml\nname: Node Linter\non: [push]\njobs:\n  lint:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v3\n      - uses: actions/setup-node@v3\n        with:\n          node-version: 18\n      - run: npm ci\n      - run: npm run lint\n```"
+      },
+      {
+        "title": "Module 5: Build Automation (Jenkins)",
+        "content": "### Jenkinsfile Declarative Pipeline\n```groovy\npipeline {\n    agent any\n    stages {\n        stage('Install') {\n            steps { sh 'npm install' }\n        }\n        stage('Test') {\n            steps { sh 'npm test' }\n        }\n    }\n}\n```"
+      },
+      {
+        "title": "Module 6: Deployment Strategies",
+        "content": "### Zero-Downtime Deployments\n- **Blue-Green Deployment**: Maintain two identical server setups (Blue and Green). Route traffic to Blue. Deploy new code to Green, test it, then switch the router to Green.\n- **Canary Release**: Roll out the update to a small percentage (e.g. 5%) of users first. Monitor error rates before updating the remaining servers."
+      }
+    ]
   },
   {
     "id": "freecodecamp-tutorials",
@@ -140,13 +354,35 @@
     "urls": [
       "https://www.freecodecamp.org/news/devops-skills/",
       "https://www.freecodecamp.org/news/how-to-learn-backend-development/",
-      "https://www.freecodecamp.org/news/how-to-learn-devops/",
-      "https://www.freecodecamp.org/news/how-to-learn-web-development/",
-      "https://www.freecodecamp.org/news/skills-backend-developer/",
-      "https://www.freecodecamp.org/news/skills-frontend-developer/"
+      "https://www.freecodecamp.org/news/how-to-learn-devops/"
     ],
     "description": "Consolidated guidelines on frontend skills, backend paths, and devops roadmaps from freeCodeCamp.",
-    "markdown": "# freeCodeCamp Roadmaps & Skill Guides\n\nfreeCodeCamp.org is a free, open-source community learning platform that helps students learn to code through interactive modules and technical tutorials.\n\n## Frontend Engineering Checklist\n1. **HTML & CSS**: Flexbox, CSS Grid layouts, semantic markup, and responsive media queries.\n2. **JavaScript**: Dynamic DOM events, array utilities, ES6 scopes, and fetch API operations.\n3. **Frameworks**: React components, hooks (useState, useEffect), and global context states.\n4. **Tooling**: Node, npm package manager, Git/GitHub, and code editors.\n\n## Backend Engineering Checklist\n1. **Programming Core**: Object-oriented scripting, asynchronous callbacks, and data structures.\n2. **Servers**: Node.js, Express web servers, routing, middleware, CORS, and response headers.\n3. **Databases**: Relational PostgreSQL (tables, indices) and NoSQL MongoDB (JSON collections).\n4. **Security**: Password crypt hashing (bcrypt), JSON Web Tokens (JWT), and injection sanitization."
+    "modules": [
+      {
+        "title": "Module 1: HTML Semantic Coding",
+        "content": "### Semantic Layout Tags\nAvoid structural `<div>` nests. Use semantic HTML tags:\n- `<header>`: Introductory content or navigation.\n- `<nav>`: Set of navigation links.\n- `<main>`: The dominant content of the document.\n- `<article>`: Self-contained independent content.\n- `<section>`: Thematic grouping of content.\n- `<footer>`: Author, copyright, or footer links."
+      },
+      {
+        "title": "Module 2: Responsive CSS Layouts",
+        "content": "### Responsive Layout Checklist\n- **CSS Grid/Flexbox**: Fluid layout structures.\n- **Viewport units**: `vw` (viewport width), `vh` (viewport height).\n- **Media Queries**:\n  ```css\n  @media (max-width: 768px) {\n    .sidebar { display: none; }\n  }\n  ```"
+      },
+      {
+        "title": "Module 3: JS Algorithms & Logic",
+        "content": "### Algorithm Best Practices\nMaster string manipulations, array filtering, recursion, and search:\n```javascript\n// Recursion example: factorial calculation\nfunction factorial(n) {\n  if (n <= 1) return 1;\n  return n * factorial(n - 1);\n}\n```"
+      },
+      {
+        "title": "Module 4: Frontend Framework Roadmaps",
+        "content": "### Frontend Master Path\n1. HTML, CSS, JavaScript basics.\n2. Build responsive layouts without templates.\n3. State management, props, routing (React/Vite).\n4. Fetch APIs and display async payloads."
+      },
+      {
+        "title": "Module 5: Backend & Database Integration",
+        "content": "### Backend Dev Path\n1. Understand client-server communication models (HTTP).\n2. Learn server logic using Node.js & Express.\n3. Establish data schemas using SQL (Postgres) or NoSQL (MongoDB).\n4. Secure endpoints using authentication tokens."
+      },
+      {
+        "title": "Module 6: Security and APIs",
+        "content": "### API Security Checklist\n- Secure backend access using API keys.\n- Prevent denial-of-service queries using rate-limiting middleware.\n- Configure secure CORS origins."
+      }
+    ]
   },
   {
     "id": "smashing-magazine",
@@ -156,13 +392,35 @@
     "urls": [
       "https://www.smashingmagazine.com/2020/01/back-end-challenges-2020/",
       "https://www.smashingmagazine.com/2020/01/back-end-tools-2020/",
-      "https://www.smashingmagazine.com/2020/01/devops-challenges-2020/",
-      "https://www.smashingmagazine.com/2020/01/devops-tools-2020/",
-      "https://www.smashingmagazine.com/2020/01/front-end-challenges-2020/",
-      "https://www.smashingmagazine.com/2020/01/front-end-tools-2020/"
+      "https://www.smashingmagazine.com/2020/01/devops-challenges-2020/"
     ],
     "description": "Deep-dives into modern toolsets, scalability issues, and performance challenges facing developers.",
-    "markdown": "# Smashing Magazine Technical Summaries\n\nSmashing Magazine provides design and development articles, coding tips, and challenges for digital creatives and web developers.\n\n## Current Web Application Challenges\n\n### 1. Frontend Performance & Core Web Vitals\n- **LCP (Largest Contentful Paint)**: Measures loading performance. Optimize image sizes and prevent render-blocking resources.\n- **FID (First Input Delay)**: Measures interactivity. Keep main execution tasks short, split long tasks.\n- **CLS (Cumulative Layout Shift)**: Measures visual stability. Always define dimension size ratios on images and components.\n\n### 2. Microservice Architectures & Distributed Backend\n- **Data consistency**: Managing transactions across multiple microservice databases (Saga Pattern).\n- **Service Discovery**: Resolving dynamically changing network IP locations for dockerized backend containers (Consul, Kubernetes DNS).\n- **Monitoring & Tracing**: Debugging server execution pipelines across network routes (Jaeger, OpenTelemetry)."
+    "modules": [
+      {
+        "title": "Module 1: Critical Rendering Path",
+        "content": "### Critical Rendering Path Steps\n1. **DOM (Document Object Model)**: Parsed HTML tree.\n2. **CSSOM (CSS Object Model)**: Parsed CSS style declarations.\n3. **Render Tree**: Intersection of DOM and CSSOM.\n4. **Layout**: Calculates coordinates for each element.\n5. **Paint**: Fills in pixels on screen."
+      },
+      {
+        "title": "Module 2: Performance Auditing (Lighthouse)",
+        "content": "### Core Web Vitals\n- **LCP (Largest Contentful Paint)**: Loading speed indicator. Ideal: < 2.5s.\n- **FID (First Input Delay)**: Interactivity indicator. Ideal: < 100ms.\n- **CLS (Cumulative Layout Shift)**: Layout stability. Ideal: < 0.1."
+      },
+      {
+        "title": "Module 3: Microservice Architectures",
+        "content": "### Microservice Scalability\nDeconstruct monolithic backends into specialized, independently scalable servers.\n- **API Gateways**: Act as a single entry point for clients, routing queries and handling auth.\n- **Service Mesh**: Manages internal networking between containerized microservices."
+      },
+      {
+        "title": "Module 4: Web Accessibility (a11y)",
+        "content": "### Accessible Web Principles\n- **Semantic elements**: Let screen readers identify controls.\n- **Keyboard navigation**: Tab navigates, Enter triggers buttons.\n- **ARIA attributes**: Provide context for complex elements (`aria-label`, `aria-live`)."
+      },
+      {
+        "title": "Module 5: Responsive Web Design",
+        "content": "### Fluid Grids & Queries\n- **Flexbox & Grid**: Standard layout constructs.\n- **Container Queries**: Shift layouts based on parent element size instead of global viewport width."
+      },
+      {
+        "title": "Module 6: Scalability Challenges",
+        "content": "### Backend Bottlenecks\n- **Database read locks**: Query congestion points.\n- **Memory leaks**: Event listeners left attached in Node server setups."
+      }
+    ]
   },
   {
     "id": "realpython-tutorials",
@@ -172,13 +430,35 @@
     "urls": [
       "https://realpython.com/",
       "https://realpython.com/learn-python-basics/",
-      "https://realpython.com/primer-on-python-decorators/",
-      "https://realpython.com/python-profiling/",
-      "https://realpython.com/python-tools/",
-      "https://realpython.com/skills-for-python-developers/"
+      "https://realpython.com/primer-on-python-decorators/"
     ],
     "description": "Python syntax primers, decorator mechanics, memory/speed profiling, and coding tools from Real Python.",
-    "markdown": "# Real Python Reference & Code Guidelines\n\nReal Python provides high-quality tutorials, reference materials, and video courses for developers learning Python.\n\n## Core Python Features & Syntax\n\n### 1. Decorator Mechanics\nDecorators allow modifying the behavior of a function without directly changing its code.\n```python\nimport time\n\ndef timer_decorator(func):\n    def wrapper(*args, **kwargs):\n        start = time.time()\n        result = func(*args, **kwargs)\n        end = time.time()\n        print(f\"Executed {func.__name__} in {end - start:.4f} seconds\")\n        return result\n    return wrapper\n\n@timer_decorator\ndef heavy_computation():\n    sum(i * i for i in range(1000000))\n\nheavy_computation()\n```\n\n### 2. Python Virtual Environments (venv)\nKeep project dependencies isolated.\n```bash\n# Create virtual environment\npython -m venv .venv\n\n# Activate venv (Windows)\n.venv\\Scripts\\activate\n\n# Install dependencies from manifest\npip install -r requirements.txt\n```\n\n## Code Performance Profiling\n- **cProfile**: Native Python library to analyze runtime and identify performance bottlenecks.\n  ```bash\n  python -m cProfile script.py\n  ```"
+    "modules": [
+      {
+        "title": "Module 1: Python Fundamentals",
+        "content": "### Core Collections\n\n- **List**: Mutable, ordered values sequence. `[1, 2, 3]`\n- **Dictionary**: Key-value mappings. `{'name': 'Alice'}`\n- **Tuple**: Immutable ordered values sequence. `(1, 2, 3)`\n- **Set**: Unordered collection of unique items. `{1, 2, 3}`"
+      },
+      {
+        "title": "Module 2: Advanced OOP in Python",
+        "content": "### Dunder Methods (Double Under)\nSpecial methods in Python classes that define custom behaviors:\n```python\nclass Book:\n    def __init__(self, title):\n        self.title = title\n    def __str__(self):\n        return f\"Book: {self.title}\"\n\nmyBook = Book('Python Guide')\nprint(myBook) # Calls __str__ dunder method\n```"
+      },
+      {
+        "title": "Module 3: Functional Python",
+        "content": "### List Comprehensions & Generators\nList comprehensions build collections instantly; generators yield items lazily to save RAM.\n```python\n# List Comprehension\nsquares = [x * x for x in range(10)]\n\n# Generator Expression (RAM efficient)\nsquares_gen = (x * x for x in range(10))\nprint(next(squares_gen)) # 0\nprint(next(squares_gen)) # 1\n```"
+      },
+      {
+        "title": "Module 4: Performance Profiling",
+        "content": "### cProfile usage\nProfile script speed and trace execution:\n```bash\npython -m cProfile -s time my_script.py\n```"
+      },
+      {
+        "title": "Module 5: Web Frameworks (Django/Flask)",
+        "content": "### Minimal Flask App Setup\n```python\nfrom flask import Flask\napp = Flask(__name__)\n\n@app.route('/')\ndef home():\n    return \"Hello World!\"\n\nif __name__ == '__main__':\n    app.run(port=5000)\n```"
+      },
+      {
+        "title": "Module 6: Data Science Core",
+        "content": "### NumPy & Pandas\n- **NumPy**: Matrix computation.\n- **Pandas**: Data structures for table analysis.\n  ```python\n  import pandas as pd\n  df = pd.read_csv('stats.csv')\n  print(df.describe())\n  ```"
+      }
+    ]
   },
   {
     "id": "career-guidance",
@@ -188,22 +468,35 @@
     "urls": [
       "https://www.coursera.org/articles/a-day-in-the-life-of-a-front-end-developer",
       "https://www.coursera.org/articles/a-day-in-the-life-of-a-back-end-developer",
-      "https://www.coursera.org/articles/a-day-in-the-life-of-a-devops-engineer",
-      "https://www.coursera.org/articles/a-day-in-the-life-of-a-python-developer",
-      "https://www.coursera.org/articles/frontend-developer",
-      "https://www.coursera.org/articles/backend-developer",
-      "https://www.coursera.org/articles/devops-engineer",
-      "https://www.coursera.org/articles/python-developer",
-      "https://www.coursera.org/articles/cybersecurity-career-guide",
-      "https://www.codecademy.com/learn/paths/front-end-engineer-career-path",
-      "https://www.codecademy.com/learn/paths/back-end-engineer-career-path",
-      "https://www.codecademy.com/learn/paths/devops-engineer-career-path",
-      "https://www.codecademy.com/learn/paths/python-developer",
-      "https://www.bls.gov/ooh/computer-and-information-technology/software-developers.htm",
-      "https://www.bls.gov/ooh/computer-and-information-technology/web-developers.htm"
+      "https://www.coursera.org/articles/a-day-in-the-life-of-a-devops-engineer"
     ],
     "description": "Job scopes, career path roadmaps, and Bureau of Labor Statistics data for software engineering roles.",
-    "markdown": "# Software Engineering Career Roadmaps & Statistics\n\nA guide compiling roles, daily operations, and job market metrics for software developers.\n\n## Roles & Responsibilities\n\n| Role | Core Focus | Common Technologies | US Job Growth (BLS) |\n|---|---|---|---|\n| **Frontend Developer** | User Interfaces & Experiences | React, Next.js, HTML/CSS, TypeScript | 16% (Much faster than average) |\n| **Backend Developer** | Server logic, Database, API systems | Node.js, Python, PostgreSQL, REST APIs | 25% (Much faster than average) |\n| **DevOps Engineer** | Automation, Infrastructure & Deployment | Docker, Kubernetes, Terraform, CI/CD | 25% (Much faster than average) |\n| **Cybersecurity Expert** | Auditing, Network Protection, Pen Testing | Wireshark, Burp Suite, Zap, Metasploit | 35% (Extremely high demand) |\n\n## A Day in the Life\n- **Software Engineers**: Writing modular code, debugging pipeline integrations, reviewing pull requests, participating in agile stand-up meetings, and writing system unit tests.\n- **DevOps Engineers**: Provisioning cloud networks, fixing container registry builds, scaling server pods, and optimizing automated delivery scripts."
+    "modules": [
+      {
+        "title": "Module 1: Software Engineer Role Specs",
+        "content": "### Industry Levels\n- **Junior Developer**: Focuses on implementing clear coding tasks and learning tools.\n- **Mid-level Developer**: Implements complex features, refactors systems, and writes unit tests.\n- **Senior Developer**: Designs system architectures, leads reviews, and defines workflows."
+      },
+      {
+        "title": "Module 2: Frontend Dev Career Path",
+        "content": "### Frontend Career Path\nHTML, CSS, Vanilla JS -> CSS Layouts (Grid/Flexbox) -> React/TypeScript -> State management and build tools -> Unit/E2E testing (Jest/Playwright)."
+      },
+      {
+        "title": "Module 3: Backend Dev Career Path",
+        "content": "### Backend Career Path\nProgramming core -> Server APIs (Node/Express) -> Database modeling (SQL/NoSQL) -> Auth (JWT/Sessions) -> Security hardening -> Cloud servers deployment."
+      },
+      {
+        "title": "Module 4: DevOps Career Path",
+        "content": "### DevOps Career Path\nSystem administration (Linux) -> Scripting (Bash/Python) -> Containerization (Docker) -> Orchestration (Kubernetes) -> Infrastructure as Code (Terraform) -> CI/CD pipelines."
+      },
+      {
+        "title": "Module 5: Job Growth & Salaries (BLS)",
+        "content": "### Industry growth projections (BLS)\nSoftware development roles are projected to grow **25%** over the decade, much faster than the average for all occupations. Median annual wage sits near $127,000 in the US."
+      },
+      {
+        "title": "Module 6: Technical Interview Prep",
+        "content": "### Interview Blueprint\n1. **Data Structures & Algorithms**: Arrays, linked lists, hash tables, sorting.\n2. **System Design**: Scaling, API models, database selections.\n3. **Behavioral Interviews**: Star method (Situation, Task, Action, Result)."
+      }
+    ]
   },
   {
     "id": "cybersecurity-career",
@@ -213,11 +506,35 @@
     "urls": [
       "https://www.cyberseek.org/entry-level.html",
       "https://www.cyberseek.org/heatmap.html",
-      "https://www.cyberseek.org/pathway.html",
-      "https://www.cyberdegrees.org/resources/a-day-in-the-life-of-a-cybersecurity-professional/"
+      "https://www.cyberseek.org/pathway.html"
     ],
     "description": "Vulnerability analysis paths, certification checklists (CISSP, CEH), and workforce heatmaps from Cyberseek.",
-    "markdown": "# Cybersecurity Career Pathway Reference\n\nDetailed career information, training metrics, and certification pathways compiled from Cyberseek.org and Cyber Degrees.\n\n## Interactive Career Pathways\n\n### 1. Entry-Level Roles\n- **Cybersecurity Specialist / Technician**: Monitor logs, analyze events, configure firewall rules, and patch known server flaws.\n- **Incident Responder**: Handle active breaches, perform forensics, isolate compromised server containers, and restore backups.\n\n### 2. Mid-Level Roles\n- **Penetration Tester (Ethical Hacker)**: Find vulnerabilities in application APIs and corporate networks before malicious hackers do.\n- **Cybersecurity Consultant**: Audit architecture designs, assess compliance with security benchmarks (e.g. ISO 27001, SOC2).\n\n## Core Certification Targets\n- **CompTIA Security+**: Entry-level baseline credential covering security concepts and operations.\n- **Certified Ethical Hacker (CEH)**: Covers scan strategies, system penetration, threat vectors, and hacking utilities.\n- **CISSP (Certified Information Systems Security Professional)**: Advanced architecture-level credential focusing on policy, management, risk, and security governance."
+    "modules": [
+      {
+        "title": "Module 1: Career Pathways Heatmap",
+        "content": "### Cybersecurity Supply & Demand\nGrids showing employment metrics, average salaries, and certifications demanded per sub-category."
+      },
+      {
+        "title": "Module 2: Penetration Testing Core",
+        "content": "### Penetration Testing Phases\n1. **Reconnaissance**: Information gathering (Whois, Nmap).\n2. **Scanning**: Active ports scanning (Nessus, Nikto).\n3. **Exploitation**: Injecting payloads (Metasploit).\n4. **Post-Exploitation**: Privilege escalation, data gathering.\n5. **Reporting**: Documenting vulnerability findings."
+      },
+      {
+        "title": "Module 3: Security Operations (SOC)",
+        "content": "### SOC Analyst Role\n- Monitor security event logs (SIEM tools).\n- Handle firewall alarms, isolate suspicious servers, and configure rules."
+      },
+      {
+        "title": "Module 4: Network Auditing (Wireshark)",
+        "content": "### Wireshark packet capture analysis\n- Analyze TCP three-way handshakes (SYN, SYN-ACK, ACK).\n- Track plaintext packets (HTTP, FTP) to find leaked credentials."
+      },
+      {
+        "title": "Module 5: Vulnerability Scanning",
+        "content": "### Scanning Tools\n- **Nessus**: Enterprise vulnerability scanner.\n- **OWASP ZAP**: Open-source web app scanner."
+      },
+      {
+        "title": "Module 6: Security Governance (CISSP/CEH)",
+        "content": "### Certifications Track\n- **Security+**: Baseline fundamentals.\n- **CEH**: Practical scanning and exploitation skills.\n- **CISSP**: Managerial policy and governance."
+      }
+    ]
   },
   {
     "id": "mobile-development",
@@ -227,24 +544,34 @@
     "urls": [
       "https://developer.android.com/docs",
       "https://developer.android.com/studio",
-      "https://developer.android.com/studio/intro",
-      "https://developer.android.com/community",
-      "https://developer.android.com/training/data-storage/room",
-      "https://developer.apple.com/documentation",
-      "https://developer.apple.com/xcode/",
-      "https://developer.apple.com/documentation/xcode",
-      "https://developer.apple.com/documentation/coredata",
-      "https://developer.apple.com/forums/",
-      "https://flutter.dev/docs",
-      "https://flutter.dev/docs/development/tools",
-      "https://flutter.dev/docs/get-started/flutter-for/react-native-devs",
-      "https://flutter.dev/community",
-      "https://reactnative.dev/docs",
-      "https://reactnative.dev/docs/getting-started",
-      "https://reactnative.dev/docs/environment-setup",
-      "https://reactnative.dev/community"
+      "https://developer.apple.com/documentation"
     ],
     "description": "Native SDKs (Android Room, iOS CoreData), cross-platform mobile compilers (Flutter vs React Native), and tools.",
-    "markdown": "# Mobile Software Development Manual\n\nThis resource compiles documentation and guides for Android (Kotlin/Java), iOS (Swift), and cross-platform mobile frameworks (React Native and Flutter).\n\n## Native Database Storage Options\n\n### 1. Android Room Database (SQLite Wrapper)\n```kotlin\n@Entity\ndata class User(\n    @PrimaryKey val id: Int,\n    @ColumnInfo(name = \"user_name\") val userName: String?\n)\n\n@Dao\ninterface UserDao {\n    @Query(\"SELECT * FROM user\")\n    fun getAll(): List<User>\n\n    @Insert\n    fun insertAll(vararg users: User)\n}\n```\n\n### 2. iOS CoreData\nApple's local object graph and persistence framework. Used to store user preferences, cache assets, and manage offline data structures.\n\n## Cross-Platform Compiler Engines\n\n### 1. React Native\n- **Runtime Compilation**: JavaScript thread communicates with native threads via a bridge or the newer JSI (JavaScript Interface) using the Hermes engine.\n- **Layout**: Uses Yoga layout engine to translate CSS Flexbox properties to native platform views.\n\n### 2. Flutter\n- **Direct Compilation**: Compiles Dart code ahead-of-time (AOT) to native ARM machine code.\n- **Rendering**: Skips native wrappers entirely, rendering UI layouts directly on screen using Skia or Impeller graphics engines."
+    "modules": [
+      {
+        "title": "Module 1: Native Android (Kotlin & Room)",
+        "content": "### Room Database configuration\nRoom abstracts SQLite access:\n```kotlin\n@Dao\ninterface UserDao {\n    @Query(\"SELECT * FROM users\")\n    fun getAll(): Flow<List<User>>\n}\n```"
+      },
+      {
+        "title": "Module 2: Native iOS (Swift & CoreData)",
+        "content": "### CoreData stack\nCoreData tracks relationships, manages object life cycles, and handles local SQLite persistence."
+      },
+      {
+        "title": "Module 3: React Native (Hermes Engine)",
+        "content": "### Hermes Engine\nHermes compiles JavaScript to bytecode ahead-of-time (AOT) to speed up application startup times."
+      },
+      {
+        "title": "Module 4: Flutter (Dart & Impeller)",
+        "content": "### Flutter Compilations\n- **Dart AOT**: Compiles to ARM/x64 machine code for release performance.\n- **Impeller Graphics**: Custom rendering engine for iOS, avoiding shader compilation glitches."
+      },
+      {
+        "title": "Module 5: Cross-Platform Layouts",
+        "content": "### Layout Engines\n- **React Native**: Uses Yoga engine (Flexbox translating to native platform views).\n- **Flutter**: Builds layouts directly on a canvas using widgets."
+      },
+      {
+        "title": "Module 6: Local Storage & Caching",
+        "content": "### Secure Storage\n- **iOS Keychain / Android Keystore**: Secure encryption engines for credentials.\n- **SQLite / Hive**: Databases for offline data caching."
+      }
+    ]
   }
 ]
