@@ -1,4 +1,4 @@
-import { Search, Code2, Cpu, Menu, X, Settings, BookOpen } from 'lucide-react';
+import { Search, Code2, Cpu, Menu, X, Settings, BookOpen, FileText } from 'lucide-react';
 import { Contact } from '../types/chat';
 import ContactItem from './ContactItem';
 import { useState, useEffect } from 'react';
@@ -12,9 +12,10 @@ interface SidebarProps {
   isCollapsed?: boolean;
   onToggle?: () => void;
   onOpenResourcesHub: () => void;
+  onOpenHelpHub: () => void;
 }
 
-const Sidebar = ({ contacts, activeContact, onContactSelect, isCollapsed = false, onToggle, onOpenResourcesHub }: SidebarProps) => {
+const Sidebar = ({ contacts, activeContact, onContactSelect, isCollapsed = false, onToggle, onOpenResourcesHub, onOpenHelpHub }: SidebarProps) => {
   const [currentMode, setCurrentMode] = useState<string>('fallback');
 
   useEffect(() => {
@@ -84,13 +85,24 @@ const Sidebar = ({ contacts, activeContact, onContactSelect, isCollapsed = false
                 {currentMode === 'gemini' ? 'Gemini (Online)' : currentMode === 'ollama' ? 'Ollama (Local)' : currentMode === 'chrome' ? 'Chrome AI' : 'Fallback (Offline)'}
               </span>
             </div>
-            <button 
-              onClick={onOpenResourcesHub}
-              className="w-full flex items-center justify-center space-x-2 text-xs text-white bg-[#0B132B] hover:bg-blue-900/40 py-2 rounded-lg transition-all border border-[#243B6B]/40 hover:border-blue-500 shadow-md cursor-pointer active:scale-98 font-semibold mb-2"
-            >
-              <BookOpen className="w-3.5 h-3.5 text-blue-400" />
-              <span>Offline Resources Hub</span>
-            </button>
+            <div className="grid grid-cols-2 gap-2 mb-2">
+              <button 
+                onClick={onOpenResourcesHub}
+                className="w-full flex items-center justify-center space-x-1.5 text-[11px] text-white bg-[#0B132B] hover:bg-blue-900/40 py-2 rounded-lg transition-all border border-[#243B6B]/40 hover:border-blue-500 shadow-md cursor-pointer active:scale-98 font-semibold"
+                title="Offline Resources Hub"
+              >
+                <BookOpen className="w-3.5 h-3.5 text-blue-400 flex-shrink-0" />
+                <span className="truncate">Library</span>
+              </button>
+              <button 
+                onClick={onOpenHelpHub}
+                className="w-full flex items-center justify-center space-x-1.5 text-[11px] text-white bg-[#0B132B] hover:bg-blue-900/40 py-2 rounded-lg transition-all border border-[#243B6B]/40 hover:border-blue-500 shadow-md cursor-pointer active:scale-98 font-semibold"
+                title="Privacy, Terms & User Guide"
+              >
+                <FileText className="w-3.5 h-3.5 text-blue-400 flex-shrink-0" />
+                <span className="truncate">Help & Legal</span>
+              </button>
+            </div>
             <SettingsDialog 
               onSettingsSaved={() => setCurrentMode(loadAISettings().aiMode)}
               trigger={
@@ -131,6 +143,13 @@ const Sidebar = ({ contacts, activeContact, onContactSelect, isCollapsed = false
               title="Offline Resources Hub"
             >
               <BookOpen className="w-5 h-5" />
+            </button>
+            <button 
+              onClick={onOpenHelpHub}
+              className="w-10 h-10 rounded-full flex items-center justify-center bg-[#1C2541] hover:bg-blue-600 hover:text-white text-blue-400 transition-all duration-200"
+              title="Privacy Policy, Terms & User Guide"
+            >
+              <FileText className="w-5 h-5" />
             </button>
             <SettingsDialog 
               onSettingsSaved={() => setCurrentMode(loadAISettings().aiMode)}

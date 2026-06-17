@@ -6,6 +6,7 @@ import SearchBar from './SearchBar';
 import { Search, Sparkles, Key } from 'lucide-react';
 import { loadAISettings, saveAISettings } from '../utils/aiSettings';
 import OfflineResourcesHub from './OfflineResourcesHub';
+import HelpHub from './HelpHub';
 
 interface User {
   id: string;
@@ -38,6 +39,7 @@ const ChatLayout = ({
   const [settings, setSettings] = useState(() => loadAISettings());
   const [tempKey, setTempKey] = useState('');
   const [isResourcesHubOpen, setIsResourcesHubOpen] = useState(false);
+  const [isHelpHubOpen, setIsHelpHubOpen] = useState(false);
 
   const hasGeminiKey = !!settings.geminiApiKey;
 
@@ -99,6 +101,7 @@ const ChatLayout = ({
           isCollapsed={isSidebarCollapsed}
           onToggle={toggleSidebar}
           onOpenResourcesHub={() => setIsResourcesHubOpen(true)}
+          onOpenHelpHub={() => setIsHelpHubOpen(true)}
         />
       </div>
 
@@ -115,6 +118,10 @@ const ChatLayout = ({
           onToggle={() => setIsMobileSidebarOpen(false)}
           onOpenResourcesHub={() => {
             setIsResourcesHubOpen(true);
+            setIsMobileSidebarOpen(false);
+          }}
+          onOpenHelpHub={() => {
+            setIsHelpHubOpen(true);
             setIsMobileSidebarOpen(false);
           }}
         />
@@ -311,6 +318,12 @@ const ChatLayout = ({
       <OfflineResourcesHub 
         isOpen={isResourcesHubOpen} 
         onClose={() => setIsResourcesHubOpen(false)} 
+      />
+
+      {/* Help & Legal Hub Modal */}
+      <HelpHub 
+        isOpen={isHelpHubOpen} 
+        onClose={() => setIsHelpHubOpen(false)} 
       />
     </div>
   );
