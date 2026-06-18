@@ -11,6 +11,7 @@ import { Message } from '../types/chat';
 import generalChatKB from '../knowledge/general_chat.json';
 import offlineResources from '../knowledge/offline_resources.json';
 import generalKnowledgeKB from '../knowledge/general_knowledge.json';
+import careerGuidanceKB from '../knowledge/career_guidance.json';
 
 const resolveKB = (rawKB: any) => {
   return rawKB && rawKB.knowledgeBase ? rawKB.knowledgeBase : rawKB;
@@ -55,13 +56,16 @@ const mergedSoftwareEngineeringKB = {
 };
 
 const gkKB = resolveKB(generalKnowledgeKB);
+const careerKB = resolveKB(careerGuidanceKB);
 
 const mergedCasualCareerKB = {
   coreConcepts: [
-    ...(gkKB?.coreConcepts || [])
+    ...(gkKB?.coreConcepts || []),
+    ...(careerKB?.coreConcepts || [])
   ],
   faqs: [
-    ...(gkKB?.faqs || [])
+    ...(gkKB?.faqs || []),
+    ...(careerKB?.faqs || [])
   ]
 };
 
@@ -231,7 +235,8 @@ const STOP_WORDS = new Set([
   'work', 'works', 'working', 'use', 'uses', 'using', 'run', 'runs', 'running', 'make', 'makes', 'making',
   'create', 'creates', 'creating', 'concept', 'concepts', 'basic', 'basics', 'learn', 'learning', 'understand',
   'understanding', 'show', 'shows', 'give', 'gives', 'ask', 'asks', 'question', 'questions', 'definition', 'explain',
-  'build', 'builds', 'building', 'develop', 'developing', 'developer', 'lets', 'let', 'please', 'get', 'set', 'write', 'writing', 'code', 'coding'
+  'build', 'builds', 'building', 'develop', 'developing', 'developer', 'developers', 'lets', 'let', 'please', 'get', 'set', 'write', 'writes', 'writing', 'code', 'coding',
+  'help', 'helps', 'helping', 'helpful', 'manage', 'manages', 'managing', 'management', 'program', 'programs', 'programming'
 ]);
 
 // Levenshtein distance calculation for typo tolerance
@@ -807,7 +812,8 @@ ${bestGKMatch.answer}
     { name: "Mobile Development", kb: mobileKB },
     { name: "Cloud Operations", kb: cloudopsKB },
     { name: "Full-Stack Course Notes", kb: studentNotesKB },
-    { name: "General Knowledge", kb: generalKnowledgeKB }
+    { name: "General Knowledge", kb: generalKnowledgeKB },
+    { name: "Career Guidance", kb: careerGuidanceKB }
   ];
 
   let bestGlobalMatch: any = null;
@@ -879,19 +885,49 @@ ${bestGKMatch.answer}
   }
 
   // Evaluate the best match found globally
-  if (bestGlobalMatch && bestGlobalScore >= 8 && bestGlobalScore >= bestModuleScore) {
-    return `> 🧠 **Source**: Local Offline Database (${globalSource})
+  const hasGlobal = bestGlobalMatch && bestGlobalScore >= 8;
+  const hasModule = bestModuleMatch && bestModuleScore >= 8;
 
-**${bestGlobalMatch.question}**
+  if (hasGlobal || hasModule) {
+    const isGlobalBetter = !hasModule || (hasGlobal && bestGlobalScore >= bestModuleScore);
+    const matchedTitle = isGlobalBetter 
+      ? (bestGlobalMatch.question || bestGlobalMatch.name || "")
+      : bestModuleMatch.title;
+    const isCareerTopic = isGlobalBetter
+      ? (globalSource === "Career Guidance")
+      : (bestModuleResource.category === "Career & Jobs");
 
-${bestGlobalMatch.answer}
+    // Check for active mentor thematic mismatch and route referrals
+    if (mentor.id === 'casual-career' && !isCareerTopic && globalSource !== "General Knowledge") {
+      // Counselor AI asked a technical question
+      return `I specialize in career coaching, resume writing, STAR behavioral templates, and wellness support.
+
+It looks like you are asking a technical programming or DevOps question about **${matchedTitle}**.
+
+To get detailed explanations, syntax breakdowns, and code examples, please switch to **DevEngine AI** (or **Antigravity AI** for project building) in the sidebar!`;
+    }
+
+    if ((mentor.id === 'software-engineering' || mentor.id === 'project-builder') && isCareerTopic) {
+      // Technical mentor asked a career question
+      return `I specialize in technical software engineering, coding templates, and system design.
+
+It looks like you are asking about career progression, resume building, or behavioral interviews (**${matchedTitle}**).
+
+For dedicated career guidance, CV writing templates, stress management support, or casual talk, please switch to my colleague **Counselor AI** in the sidebar!`;
+    }
+
+    // No mismatch, return normal match content
+    if (isGlobalBetter) {
+      return `> 🧠 **Source**: Local Offline Database (${globalSource})
+
+**${bestGlobalMatch.question || bestGlobalMatch.name}**
+
+${bestGlobalMatch.answer || bestGlobalMatch.description || ""}
 
 ---
 *Retrieved from local offline ${globalSource} files.*`;
-  }
-
-  if (bestModuleMatch && bestModuleScore >= 8) {
-    return `> 📚 **Source**: Offline Course Library (${bestModuleResource.title})
+    } else {
+      return `> 📚 **Source**: Offline Course Library (${bestModuleResource.title})
 
 ### ${bestModuleMatch.title}
 
@@ -899,6 +935,7 @@ ${bestModuleMatch.content}
 
 ---
 *Retrieved from the offline course library.*`;
+    }
   }
 
   // Fallback if no matching topic is found anywhere
