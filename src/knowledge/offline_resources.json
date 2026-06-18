@@ -12,11 +12,11 @@
     "modules": [
       {
         "title": "Module 1: Declarative UI paradigm and JSX",
-        "content": "### Declarative vs Imperative UI Programming\n- **Imperative**: Developer describes *how* to modify the UI step-by-step.\n  ```javascript\n  // Imperative DOM updates\n  const btn = document.createElement('button');\n  btn.innerText = 'Clicked 0 times';\n  let count = 0;\n  btn.onclick = () => {\n    count++;\n    btn.innerText = 'Clicked ' + count + ' times';\n  };\n  document.body.appendChild(btn);\n  ```\n- **Declarative**: Developer describes *what* the UI should look like based on the current state.\n  ```jsx\n  // Declarative UI state\n  const [count, setCount] = useState(0);\n  return <button onClick={() => setCount(count + 1)}>Clicked {count} times</button>;\n  ```\n\n### The Virtual DOM & Reconciliation\nReact maintains a lightweight representation of the browser DOM in memory called the **Virtual DOM**:\n1. **State Mutation**: When a component's state changes, a new Virtual DOM tree is generated.\n2. **Diffing Algorithm**: React compares the new tree with the previous Virtual DOM tree using an O(n) heuristic algorithm.\n3. **Reconciliation**: React calculates the minimal set of changes needed and batches them to update the real browser DOM (Paint/Layout updates)."
+        "content": "### Declarative vs Imperative UI Programming\n- **Imperative**: Developer describes *how* to modify the UI step-by-step.\n  ```javascript\n  // Imperative DOM updates\n  const btn = document.createElement('button');\n  btn.innerText = 'Clicked 0 times';\n  let count = 0;\n  btn.onclick = () => {\n    count++;\n    btn.innerText = 'Clicked ' + count + ' times';\n  };\n  document.body.appendChild(btn);\n  ```\n- **Declarative**: Developer describes *what* the UI should look like based on the current state.\n  ```jsx\n  // Declarative UI state\n  const [count, setCount] = useState(0);\n  return <button onClick={() => setCount(count + 1)}>Clicked {count} times</button>;\n  ```\n\n### The Virtual DOM & Reconciliation\nReact maintains a lightweight representation of the browser DOM in memory called the **Virtual DOM**:\n1. **State Mutation**: When a component's state changes, a new Virtual DOM tree is generated.\n2. **Diffing Algorithm**: React compares the new tree with the previous Virtual DOM tree using an O(n) heuristic algorithm.\n3. **Reconciliation**: React calculates the minimal set of changes needed and batches them to update the real browser DOM (Paint/Layout updates).\n   - Fiber Architecture: React splits rendering work into small units of work, enabling it to pause, abort, or reuse work across updates, ensuring high responsiveness in UI layouts."
       },
       {
         "title": "Module 2: React Hooks API deep-dive",
-        "content": "### Core React Hooks Reference\n- **useState**: Declares a reactive state variable.\n- **useEffect**: Runs side effects (data fetching, DOM listeners).\n  ```javascript\n  useEffect(() => {\n    const fetchUser = async () => {\n      const res = await fetch('/api/user');\n      setUser(await res.json());\n    };\n    fetchUser();\n    // Cleanup callback runs on unmount or dependency shifts\n    return () => console.log('Cleaning up listeners...');\n  }, [userId]); // Dependency array\n  ```\n- **useContext**: Consumes Context provider values directly.\n- **useRef**: Persists mutable values without triggering re-renders; references DOM elements directly.\n- **useReducer**: Manages state using dispatch actions and reducer functions (Redux pattern)."
+        "content": "### Core React Hooks Reference\n- **useState**: Declares a reactive state variable.\n- **useEffect**: Runs side effects (data fetching, DOM listeners).\n  ```javascript\n  useEffect(() => {\n    const fetchUser = async () => {\n      const res = await fetch('/api/user');\n      setUser(await res.json());\n    };\n    fetchUser();\n    // Cleanup callback runs on unmount or dependency shifts\n    return () => console.log('Cleaning up listeners...');\n  }, [userId]); // Dependency array\n  ```\n- **useContext**: Consumes Context provider values directly.\n- **useRef**: Persists mutable values without triggering re-renders; references DOM elements directly.\n- **useReducer**: Manages state using dispatch actions and reducer functions (Redux pattern):\n  ```javascript\n  const [state, dispatch] = useReducer(reducer, { count: 0 });\n  // dispatch({ type: 'increment' })\n  ```\n- **useLayoutEffect**: Identical to useEffect, but fires synchronously after all DOM mutations. Use this to read DOM layouts and synchronously re-render to avoid visual flashes."
       },
       {
         "title": "Module 3: React Performance & Memoization",
@@ -24,15 +24,15 @@
       },
       {
         "title": "Module 4: Advanced React Patterns",
-        "content": "### Higher-Order Components & Custom Hooks\n- **Custom Hooks**: Extract stateful logic into reusable functions.\n  ```javascript\n  function useWindowWidth() {\n    const [width, setWidth] = useState(window.innerWidth);\n    useEffect(() => {\n      const handleResize = () => setWidth(window.innerWidth);\n      window.addEventListener('resize', handleResize);\n      return () => window.removeEventListener('resize', handleResize);\n    }, []);\n    return width;\n  }\n  ```\n- **Compound Components**: Design components that work together implicitly (e.g. `<Select>` and `<Option>`).\n- **Render Props**: Share logic by passing a function returning JSX as a prop."
+        "content": "### Higher-Order Components & Custom Hooks\n- **Custom Hooks**: Extract stateful logic into reusable functions.\n  ```javascript\n  function useWindowWidth() {\n    const [width, setWidth] = useState(window.innerWidth);\n    useEffect(() => {\n      const handleResize = () => setWidth(window.innerWidth);\n      window.addEventListener('resize', handleResize);\n      return () => window.removeEventListener('resize', handleResize);\n    }, []);\n    return width;\n  }\n  ```\n- **Compound Components**: Design components that work together implicitly (e.g. `<Select>` and `<Option>`).\n- **Render Props**: Share logic by passing a function returning JSX as a prop.\n- **Portals**: Render children nodes into DOM nodes that exist outside the DOM hierarchy of the parent component, ideal for modals and tooltips:\n  ```jsx\n  ReactDOM.createPortal(children, document.getElementById('portal-root'))\n  ```"
       },
       {
         "title": "Module 5: Next.js App Router & Server Components",
-        "content": "### React Server Components (RSC) vs Client Components\n- **Server Components (Default)**: Rendered on the server. Code size is not sent to the client browser, reducing bundle sizes and improving performance.\n  ```javascript\n  // app/page.tsx - Server Component\n  import { db } from '@/lib/db';\n  export default async function Page() {\n    const items = await db.query('SELECT * FROM products');\n    return (\n      <ul>\n        {items.map(item => <li key={item.id}>{item.name}</li>)}\n      </ul>\n    );\n  }\n  ```\n- **Client Components**: Marked with `\"use client\"` directive at the top. Allow interactivity, hooks, and browser APIs."
+        "content": "### React Server Components (RSC) vs Client Components\n- **Server Components (Default)**: Rendered on the server. Code size is not sent to the client browser, reducing bundle sizes and improving performance.\n  ```javascript\n  // app/page.tsx - Server Component\n  import { db } from '@/lib/db';\n  export default async function Page() {\n    const items = await db.query('SELECT * FROM products');\n    return (\n      <ul>\n        {items.map(item => <li key={item.id}>{item.name}</li>)}\n      </ul>\n    );\n  }\n  ```\n- **Client Components**: Marked with `\"use client\"` directive at the top. Allow interactivity, hooks, and browser APIs.\n\n### Routing & Layouts\n- **File-based Routing**: Folders define route paths (e.g., `app/about/page.tsx` maps to `/about`).\n- **Shared Layouts**: Nested folders inherit layouts, preserving state across route navigations."
       },
       {
         "title": "Module 6: Next.js Data Fetching & Caching",
-        "content": "### Fetching Paradigms in Next.js\n- **Static Rendering (SSG)**: Data is fetched at build time and cached.\n- **Dynamic Rendering (SSR)**: Data is fetched on each HTTP request.\n- **Incremental Static Regeneration (ISR)**: Re-validates cached static pages in the background.\n  ```javascript\n  // Re-evaluate cache every 60 seconds\n  fetch('https://api.com/data', { next: { revalidate: 60 } })\n  ```\n- **Server Actions**: Secure async functions executed directly on the server, triggered from the client forms without writing REST route controllers."
+        "content": "### Fetching Paradigms in Next.js\n- **Static Rendering (SSG)**: Data is fetched at build time and cached.\n- **Dynamic Rendering (SSR)**: Data is fetched on each HTTP request.\n- **Incremental Static Regeneration (ISR)**: Re-validates cached static pages in the background.\n  ```javascript\n  // Re-evaluate cache every 60 seconds\n  fetch('https://api.com/data', { next: { revalidate: 60 } })\n  ```\n- **Server Actions**: Secure async functions executed directly on the server, triggered from the client forms without writing REST route controllers:\n  ```javascript\n  async function updateInvoice(formData) {\n    'use server';\n    const rawFormData = {\n      amount: formData.get('amount'),\n    };\n    await db.save(rawFormData);\n  }\n  ```"
       }
     ]
   },
@@ -64,7 +64,7 @@
       },
       {
         "title": "Module 5: Advanced Types & Type Manipulation",
-        "content": "### Mapped & Conditional Types\n- **Keyof Operator**: Queries keys of an object:\n  ```typescript\n  type UserKeys = keyof User; // 'id' | 'name' | 'role'\n  ```\n- **Mapped Types**: Dynamically transform properties:\n  ```typescript\n  type Optional<T> = {\n    [P in keyof T]?: T[P];\n  };\n  ```\n- **Conditional Types**: Select types based on relationships:\n  ```typescript\n  type IsString<T> = T extends string ? true : false;\n  ```"
+        "content": "### Mapped & Conditional Types\n- **Keyof Operator**: Queries keys of an object:\n  ```typescript\n  type UserKeys = keyof User; // 'id' | 'name' | 'role'\n  ```\n- **Mapped Types**: Dynamically transform properties:\n  ```typescript\n  type Optional<T> = {\n    [P in keyof T]?: T[P];\n  };\n  ```\n- **Conditional Types**: Select types based on relationships:\n  ```typescript\n  type IsString<T> = T extends string ? true : false;\n  ```\n- **Template Literal Types**: Manipulate string patterns inside types:\n  ```typescript\n  type Event = 'click' | 'hover';\n  type HandlerName = `on${Capitalize<Event>}`; // 'onClick' | 'onHover'\n  ```\n- **Key Remapping in Mapped Types**:\n  ```typescript\n  type Getters<T> = {\n    [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K]\n  };\n  ```"
       },
       {
         "title": "Module 6: Compiler Configuration & Strict Flagging",
@@ -132,7 +132,7 @@
       },
       {
         "title": "Module 4: Responsive Design & Viewports",
-        "content": "### Media Queries & Viewport Sizing\nResponsive designs adjust layouts to fit different devices:\n```css\n/* Mobile First Base */\n.layout { display: flex; flex-direction: column; }\n\n/* Desktop Viewport */\n@media (min-width: 1024px) {\n  .layout { flex-direction: row; }\n}\n```\n- Use relative units (`rem`, `em`, `vh`, `vw`) rather than absolute pixels (`px`).\n- Set viewport configuration in HTML header:\n  ```html\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  ```"
+        "content": "### Media Queries & Viewport Sizing\nResponsive designs adjust layouts to fit different devices:\n```css\n/* Mobile First Base */\n.layout { display: flex; flex-direction: column; }\n\n/* Desktop Viewport */\n@media (min-width: 1024px) {\n  .layout { flex-direction: row; }\n}\n```\n- Use relative units (`rem`, `em`, `vh`, `vw`) rather than absolute pixels (`px`).\n- Set viewport configuration in HTML header:\n  ```html\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  ```\n- **Container Queries**: Scale layouts based on size of parent element instead of global viewport:\n  ```css\n  @container (min-width: 400px) {\n    .card { grid-template-columns: 1fr 2fr; }\n  }\n  ```"
       },
       {
         "title": "Module 5: CSS Variables & Animations",
@@ -175,8 +175,8 @@
         "content": "### Core Standard Modules\n- **sys / os**: Query environment configurations and directory paths.\n- **json**: Serializes Python dicts to JSON strings and parses JSON payloads.\n- **pathlib**: Modern OOP file path manager:\n  ```python\n  from pathlib import Path\n  config_file = Path(__file__).parent / \"config.json\"\n  if config_file.exists():\n      content = config_file.read_text(encoding=\"utf-8\")\n  ```\n- **subprocess**: Spawns system processes to run CLI commands."
       },
       {
-        "title": "Module 6: Web Frameworks & Data Analysis Tools",
-        "content": "### Python Ecosystem Frameworks\n- **Flask**: Micro web framework:\n  ```python\n  from flask import Flask\n  app = Flask(__name__)\n  @app.route('/')\n  def home():\n      return \"Online\"\n  ```\n- **Django**: Batteries-included MVC framework with built-in ORM.\n- **NumPy & Pandas**: High-performance mathematical arrays and data structures (DataFrames) for analysis."
+        "title": "Module 6: Metaclasses, Context Managers & Advanced Features",
+        "content": "### Advanced Python Constructs\n- **Context Managers**: Custom objects managed by `with` statements using `__enter__` and `__exit__` dunder methods:\n  ```python\n  class FileHandler:\n      def __init__(self, filename):\n          self.filename = filename\n      def __enter__(self):\n          self.file = open(self.filename, 'w')\n          return self.file\n      def __exit__(self, exc_type, exc_val, exc_tb):\n          self.file.close()\n  ```\n- **Metaclasses**: Class templates used to construct other classes, intercepting class initialization rules dynamically."
       }
     ]
   },
@@ -211,8 +211,8 @@
         "content": "### Native Production Web Server\nGo standard library includes high-performance HTTP engines:\n```go\npackage main\n\nimport (\n    \"fmt\"\n    \"net/http\"\n)\n\nfunc helloHandler(w http.ResponseWriter, r *http.Request) {\n    fmt.Fprintf(w, \"Hello, secure web server!\")\n}\n\nfunc main() {\n    http.HandleFunc(\"/hello\", helloHandler)\n    http.ListenAndServe(\":8080\", nil)\n}\n```"
       },
       {
-        "title": "Module 6: Project Tooling & Dependency Tracking",
-        "content": "### Modules & Compiling\n- **go mod init**: Initializes dependency manifests.\n- **go build**: Compiles files into a single, self-contained executable binary file.\n- **go test**: Runs built-in test suites:\n  ```go\n  func TestSum(t *testing.T) {\n      ans := Sum(1, 2)\n      if ans != 3 {\n          t.Errorf(\"Expected 3, got %d\", ans)\n      }\n  }\n  ```"
+        "title": "Module 6: Go Scheduler Internals & Profiling",
+        "content": "### G-M-P Scheduler Model\nGo utilizes a highly custom M:N scheduler in runtime:\n- **G (Goroutine)**: Represents goroutine runtime thread state and stack.\n- **M (Machine)**: Represents OS native thread.\n- **P (Processor)**: Represents resource execution context, holding the local run queue.\n- **Work Stealing**: idle processors steal work tasks from queues of busy processors to balance load.\n- **pprof Profiling**: Built-in runtime tool to generate CPU/Heap profiles for optimization:\n  ```go\n  import _ \"net/http/pprof\"\n  ```"
       }
     ]
   },
@@ -247,8 +247,8 @@
         "content": "### Shared Behavior Templates\n**Traits** define shared behavior structures (similar to interfaces):\n```rust\npub trait Summary {\n    fn summarize(&self) -> String;\n}\n\npub struct Article {\n    pub title: String,\n}\n\nimpl Summary for Article {\n    fn summarize(&self) -> String {\n        format!(\"Article: {}\", self.title)\n    }\n}\n```\nUse traits as parameters or generic bounds to enforce constraints."
       },
       {
-        "title": "Module 6: Cargo Package Manager & Concurrency",
-        "content": "### Rust Package Tooling\n- **Cargo**: Manages dependencies, compiles files, and runs tests.\n  - `cargo build`: Compiles source code.\n  - `cargo run`: Runs the executable binary.\n  - `cargo test`: Executes unit and integration test blocks.\n- **Safe Concurrency**: Compiler tracks ownership of values across threads, preventing data races:\n  ```rust\n  use std::thread;\n  let handle = thread::spawn(|| {\n      println!(\"Hello thread!\");\n  });\n  handle.join().unwrap();\n  ```"
+        "title": "Module 6: Rust Smart Pointers & Macros",
+        "content": "### Smart Pointers & Macro Systems\n- **Smart Pointers**:\n  - `Box<T>`: Allocates values on heap.\n  - `Rc<T> / Arc<T>`: Reference-counted wrapper objects (Arc is thread-safe).\n  - `RefCell<T>`: Enforces borrowing rules at runtime instead of compile-time.\n- **Unsafe Rust**: Bypass strict compiler checks using `unsafe` blocks.\n- **Macros**:\n  - Declarative (`macro_rules!`): Pattern-matching code generation.\n  - Procedural: Derive plugins that modify AST elements."
       }
     ]
   },
@@ -283,8 +283,8 @@
         "content": "### Functional Programming in Java 8+\nStreams API enables declarative operations on collections:\n```java\nList<String> names = Arrays.asList(\"Alice\", \"Bob\", \"Charlie\");\nList<String> filtered = names.stream()\n    .filter(name -> name.startsWith(\"C\")) // Lambda expression\n    .map(String::toUpperCase)\n    .collect(Collectors.toList());\n```"
       },
       {
-        "title": "Module 6: Concurrency & Build Tooling (Maven)",
-        "content": "### Java Threads & Build Systems\n- **Thread Class**: Extend `Thread` or implement `Runnable` to create parallel tasks.\n- **synchronized**: Keyword that locks code blocks to prevent race conditions.\n- **Maven & Gradle**: Manage dependencies and lifecycle phases (compile, package, install)."
+        "title": "Module 6: JVM Memory Model & Garbage Collection",
+        "content": "### Inside the Java Virtual Machine\n- **JVM Memory Areas**:\n  - **Heap**: Stores all objects created dynamically (Shared).\n  - **Stack**: Stores primitive variables and local execution method frames (Thread-local).\n  - **Metaspace**: Stores class metadata, methods structures, and constant pools.\n- **Garbage Collection (GC) Algorithms**:\n  - **Generational GC**: Splits heap into Young and Old generations to speed up garbage sweeping.\n  - **G1 GC & ZGC**: Modern concurrent collectors that reduce thread pauses to sub-milliseconds."
       }
     ]
   },
@@ -319,8 +319,8 @@
         "content": "### File Streams & Preprocessors\n- **fstream**: Read and write files:\n  ```cpp\n  #include <fstream>\n  std::ofstream out(\"log.txt\");\n  out << \"Logging activity\";\n  out.close();\n  ```\n- **Preprocessor Macros**: Handled before compiler starts:\n  ```cpp\n  #define MAX_SIZE 100\n  #ifndef HEADER_H\n  #define HEADER_H\n  #endif\n  ```"
       },
       {
-        "title": "Module 6: Multi-Threading & Compilation Processes",
-        "content": "### Compiling & Threads\n- **std::thread**: Spawns concurrent tasks:\n  ```cpp\n  #include <thread>\n  std::thread t([]() { cout << \"Child thread\"; });\n  t.join();\n  ```\n- **Compilation phases**: Preprocessing -> Compilation -> Assembly -> Linking.\n- **GNU Make**: Orchestrates compilation configurations using Makefiles."
+        "title": "Module 6: Move Semantics & Rvalue References",
+        "content": "### Modern C++ Memory Optimization\n- **Rvalue References (`&&`)**: Capture temporary values that are about to be destroyed, enabling resource transfers rather than deep copying.\n- **std::move**: Casts an lvalue reference to an rvalue reference, invoking the Move Constructor:\n  ```cpp\n  std::string str1 = \"Hello\";\n  std::string str2 = std::move(str1); // str1 is now empty; pointer transferred to str2\n  ```\n- **Move Semantics**: Prevents runtime performance losses during heavy vector reallocation or string swapping."
       }
     ]
   },
@@ -355,8 +355,8 @@
         "content": "### Integrity Constraints\nEnsure data validity using database-level checks:\n- **Primary Key / Foreign Key**: Establish linkages and prevent orphan child rows.\n- **UNIQUE**: Restricts duplicate values.\n- **CHECK constraints**:\n  ```sql\n  ALTER TABLE users ADD CONSTRAINT check_age CHECK (age >= 18);\n  ```"
       },
       {
-        "title": "Module 6: Connection Pooling & DB Scaling",
-        "content": "### Database Scalability Configurations\n- **Connection Pools**: Maintain pools of open, active DB client sockets (using pgpool or pgbouncer) to save handshake times.\n- **Read Replicas**: Primary node handles writes and replicates data to secondary nodes that handle read traffic.\n- **Sharding**: Horizontally splits tables across separate databases using a partition key."
+        "title": "Module 6: SQL Window Functions & Stored Procedures",
+        "content": "### Advanced Query Capabilities\n- **Window Functions**: Perform calculations across sets of rows related to the current row without grouping:\n  ```sql\n  SELECT name, department, salary,\n         RANK() OVER (PARTITION BY department ORDER BY salary DESC) as salary_rank\n  FROM employees;\n  ```\n- **Stored Procedures**: Bundled SQL statements compiled directly inside database servers to execute high-speed operations.\n- **Vacuuming**: Reclaims storage space occupied by dead tuples from UPDATE or DELETE operations in PostgreSQL."
       }
     ]
   },
@@ -489,7 +489,7 @@
       },
       {
         "title": "Module 3: Variables, Locals & Outputs",
-        "content": "### Customizing HCL Configurations\n- **Variables**: Inputs configured via command line or file:\n  ```hcl\n  variable \"instance_type\" {\n    type    = string\n    default = \"t2.micro\"\n  }\n  ```\n- **Locals**: Temporary variables computed within module.\n- **Outputs**: Export variables to stdout or remote storage:\n  ```hcl\n  output \"public_ip\" {\n    value = aws_instance.web.public_ip\n  }\n  ```"
+        "content": "### Customizing HCL Configurations\n- **Variables**: Inputs configured via command line or file:\n  ```hcl\n  variable \"instance_count\" {\n    type    = number\n    default = 2\n  }\n  ```\n- **Locals**: Temporary variables computed within module.\n- **Outputs**: Export variables to stdout or remote storage:\n  ```hcl\n  output \"public_ip\" {\n    value = aws_instance.web.public_ip\n  }\n  ```"
       },
       {
         "title": "Module 4: State Files & Lock Locks",
@@ -647,6 +647,297 @@
       {
         "title": "Module 6: High EQ Team Collaboration",
         "content": "### Emotional Intelligence in Engineering\n- Empathy: Understand constraints and difficulties faced by peers.\n- Active Listening: Listen to build collective solutions during reviews instead of defending opinions.\n- Conflict Resolution: Address disagreements constructively and align on standards."
+      }
+    ]
+  },
+  {
+    "id": "vue-nuxt-docs",
+    "title": "Vue.js & Nuxt.js official Docs",
+    "category": "Documentation",
+    "domain": "vuejs.org",
+    "urls": [
+      "https://vuejs.org/",
+      "https://nuxt.com/"
+    ],
+    "description": "Official guides for Vue.js Composition API, reactivity proxies, Pinia state stores, and Nuxt.js SSR meta-framework.",
+    "modules": [
+      {
+        "title": "Module 1: Vue Composition API & Reactivity Model",
+        "content": "### Ref vs Reactive\n- **ref**: Wraps primitive values or objects in a reactive container. Accessible via `.value` in JS/TS.\n  ```javascript\n  import { ref } from 'vue';\n  const count = ref(0); // count.value++\n  ```\n- **reactive**: Creates reactive proxies of objects. Modifies objects directly without `.value`.\n  ```javascript\n  import { reactive } from 'vue';\n  const state = reactive({ count: 0 }); // state.count++\n  ```\n\n### Vue 3 Proxy-Based Reactivity\nVue 3 uses ES6 **Proxies** to trap property read/write operations:\n1. **Track**: Intercepts get operations to register dependencies (effects).\n2. **Trigger**: Intercepts set operations to execute registered dependencies (trigger updates).\nThis enables automatic, precise DOM updates without Virtual DOM diffing overhead for static parts."
+      },
+      {
+        "title": "Module 2: Component Architecture & Directives",
+        "content": "### Directives Cheat Sheet\n- **v-if / v-else-if / v-else**: Conditionally renders elements in the DOM.\n- **v-show**: Toggles CSS `display: none` (keeps elements in DOM).\n- **v-for**: Renders lists. Always use unique `:key` properties.\n  ```html\n  <li v-for=\"item in items\" :key=\"item.id\">{{ item.name }}</li>\n  ```\n- **v-model**: Two-way data binding on form inputs.\n\n### Custom Component Data Transfer\n- **Props**: Pass data from parent to child (read-only).\n- **Emits**: Send events from child to parent:\n  ```javascript\n  const emit = defineEmits(['submit']);\n  emit('submit', payload);\n  ```\n- **Slots**: Inject custom HTML segments from parent template layouts."
+      },
+      {
+        "title": "Module 3: State Management with Pinia",
+        "content": "### Pinia Stores Configuration\nPinia is the standard lightweight state manager replacing Vuex:\n```javascript\nimport { defineStore } from 'pinia';\n\nexport const useUserStore = defineStore('user', {\n  state: () => ({\n    name: 'Tonde',\n    role: 'Admin'\n  }),\n  getters: {\n    isAdmin: (state) => state.role === 'Admin'\n  },\n  actions: {\n    updateName(newName) {\n      this.name = newName; // Direct mutation allowed in Pinia\n    }\n  }\n});\n```"
+      },
+      {
+        "title": "Module 4: Nuxt.js Directory Structure & File Routing",
+        "content": "### File-System Directory Routing\nNuxt.js automates setups based on file paths:\n- **pages/**: Generates routes automatically (e.g. `pages/about.vue` maps to `/about`).\n- **layouts/**: Declares layouts for UI consistency.\n- **components/**: Automatically imports components anywhere.\n- **server/**: Houses server API endpoints.\n\n### Dynamic Route Configurations\nDynamic parameters are defined using square brackets:\n- `pages/posts/[id].vue` maps to dynamic paths like `/posts/123`.\n- Query params are retrieved via `useRoute().params.id`."
+      },
+      {
+        "title": "Module 5: Nuxt.js Data Fetching & SSR",
+        "content": "### Server-Side Rendering Data Hooks\n- **useFetch**: Composable designed to fetch data from API endpoints, preventing duplicate calls on client hydration.\n  ```javascript\n  const { data, pending, error } = await useFetch('/api/products');\n  ```\n- **useAsyncData**: Best for complex fetching pipelines combining multiple async queries.\n- **Static Site Generation (SSG)**: Pre-renders pages to static HTML/CSS files at build time for extreme performance."
+      },
+      {
+        "title": "Module 6: Nuxt.js Server Routes & API endpoints",
+        "content": "### Writing API Controllers in Nuxt\nNuxt uses **H3** backend server engines under the hood. API files reside in `server/api/`:\n```javascript\n// server/api/hello.ts\nexport default defineEventHandler((event) => {\n  return {\n    message: 'Hello from Nuxt API server!'\n  };\n});\n```\n- Handles requests asynchronously, supports middleware chains, and compiles cleanly to serverless edge functions."
+      }
+    ]
+  },
+  {
+    "id": "angular-docs",
+    "title": "Angular official Guides",
+    "category": "Documentation",
+    "domain": "angular.io",
+    "urls": [
+      "https://angular.io/"
+    ],
+    "description": "Official reference for Angular components metadata, Dependency Injection, standalone elements, and RxJS-based reactive forms.",
+    "modules": [
+      {
+        "title": "Module 1: Component Lifecycle & Metadata Decorators",
+        "content": "### Angular Decorators\nDecorators provide metadata configuration to TypeScript classes:\n- **@Component**: Declares component selectors, HTML templates, and CSS stylesheets.\n- **@Injectable**: Declares services available for dependency injection.\n- **@Directive**: Defines custom DOM modifiers.\n\n### Core Lifecycle Hooks\n- **ngOnInit**: Fires after properties inputs are initialized (use this for data fetching setup).\n- **ngOnChanges**: Fires whenever data-bound input properties shift.\n- **ngOnDestroy**: Fires before components are deleted (use this to unsubscribe from streams and avoid memory leaks)."
+      },
+      {
+        "title": "Module 2: Templates, Directives & Data Binding",
+        "content": "### Angular Template Syntax\n- **Interpolation**: Bind component fields in HTML: `{{ title }}`\n- **Property Binding**: Bind to HTML attributes: `[src]=\"imageUrl\"`\n- **Event Binding**: Bind user click events to methods: `(click)=\"onSave()\"`\n- **Two-Way Binding**: Synchronize input forms to states: `[(ngModel)]=\"username\"`\n\n### Structural Directives\n- ***ngIf**: Conditionally includes elements.\n- ***ngFor**: Iterates collections:\n  ```html\n  <div *ngFor=\"let item of items; trackBy: trackById\">\n    {{ item.name }}\n  </div>\n  ```"
+      },
+      {
+        "title": "Module 3: Standalone Components Paradigm",
+        "content": "### Standalone Components (Angular 14+)\nStandalone components bypass traditional **NgModules**, making code modular and self-contained:\n```typescript\nimport { Component } from '@angular/core';\nimport { CommonModule } from '@angular/common';\n\n@Component({\n  selector: 'app-user-card',\n  standalone: true,\n  imports: [CommonModule],\n  template: `<p>User status: Active</p>`\n})\nexport class UserCardComponent {}\n```\n- Eliminates heavy module registration boilerplates and speeds up application bootstrapping."
+      },
+      {
+        "title": "Module 4: Dependency Injection & Services",
+        "content": "### Angular DI System\nDependency Injection simplifies class interactions. Services carry business logic:\n```typescript\nimport { Injectable } from '@angular/core';\n\n@Injectable({\n  providedIn: 'root' // Singleton accessible anywhere\n})\nexport class DataService {\n  getData() { return ['A', 'B', 'C']; }\n}\n```\nInject services inside components using the constructor or `inject()` function:\n```typescript\nconstructor(private dataService: DataService) {}\n```"
+      },
+      {
+        "title": "Module 5: Reactive Forms & Validations",
+        "content": "### Reactive Forms Architecture\nManages form state model-driven in TypeScript, allowing robust validations:\n```typescript\nimport { FormControl, FormGroup, Validators } from '@angular/forms';\n\nthis.profileForm = new FormGroup({\n  email: new FormControl('', [Validators.required, Validators.email]),\n  password: new FormControl('', Validators.minLength(8))\n});\n```\n- **Async Validators**: Check databases (e.g. username availability) asynchronously before submitting."
+      },
+      {
+        "title": "Module 6: RxJS Observables & Interceptors",
+        "content": "### RxJS streams in HTTP\nAngular's `HttpClient` returns **Observables** representing data streams:\n```typescript\nthis.http.get<User[]>('/api/users').subscribe(data => this.users = data);\n```\n\n### Common RxJS Operators\n- **map**: Transforms stream items.\n- **switchMap**: Cancels previous HTTP queries if new typing requests fire (essential for auto-complete searches).\n- **catchError**: Intercepts errors.\n\n### HttpInterceptors\nMiddleware class to append headers (e.g., JWT Auth Bearer tokens) to all outgoing HTTP calls automatically."
+      }
+    ]
+  },
+  {
+    "id": "dotnet-csharp-docs",
+    "title": "C# & .NET Core Enterprise Platform",
+    "category": "Documentation",
+    "domain": "learn.microsoft.com/dotnet",
+    "urls": [
+      "https://learn.microsoft.com/en-us/dotnet/"
+    ],
+    "description": "C# compiler mechanics, LINQ expressions, Entity Framework database ORM, and ASP.NET Core API routing models.",
+    "modules": [
+      {
+        "title": "Module 1: C# OOP Core & Memory Types",
+        "content": "### Value Types vs Reference Types\n- **Value Types (Stack)**: Store data directly (e.g. `int`, `float`, `bool`, `struct`). High-speed, local allocations.\n- **Reference Types (Heap)**: Store pointers to memory addresses (e.g. `class`, `string`, `object`). Managed by Garbage Collector.\n\n### Properties & Interfaces\nC# enforces strict encapsulation using auto-implemented properties:\n```csharp\npublic class Employee {\n    public int Id { get; set; } // Auto Property\n    public string Name { get; set; }\n}\n```\n- **Interfaces**: Define API templates using `interface` keyword, implemented implicitly."
+      },
+      {
+        "title": "Module 2: LINQ (Language Integrated Query) & Lambdas",
+        "content": "### LINQ Queries\nLINQ compiles database-like filtering expressions directly inside C#:\n```csharp\nvar VIPs = users.Where(u => u.IsPremium)\n                .OrderBy(u => u.Name)\n                .Select(u => new { u.Name, u.Email })\n                .ToList();\n```\n- **Deferred Execution**: LINQ filters aren't evaluated when declared. Execution is postponed until you call conversion methods like `ToList()` or iterate via `foreach` loops."
+      },
+      {
+        "title": "Module 3: ASP.NET Core Web API Architecture",
+        "content": "### Web Controller Configurations\nBuild secure REST controllers using attributes and dependency injections:\n```csharp\n[ApiController]\n[Route(\"api/[controller]\")]\npublic class UsersController : ControllerBase {\n    private readonly IUserRepository _repo;\n    public UsersController(IUserRepository repo) {\n        _repo = repo; // Injected service\n    }\n\n    [HttpGet(\"{id}\")]\n    public async Task<IActionResult> GetUser(int id) {\n        var user = await _repo.GetByIdAsync(id);\n        return user != null ? Ok(user) : NotFound();\n    }\n}\n```"
+      },
+      {
+        "title": "Module 4: Entity Framework Core (EF Core) ORM",
+        "content": "### Database DbContext Configuration\nEF Core acts as the database mapping layer to C# classes:\n```csharp\npublic class AppDbContext : DbContext {\n    public DbSet<Product> Products { get; set; }\n    \n    protected override void OnConfiguring(DbContextOptionsBuilder options)\n        => options.UseNpgsql(\"Host=localhost;Database=store;\");\n}\n```\n- **Migrations CLI**:\n  ```bash\n  dotnet ef migrations add InitialCreate\n  dotnet ef database update\n  ```"
+      },
+      {
+        "title": "Module 5: Task Parallel Library (TPL) Async",
+        "content": "### Async/Await in .NET\nTPL avoids thread blockages, allowing servers to process millions of requests on lightweight thread pools:\n```csharp\npublic async Task<string> FetchDataAsync(string url) {\n    using HttpClient client = new HttpClient();\n    string result = await client.GetStringAsync(url); // Non-blocking await\n    return result;\n}\n```\n- **Task.WhenAll**: Runs multiple network tasks concurrently.\n- **CancellationToken**: Propagates cancellation alerts through async loops to abort stalled requests."
+      },
+      {
+        "title": "Module 6: .NET Memory Management & GC",
+        "content": "### Generational Garbage Collector\n.NET splits the managed heap into generations to speed up sweeps:\n- **Gen 0**: Short-lived allocations (e.g. local method variables). Frequently swept.\n- **Gen 1**: Buffer zone for items surviving Gen 0.\n- **Gen 2**: Long-lived allocations (e.g. singleton classes). Swept rarely.\n\n### IDisposable & Using Statements\nClean up unmanaged resources (database handles, files) immediately using `using` blocks:\n```csharp\nusing (var reader = new StreamReader(\"file.txt\")) {\n    var content = reader.ReadToEnd();\n} // Automatically invokes reader.Dispose() here\n```"
+      }
+    ]
+  },
+  {
+    "id": "linux-shell-docs",
+    "title": "Linux commands & Shell Scripting",
+    "category": "Developer Tools",
+    "domain": "linux.org",
+    "urls": [
+      "https://www.linux.org/docs/"
+    ],
+    "description": "Linux filesystem architecture, stream manipulations (grep, awk, sed), file permissions, and automated bash scripting.",
+    "modules": [
+      {
+        "title": "Module 1: Linux Directory Structure & CLI Navigation",
+        "content": "### Core Directory Standard\n- **/bin & /sbin**: Contains system commands and binaries.\n- **/etc**: Stores system and service configuration files (e.g. hosts, network configs).\n- **/var**: Contains variable data like logs, spool folders, and database caches.\n- **/home**: User personal directories.\n\n### Navigation Essentials\n- `ls -la`: Lists all files, including hidden ones, with details.\n- `pwd`: Prints active working directory path.\n- `cd -`: Switches back to the previous directory.\n- `mkdir -p path/to/dir`: Recursively builds directories."
+      },
+      {
+        "title": "Module 2: Stream Piping & Text Filters",
+        "content": "### Redirections and Pipes\n- `>`: Overwrites output to a file.\n- `>>`: Appends output to a file.\n- `|` (Pipe): Directs output of one command to the input of another.\n\n### Core Text Processing Utilities\n- **grep**: Finds text matches.\n  ```bash\n  grep -rn \"TODO\" src/ # Recursive search with line numbers\n  ```\n- **awk**: Columns transformer.\n  ```bash\n  ps aux | awk '{print $2, $11}' # Prints PID and command columns\n  ```\n- **sed**: Stream editor for replacements.\n  ```bash\n  sed -i 's/localhost/127.0.0.1/g' config.env\n  ```"
+      },
+      {
+        "title": "Module 3: File Permissions & Access Controls",
+        "content": "### Permissions Model (rwx)\nEvery file has permissions split across User, Group, and Others:\n- **r (read)** = 4\n- **w (write)** = 2\n- **x (execute)** = 1\n\n### Operations\n- `chmod 755 script.sh`: Sets rwxr-xr-x (User has all; Group/Others can read/execute).\n- `chown root:root file.log`: Updates file owner user and group to root.\n- `sudo`: Executes commands with superuser permissions."
+      },
+      {
+        "title": "Module 4: Bash Shell Scripting Basics",
+        "content": "### Writing Automated Bash Scripts (`script.sh`)\nAlways define the interpreter shebang at the top:\n```bash\n#!/bin/bash\n\nNAME=\"Tonde\"\necho \"Starting audit for $NAME...\"\n\nif [ -f \"server.log\" ]; then\n    echo \"Log file exists. Scanning...\"\n    grep -i \"error\" server.log\nelse\n    echo \"No log file found.\"\n    exit 1\nfi\n```\n- Run scripts using `chmod +x script.sh && ./script.sh`."
+      },
+      {
+        "title": "Module 5: Process Management & Daemons",
+        "content": "### Process Commands\n- `ps aux`: Lists all active running processes.\n- `top / htop`: Live resource monitors.\n- `kill -9 <PID>`: Force terminates a process.\n- `& (Ampersand)`: Appends behind commands to launch them in the background.\n- `nohup command > output.log 2>&1 &`: Keeps background processes running after terminal disconnects.\n\n### Systemd Services\nManage background system daemons:\n- `systemctl start nginx`\n- `systemctl status nginx`\n- `systemctl enable nginx` (runs service on boot)"
+      },
+      {
+        "title": "Module 6: Task Scheduling with Cron",
+        "content": "### Crontab Syntax (Five Fields)\nCron schedules automated tasks at designated intervals:\n```text\n* * * * *  command_to_execute\n| | | | |\n| | | | +----- Day of the Week (0 - 6) (Sunday is 0)\n| | | +------- Month (1 - 12)\n| | +--------- Day of the Month (1 - 31)\n| +----------- Hour (0 - 23)\n+------------- Minute (0 - 59)\n```\n\n### Crontab Examples\n- `0 2 * * * /backup.sh`: Runs backup script every night at 2:00 AM.\n- `*/5 * * * * /check.sh`: Runs script every 5 minutes.\n- Edit cron schedules via `crontab -e` and list schedules via `crontab -l`."
+      }
+    ]
+  },
+  {
+    "id": "testing-frameworks-docs",
+    "title": "Testing & Automation Guides",
+    "category": "Developer Tools",
+    "domain": "vitest.dev",
+    "urls": [
+      "https://vitest.dev/",
+      "https://playwright.dev/"
+    ],
+    "description": "Unit testing with Vitest/Jest, React Testing Library UI assertions, MSW api mocking, and Playwright E2E browser runs.",
+    "modules": [
+      {
+        "title": "Module 1: Unit Testing Principles & Vitest/Jest",
+        "content": "### Assertions & Test Blocks\nStructure tests using clean describe blocks and logical assertions:\n```javascript\nimport { describe, it, expect } from 'vitest';\nimport { add } from './calculator';\n\ndescribe('Calculator Library', () => {\n  it('should compute sums correctly', () => {\n    expect(add(2, 3)).toBe(5);\n  });\n});\n```\n- **Mocking**: Spy on functions and return mock values:\n  ```javascript\n  const spy = vi.fn().mockReturnValue('Success');\n  ```"
+      },
+      {
+        "title": "Module 2: React Testing Library (RTL)",
+        "content": "### Component UI Tests\nRTL asserts components work the way users interact with them:\n```jsx\nimport { render, screen } from '@testing-library/react';\nimport userEvent from '@testing-library/user-event';\nimport LoginButton from './LoginButton';\n\nit('triggers click event', async () => {\n  render(<LoginButton />);\n  const btn = screen.getByRole('button', { name: /login/i });\n  await userEvent.click(btn);\n  expect(btn).toBeDisabled();\n});\n```"
+      },
+      {
+        "title": "Module 3: Mocking API layers with MSW",
+        "content": "### Mock Service Worker (MSW)\nAvoid making real HTTP calls during unit testing by mocking network layers using service workers:\n```javascript\nimport { setupServer } from 'msw/node';\nimport { http, HttpResponse } from 'msw';\n\nconst server = setupServer(\n  http.get('/api/user', () => {\n    return HttpResponse.json({ name: 'Bob' });\n  })\n);\n\nbeforeAll(() => server.listen());\nafterEach(() => server.resetHandlers());\nafterAll(() => server.close());\n```"
+      },
+      {
+        "title": "Module 4: End-to-End Testing with Playwright",
+        "content": "### E2E Browser Automation\nPlaywright launches actual headless browsers (Chromium, Firefox, WebKit) to test user actions:\n```javascript\nimport { test, expect } from '@playwright/test';\n\ntest('has title and login button', async ({ page }) => {\n  await page.goto('https://localhost:3000/');\n  await expect(page).toHaveTitle(/dashboard/i);\n  \n  await page.click('text=Login');\n  await expect(page.locator('#welcome-msg')).toBeVisible();\n});\n```"
+      },
+      {
+        "title": "Module 5: Cypress Testing Framework",
+        "content": "### Cypress Integration\nCypress runs directly inside the browser execution loop:\n```javascript\ndescribe('E2E Store Test', () => {\n  it('adds items to cart', () => {\n    cy.visit('/store');\n    cy.get('.add-to-cart-btn').first().click();\n    cy.get('.cart-badge').should('contain', '1');\n  });\n});\n```\n- Intercepts requests, mocks data, and displays timelines of visual stages for debugging."
+      },
+      {
+        "title": "Module 6: CI Test Automation Pipelines",
+        "content": "### Integrating Tests in GitHub Actions\nAutomate test runs on every pull request to protect codebase safety:\n```yaml\nname: CI Test Runner\non: [push, pull_request]\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n    - uses: actions/checkout@v3\n    - uses: actions/setup-node@v3\n      with:\n        node-version: 20\n        cache: 'npm'\n    - run: npm ci\n    - run: npm run test:unit\n    - run: npx playwright install --with-deps\n    - run: npm run test:e2e\n```"
+      }
+    ]
+  },
+  {
+    "id": "cloud-architecture-docs",
+    "title": "Cloud Computing & Systems Architecture",
+    "category": "Documentation",
+    "domain": "aws.amazon.com",
+    "urls": [
+      "https://aws.amazon.com/",
+      "https://cloud.google.com/"
+    ],
+    "description": "Cloud network topologies, AWS EC2 compute, S3 buckets, cloud security configurations, IAM roles, and serverless architectures.",
+    "modules": [
+      {
+        "title": "Module 1: Cloud Service Models & VPC Network",
+        "content": "### Service Models\n- **IaaS (Infrastructure as a Service)**: Rent virtual servers, disks, and networks (e.g. AWS EC2).\n- **PaaS (Platform as a Service)**: Rent platforms without managing OS configurations (e.g. Heroku, Vercel).\n- **SaaS (Software as a Service)**: Consume web apps directly (e.g. Google Workspace).\n\n### Virtual Private Cloud (VPC)\nIsolate your cloud resources in a private network:\n- **Subnets**: Split VPC into Public (facing internet, has Internet Gateway) and Private (isolated database servers).\n- **Security Groups**: Stateful virtual firewalls restricting port access to instances."
+      },
+      {
+        "title": "Module 2: Compute Services (EC2 & Serverless)",
+        "content": "### AWS Compute Solutions\n- **EC2 (Elastic Compute Cloud)**: Standard virtual servers that you configure and scale.\n- **ECS / EKS**: Run containerized Docker images at scale (EKS manages Kubernetes clusters).\n- **AWS Lambda**: Serverless compute engine that runs code on events:\n  ```javascript\n  // Lambda function handler\n  export const handler = async (event) => {\n    const response = {\n      statusCode: 200,\n      body: JSON.stringify('Hello from serverless Lambda!'),\n    };\n    return response;\n  };\n  ```"
+      },
+      {
+        "title": "Module 3: Object Storage & Managed Databases",
+        "content": "### AWS Storage Solutions\n- **S3 (Simple Storage Service)**: Geographically distributed object store for assets, static files, and media. Highly durable (99.999999999% durability).\n- **RDS (Relational Database Service)**: Managed databases supporting Postgres, MySQL, Oracle. Automates scaling, backups, and replicates.\n- **DynamoDB**: Managed, highly-scalable serverless NoSQL key-value database."
+      },
+      {
+        "title": "Module 4: Identity & Access Management (IAM)",
+        "content": "### Securing Cloud Access\nEnforce authorization boundaries using IAM:\n- **IAM Users**: Standard accounts for individuals.\n- **IAM Groups**: Collections of users sharing the same rights.\n- **IAM Roles**: Identities assumed by cloud resources (e.g., allow EC2 to read S3 buckets) without storing access keys on the machines.\n- **Least Privilege Principle**: Never grant wildcard permissions (`*`). Grant only the narrowest possible API permissions required."
+      },
+      {
+        "title": "Module 5: Serverless Architectures & API Gateway",
+        "content": "### Building Serverless APIs\nAPI Gateway sits at the front, routing HTTP requests to Lambda functions:\n1. **Client** queries API Gateway.\n2. **API Gateway** validates headers and forwards requests.\n3. **Lambda** initializes, executes business logic, queries DynamoDB, and returns response.\n4. **DynamoDB** stores records.\n*Benefits*: Zero cost when idle, scales automatically, no server updates needed."
+      },
+      {
+        "title": "Module 6: Cloud Monitoring & High Availability",
+        "content": "### Metrics & Alerts\n- **CloudWatch**: Monitors server CPU usage, disk space, and collects Lambda console logs.\n- **Route 53**: Highly-available cloud DNS service that supports health-check routing.\n- **Multi-AZ Deployments**: Deploy resources across multiple Availability Zones (physical datacenters) to protect against server farm failures."
+      }
+    ]
+  },
+  {
+    "id": "architecture-design-patterns",
+    "title": "Software Architecture & System Design",
+    "category": "Career & Jobs",
+    "domain": "systemdesign.org",
+    "urls": [
+      "https://systemdesign.org/"
+    ],
+    "description": "Microservices design constraints, event-driven integrations (Kafka), Domain-Driven Design definitions, CQRS, and high availability systems.",
+    "modules": [
+      {
+        "title": "Module 1: Monoliths vs Microservices",
+        "content": "### Architectural Styles\n- **Monolith**: A single application containing all frontend, backend logic, and database schemas. Easy to build but hard to scale and coordinate in large teams.\n- **Microservices**: Decouple logic into small, autonomous services focusing on single business features. Communicate via lightweight protocols (gRPC, HTTP/REST).\n\n### Microservices Patterns\n- **Database-Per-Service**: Every service owns its database. Prevents coupling but complicates joins.\n- **API Gateway**: Entry controller translating external routes to microservice endpoints."
+      },
+      {
+        "title": "Module 2: Event-Driven Architectures (Message Brokers)",
+        "content": "### Asynchronous Communications\nDecouple services using message brokers (RabbitMQ, Apache Kafka):\n- **Producer**: Publishes events (e.g., \"OrderCreated\") to a queue.\n- **Broker**: Stores, queues, and routes messages.\n- **Consumer**: Listens to queue and processes events asynchronously.\nThis pattern prevents server downtime cascades: if the shipping service crashes, the checkout service still processes orders because messages queue up safely."
+      },
+      {
+        "title": "Module 3: Domain-Driven Design (DDD)",
+        "content": "### Core DDD Terminology\nFocuses software development on business operations (domains):\n- **Bounded Context**: Boundary enclosing model definitions.\n- **Entity**: Objects having unique IDs that change state over time (e.g. `User`).\n- **Value Object**: Immutable elements identified only by attributes (e.g., `Address`).\n- **Aggregates**: Clusters of entities bound inside a single root entity controlling mutations."
+      },
+      {
+        "title": "Module 4: Advanced Architectures: CQRS & Event Sourcing",
+        "content": "### CQRS (Command Query Responsibility Segregation)\nSplits write operations (Commands) from read operations (Queries):\n- **Command Database**: Optimized for fast writes and inserts.\n- **Read Database**: Optimized for fast reads and complex joins (e.g. Elasticsearch).\n\n### Event Sourcing\nInstead of storing current state, store all state changes as a sequence of events. Replay events on startup to reconstruct state."
+      },
+      {
+        "title": "Module 5: API Gateway, Rate Limiting & Service Discovery",
+        "content": "### Core API Infrastructure\n- **Service Discovery**: Registry (like Consul) tracking IPs of dynamic microservice containers.\n- **Rate Limiting**: Defends endpoints against DDoS attacks and brute-force queries:\n  - Token Bucket Algorithm.\n  - Leaky Bucket Algorithm.\n- **Circuit Breaker**: Detects downstream crashes and returns fallback responses immediately, protecting thread pools from backing up."
+      },
+      {
+        "title": "Module 6: High Availability, DR & SLA",
+        "content": "### Reliability Metrics\n- **SLA (Service Level Agreement)**: Promised uptime (e.g., 99.99% \"four nines\").\n- **DR (Disaster Recovery)**:\n  - RPO (Recovery Point Objective): Acceptable data loss duration.\n  - RTO (Recovery Time Objective): Acceptable system downtime duration.\n- **Active-Active**: Deploy servers across multiple regions, splitting traffic globally.\n- **Active-Passive**: Failover database backups activated only on primary crashes."
+      }
+    ]
+  },
+  {
+    "id": "php-laravel-docs",
+    "title": "PHP & Laravel web Framework",
+    "category": "Documentation",
+    "domain": "laravel.com",
+    "urls": [
+      "https://laravel.com/"
+    ],
+    "description": "Modern PHP type systems, Laravel MVC pipelines, Eloquent ORM relationships, Blade templates, and background job queues.",
+    "modules": [
+      {
+        "title": "Module 1: Modern PHP & OOP Features",
+        "content": "### PHP 8+ Modern Type Specifications\nPHP is now a fast, strongly typed language:\n- **Strict Types**: Enforced at file top:\n  ```php\n  <?php\n  declare(strict_types=1);\n  ```\n- **Union Types**: Allow functions to return multiple types:\n  ```php\n  public function getValue(): int|float { ... }\n  ```\n- **Constructor Property Promotion**: Shorthand class declarations:\n  ```php\n  class User {\n      public function __construct(\n          public string $name,\n          protected string $email\n      ) {}\n  }\n  ```"
+      },
+      {
+        "title": "Module 2: Laravel MVC & Routing Model",
+        "content": "### Laravel HTTP Request Pipeline\n1. **Entry**: `public/index.php` boots framework.\n2. **HTTP Kernel**: Routes request through middleware checks (session, CSRF, auth).\n3. **Route Resolver**: Matches path in `routes/web.php` or `routes/api.php`.\n4. **Controller**: Handles business logic.\n\n### Routing Example\n```php\nRoute::middleware(['auth'])->group(function () {\n    Route::get('/dashboard', [DashboardController::class, 'index']);\n});\n```"
+      },
+      {
+        "title": "Module 3: Database & Eloquent ORM",
+        "content": "### Eloquent Active Record ORM\nEloquent maps database tables to PHP classes:\n```php\nclass Product extends Model {\n    // Relationship: Product belongs to Category\n    public function category() {\n        return $this->belongsTo(Category::class);\n    }\n}\n```\n- **Database Queries**:\n  ```php\n  $products = Product::with('category')->where('price', '<', 50)->get();\n  ```\n- **Eager Loading**: Using `with()` avoids the N+1 query performance bottleneck."
+      },
+      {
+        "title": "Module 4: Blade Templating Engine",
+        "content": "### Blade layout features\nBlade compiles clean layouts to optimized PHP code:\n- **Directives**: Shorthand control statements:\n  ```html\n  @if($users->isEmpty())\n      <p>No active users.</p>\n  @else\n      @foreach($users as $user)\n          <li>{{ $user->name }}</li>\n      @endforeach\n  @endif\n  ```\n- **Layout Inheritance**: Child templates extend parent shells using `@extends` and `@section` tags."
+      },
+      {
+        "title": "Module 5: Laravel API Development & Sanctum",
+        "content": "### Creating API resources\nLaravel simplifies REST API configurations:\n- **API Resources**: Transforms models into matching JSON structures.\n- **Laravel Sanctum**: Lightweight token auth system for SPAs and mobile apps:\n  ```php\n  // Issuing tokens upon authentication\n  $token = $user->createToken('auth-token')->plainTextToken;\n  ```\n- Protect controllers using Sanctum guard: `Route::middleware('auth:sanctum')`."
+      },
+      {
+        "title": "Module 6: Laravel Job Queues & Tasks",
+        "content": "### Background Job Queues\nDelegate heavy tasks (sending emails, image processing) to background workers:\n- **Jobs**: PHP classes representing background tasks, executing a `handle()` method.\n  ```php\n  SendWelcomeEmail::dispatch($user); // Pushes job to queue\n  ```\n- **Queue Workers**: Background CLI daemon executing queued items:\n  ```bash\n  php artisan queue:work\n  ```\n- **Task Scheduler**: Replaces system crontab listings, managed inside `routes/console.php`:\n  ```php\n  Schedule::command('emails:send')->daily();\n  ```"
       }
     ]
   }

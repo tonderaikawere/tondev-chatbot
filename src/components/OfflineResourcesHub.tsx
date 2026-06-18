@@ -93,7 +93,7 @@ export default function OfflineResourcesHub({ isOpen, onClose }: OfflineResource
               <span className="truncate">Offline Library & Course Modules</span>
             </h2>
             <p className="text-[10px] sm:text-xs text-slate-400 mt-0.5 truncate">
-              Comprehensive offline learning modules compiled from 183+ resource sites. Sponsored by <a href="https://kawerifytech.com" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 font-semibold hover:underline">Kawerify Tech</a>
+              Comprehensive offline library of {offlineResources.length} core developer courses ({offlineResources.reduce((sum, res) => sum + res.modules.length, 0)} interactive modules). Sponsored by <a href="https://kawerifytech.com" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 font-semibold hover:underline">Kawerify Tech</a>
             </p>
           </div>
           <button
