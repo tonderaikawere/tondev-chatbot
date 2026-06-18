@@ -1,187 +1,571 @@
 [
   {
     "id": "react-docs",
-    "title": "React Official Docs & Reference Guides",
+    "title": "React & Next.js official Docs",
     "category": "Documentation",
-    "domain": "reactjs.org",
+    "domain": "react.dev",
     "urls": [
-      "https://reactjs.org/",
-      "https://reactjs.org/docs/",
-      "https://reactjs.org/docs/getting-started.html",
-      "https://reactjs.org/docs/hooks-intro.html",
-      "https://reactjs.org/docs/hooks-overview.html",
-      "https://reactjs.org/docs/optimizing-performance.html",
-      "https://github.com/facebook/react",
-      "https://chrome.google.com/webstore/detail/react-developer-tools"
+      "https://react.dev/",
+      "https://nextjs.org/docs"
     ],
-    "description": "Official guides, hooks APIs, performance tuning strategies, and developer tooling for React.",
+    "description": "Official reference documentation for React components, Hooks API, and Next.js App Router architectures.",
     "modules": [
       {
-        "title": "Module 1: Introduction to Declarative UI & JSX",
-        "content": "### Declarative vs Imperative UI\n- **Imperative UI**: Direct DOM modifications step-by-step (e.g. `document.createElement`, `button.addEventListener`).\n- **Declarative UI**: You describe *what* the UI should look like based on the current state, and React handles updates.\n\n### Virtual DOM & Reconciliation\nReact maintains a lightweight representation of the real DOM in memory called the **Virtual DOM**.\n1. State changes -> React generates a new Virtual DOM tree.\n2. Diffing Algorithm: React compares the new tree with the previous Virtual DOM tree (O(n) heuristic diffing).\n3. Batched Updates: React calculates the minimum operations to update the real DOM and applies them in a batch."
+        "title": "Module 1: Declarative UI paradigm and JSX",
+        "content": "### Declarative vs Imperative UI Programming\n- **Imperative**: Developer describes *how* to modify the UI step-by-step.\n  ```javascript\n  // Imperative DOM updates\n  const btn = document.createElement('button');\n  btn.innerText = 'Clicked 0 times';\n  let count = 0;\n  btn.onclick = () => {\n    count++;\n    btn.innerText = 'Clicked ' + count + ' times';\n  };\n  document.body.appendChild(btn);\n  ```\n- **Declarative**: Developer describes *what* the UI should look like based on the current state.\n  ```jsx\n  // Declarative UI state\n  const [count, setCount] = useState(0);\n  return <button onClick={() => setCount(count + 1)}>Clicked {count} times</button>;\n  ```\n\n### The Virtual DOM & Reconciliation\nReact maintains a lightweight representation of the browser DOM in memory called the **Virtual DOM**:\n1. **State Mutation**: When a component's state changes, a new Virtual DOM tree is generated.\n2. **Diffing Algorithm**: React compares the new tree with the previous Virtual DOM tree using an O(n) heuristic algorithm.\n3. **Reconciliation**: React calculates the minimal set of changes needed and batches them to update the real browser DOM (Paint/Layout updates)."
       },
       {
-        "title": "Module 2: State & Props Data Flow",
-        "content": "### Uni-Directional Data Flow\nData flows downward from parent components to child components via read-only **Props**.\n- **Props**: Immutable configuration parameters passed down from a parent.\n- **State**: Mutable local data maintained inside a component instance.\n\n### Immutability Principle\nNever mutate state directly! React detects changes by checking object reference references.\n```javascript\n// INCORRECT\nuser.name = 'Bob'; \nsetUser(user); // React won't re-render (same reference)\n\n// CORRECT\nsetUser({ ...user, name: 'Bob' }); // New object reference!\n```"
+        "title": "Module 2: React Hooks API deep-dive",
+        "content": "### Core React Hooks Reference\n- **useState**: Declares a reactive state variable.\n- **useEffect**: Runs side effects (data fetching, DOM listeners).\n  ```javascript\n  useEffect(() => {\n    const fetchUser = async () => {\n      const res = await fetch('/api/user');\n      setUser(await res.json());\n    };\n    fetchUser();\n    // Cleanup callback runs on unmount or dependency shifts\n    return () => console.log('Cleaning up listeners...');\n  }, [userId]); // Dependency array\n  ```\n- **useContext**: Consumes Context provider values directly.\n- **useRef**: Persists mutable values without triggering re-renders; references DOM elements directly.\n- **useReducer**: Manages state using dispatch actions and reducer functions (Redux pattern)."
       },
       {
-        "title": "Module 3: Hooks API Deep Dive",
-        "content": "### Core Hooks Overview\n\n- **useState**: Registers local state variable.\n- **useEffect**: Manages side effects (data fetching, subscriptions).\n- **useContext**: Consumes shared global values from a React Context.\n- **useReducer**: Alternative state management for complex logic using actions and reducers.\n\n### Rules of Hooks\n1. Only call Hooks at the **top level** (never inside loops, conditions, or nested functions).\n2. Only call Hooks from **React Function Components** or **Custom Hooks**."
+        "title": "Module 3: React Performance & Memoization",
+        "content": "### Optimization Hooks\n- **useMemo**: Caches expensive computation results.\n  ```javascript\n  const expensiveCalculation = useMemo(() => {\n    return runHeavyLoop(items);\n  }, [items]); // Only computes when items dependency changes\n  ```\n- **useCallback**: Caches function instances to prevent children from re-rendering on parent updates.\n- **React.memo**: Higher-Order Component that prevents a functional component from re-rendering if props are unchanged.\n\n### Code Splitting with Suspense\n```jsx\nimport React, { lazy, Suspense } from 'react';\nconst ChartComponent = lazy(() => import('./Chart'));\n\nfunction App() {\n  return (\n    <Suspense fallback={<div>Loading charts...</div>}>\n      <ChartComponent />\n    </Suspense>\n  );\n}\n```"
       },
       {
-        "title": "Module 4: Component Lifecycles & Side Effects",
-        "content": "### Lifecycle Phases\n1. **Mounting**: Component created and inserted in the DOM. Runs constructor -> render -> useEffect.\n2. **Updating**: Prop or state changes trigger re-render -> useEffect dependency checks.\n3. **Unmounting**: Component removed from DOM -> runs cleanups.\n\n### Cleanups in useEffect\nAlways clean up listeners, intervals, or fetch controllers to avoid memory leaks.\n```javascript\nuseEffect(() => {\n  const handleResize = () => console.log(window.innerWidth);\n  window.addEventListener('resize', handleResize);\n  \n  // Cleanup function\n  return () => window.removeEventListener('resize', handleResize);\n}, []);\n```"
+        "title": "Module 4: Advanced React Patterns",
+        "content": "### Higher-Order Components & Custom Hooks\n- **Custom Hooks**: Extract stateful logic into reusable functions.\n  ```javascript\n  function useWindowWidth() {\n    const [width, setWidth] = useState(window.innerWidth);\n    useEffect(() => {\n      const handleResize = () => setWidth(window.innerWidth);\n      window.addEventListener('resize', handleResize);\n      return () => window.removeEventListener('resize', handleResize);\n    }, []);\n    return width;\n  }\n  ```\n- **Compound Components**: Design components that work together implicitly (e.g. `<Select>` and `<Option>`).\n- **Render Props**: Share logic by passing a function returning JSX as a prop."
       },
       {
-        "title": "Module 5: Performance Tuning & Memoization",
-        "content": "### Optimization Tools\n\n- **React.memo**: Memoizes a component; skips re-rendering if props are unchanged.\n- **useMemo**: Caches computed values between renders.\n- **useCallback**: Caches function instances to prevent child component re-renders when parent states shift.\n\n### Code Splitting\n```jsx\nimport React, { lazy, Suspense } from 'react';\nconst HeavyCharts = lazy(() => import('./HeavyCharts'));\n\nfunction Dashboard() {\n  return (\n    <Suspense fallback={<div>Loading charts...</div>}>\n      <HeavyCharts />\n    </Suspense>\n  );\n}\n```"
+        "title": "Module 5: Next.js App Router & Server Components",
+        "content": "### React Server Components (RSC) vs Client Components\n- **Server Components (Default)**: Rendered on the server. Code size is not sent to the client browser, reducing bundle sizes and improving performance.\n  ```javascript\n  // app/page.tsx - Server Component\n  import { db } from '@/lib/db';\n  export default async function Page() {\n    const items = await db.query('SELECT * FROM products');\n    return (\n      <ul>\n        {items.map(item => <li key={item.id}>{item.name}</li>)}\n      </ul>\n    );\n  }\n  ```\n- **Client Components**: Marked with `\"use client\"` directive at the top. Allow interactivity, hooks, and browser APIs."
       },
       {
-        "title": "Module 6: Advanced Patterns & Context API",
-        "content": "### Context API Setup\nAvoid prop-drilling by providing data to a subtree.\n```jsx\nconst ThemeContext = React.createContext('dark');\n\nfunction App() {\n  return (\n    <ThemeContext.Provider value=\"light\">\n      <Toolbar />\n    </ThemeContext.Provider>\n  );\n}\n\nfunction Toolbar() {\n  const theme = React.useContext(ThemeContext);\n  return <button className={theme}>Button</button>;\n}\n```"
+        "title": "Module 6: Next.js Data Fetching & Caching",
+        "content": "### Fetching Paradigms in Next.js\n- **Static Rendering (SSG)**: Data is fetched at build time and cached.\n- **Dynamic Rendering (SSR)**: Data is fetched on each HTTP request.\n- **Incremental Static Regeneration (ISR)**: Re-validates cached static pages in the background.\n  ```javascript\n  // Re-evaluate cache every 60 seconds\n  fetch('https://api.com/data', { next: { revalidate: 60 } })\n  ```\n- **Server Actions**: Secure async functions executed directly on the server, triggered from the client forms without writing REST route controllers."
       }
     ]
   },
   {
-    "id": "nodejs-docs",
-    "title": "Node.js Core Documentation",
+    "id": "typescript-docs",
+    "title": "TypeScript official Handbook",
     "category": "Documentation",
-    "domain": "nodejs.org",
+    "domain": "typescriptlang.org",
     "urls": [
-      "https://nodejs.org/en/docs/",
-      "https://nodejs.org/en/community/",
-      "https://github.com/nodejs/node"
+      "https://www.typescriptlang.org/docs/"
     ],
-    "description": "Core API guides, Event Loop specs, File System module details, and Node.js community connections.",
+    "description": "Official manual for static typing, union types, generic interfaces, mapped types, and compiler configurations.",
     "modules": [
       {
-        "title": "Module 1: V8 Engine & JS Runtime",
-        "content": "### V8 Parser & Interpreter\nGoogle V8 engine compiles JavaScript directly to native machine code:\n1. **Parser**: Analyzes source code and constructs an Abstract Syntax Tree (AST).\n2. **Ignition Interpreter**: Compiles AST into bytecode for fast execution startup.\n3. **TurboFan**: Monitors runtime profiles. If code is run frequently (\"hot\"), compiles it to optimized machine code.\n\n### Inline Caching\nV8 caches properties locations on custom objects to enable direct memory access, bypassing slow hash lookups."
+        "title": "Module 1: Basic Types & Annotations",
+        "content": "### Primitive and Core Types\nTypeScript adds static typing to JavaScript to intercept compilation errors:\n- **string, number, boolean, null, undefined**: Standard primitive types.\n- **arrays**: Annotated via `type[]` or `Array<type>`.\n- **tuples**: Fixed length arrays with designated types at each index position:\n  ```typescript\n  let user: [number, string] = [101, 'Bob'];\n  ```\n- **enums**: Set of named constants.\n- **any, unknown, never**:\n  - `any`: Disables type checking (escape hatch).\n  - `unknown`: Safe equivalent (requires type checking before operations).\n  - `never`: Represents values that should never occur (e.g. functions throwing errors)."
       },
       {
-        "title": "Module 2: The Event Loop & libuv",
-        "content": "### Six Event Loop Phases\n1. **Timers**: Executes callbacks from `setTimeout()` and `setInterval()`.\n2. **Pending Callbacks**: Executes I/O errors and TCP system errors.\n3. **Idle, Prepare**: Used internally by runtime.\n4. **Poll**: Retrieves I/O events, executing callbacks. Blocks if empty.\n5. **Check**: Executes callbacks from `setImmediate()`.\n6. **Close Callbacks**: Executes close events (e.g. `socket.on('close')`).\n\n### Microtask Queue\nContains `process.nextTick()` and Promise callbacks. Executed between every phase of the Event Loop."
+        "title": "Module 2: Interfaces vs Type Aliases",
+        "content": "### Structural Typing Setup\n- **Type Alias (`type`)**: Declares names for shapes or union/intersection types.\n  ```typescript\n  type Point = { x: number; y: number };\n  type ID = string | number; // Union type\n  ```\n- **Interface**: Declares object structures, supporting extension and declaration merging:\n  ```typescript\n  interface User {\n    id: number;\n    name: string;\n  }\n  interface User {\n    role: string; // Merges into User interface\n  }\n  ```\n- **Extending Interfaces**:\n  ```typescript\n  interface Admin extends User {\n    permissions: string[];\n  }\n  ```"
       },
       {
-        "title": "Module 3: Non-Blocking I/O & Streams",
-        "content": "### Core Buffer & Stream API\nStreams handle chunk-based transfers without loading entire files into RAM.\n```javascript\nconst fs = require('fs');\nconst readableStream = fs.createReadStream('./huge.log');\nconst writableStream = fs.createWriteStream('./dest.log');\n\n// Pipe streams together\nreadableStream.pipe(writableStream);\n```\n\n### Event Emitter Pattern\n```javascript\nconst EventEmitter = require('events');\nconst myEmitter = new EventEmitter();\n\nmyEmitter.on('buildSuccess', () => console.log('Deploy ready!'));\nmyEmitter.emit('buildSuccess');\n```"
+        "title": "Module 3: Generics and Constraints",
+        "content": "### Writing Reusable Code templates\nGenerics allow creating components that work over multiple types while preserving type details:\n```typescript\n// Generic Function\nfunction identity<T>(arg: T): T {\n  return arg;\n}\n\n// Generic Interface\ninterface Box<T> {\n  contents: T;\n}\n\n// Generic Constraint (Must have a .length property)\ninterface Lengthwise {\n  length: number;\n}\nfunction logLength<T extends Lengthwise>(arg: T): T {\n  console.log(arg.length);\n  return arg;\n}\n```"
       },
       {
-        "title": "Module 4: Cluster Module & Multithreading",
-        "content": "### Cluster Module (Horizontal Scaling)\nForks multiple Node.js processes sharing the same port using Round-Robin routing.\n```javascript\nconst cluster = require('cluster');\nconst http = require('http');\nconst numCPUs = require('os').cpus().length;\n\nif (cluster.isMaster) {\n  for (let i = 0; i < numCPUs; i++) cluster.fork();\n} else {\n  http.createServer((req, res) => res.end('Done')).listen(8000);\n}\n```\n\n### Worker Threads\nRuns CPU-intensive operations (crypto, image rendering) on background threads, bypassing single-thread blockages."
+        "title": "Module 4: TypeScript Utility Types",
+        "content": "### Built-in Helpers\n- **Partial<T>**: Sets all object properties of T to optional.\n- **Pick<T, K>**: Creates a type by extracting a subset of keys K from T.\n  ```typescript\n  type UserPreview = Pick<User, 'id' | 'name'>;\n  ```\n- **Omit<T, K>**: Creates a type by removing keys K from T.\n- **Readonly<T>**: Sets all T properties to read-only.\n- **Record<K, T>**: Construct object types mapping keys K to values T:\n  ```typescript\n  const roles: Record<string, string[]> = {\n    admin: ['write', 'delete'],\n    guest: ['read']\n  };\n  ```"
       },
       {
-        "title": "Module 5: File System & Path APIs",
-        "content": "### Async File Operations\nUse Promises instead of blocking synchronous operations:\n```javascript\nconst fs = require('fs/promises');\nconst path = require('path');\n\nasync function readLog() {\n  const filePath = path.join(__dirname, 'server.log');\n  const data = await fs.readFile(filePath, 'utf8');\n  console.log(data);\n}\nreadLog();\n```\n\n### Streams vs Buffers\n- **Buffer**: Loads entire file into memory (limited to ~2GB).\n- **Stream**: Processes small, manageable data chunks."
+        "title": "Module 5: Advanced Types & Type Manipulation",
+        "content": "### Mapped & Conditional Types\n- **Keyof Operator**: Queries keys of an object:\n  ```typescript\n  type UserKeys = keyof User; // 'id' | 'name' | 'role'\n  ```\n- **Mapped Types**: Dynamically transform properties:\n  ```typescript\n  type Optional<T> = {\n    [P in keyof T]?: T[P];\n  };\n  ```\n- **Conditional Types**: Select types based on relationships:\n  ```typescript\n  type IsString<T> = T extends string ? true : false;\n  ```"
       },
       {
-        "title": "Module 6: Security & Cryptography",
-        "content": "### Cryptography Module\nSignatures, verification, symmetric/asymmetric encryptions:\n```javascript\nconst crypto = require('crypto');\n\n// Hash password\nconst salt = crypto.randomBytes(16).toString('hex');\nconst hash = crypto.pbkdf2Sync('password123', salt, 1000, 64, 'sha512').toString('hex');\nconsole.log(hash);\n```\n\n### Insecure Randomness\nNever use `Math.random()` for secure keys, token generations, or passwords. Always use `crypto.randomBytes()` for cryptographically secure pseudo-random numbers (CSPRNG)."
-      }
-    ]
-  },
-  {
-    "id": "express-docs",
-    "title": "Express.js Framework Guide",
-    "category": "Documentation",
-    "domain": "expressjs.com",
-    "urls": [
-      "https://expressjs.com/"
-    ],
-    "description": "Routing, middleware systems, and standard REST API design practices for Express.js.",
-    "modules": [
-      {
-        "title": "Module 1: Routing & HTTP Methods",
-        "content": "### Routing Basics\nExpress matches routes using HTTP methods (GET, POST, PUT, DELETE) and URL parameters.\n```javascript\nconst express = require('express');\nconst app = express();\n\napp.get('/users/:userId/posts/:postId', (req, res) => {\n  const { userId, postId } = req.params;\n  res.send(`User ${userId}, Post ${postId}`);\n});\n```"
-      },
-      {
-        "title": "Module 2: Middleware Architecture",
-        "content": "### Middleware Pipeline\nMiddleware functions have access to the Request (`req`), Response (`res`), and next function (`next`).\n```javascript\n// Custom Middleware\napp.use((req, res, next) => {\n  req.requestTime = Date.now();\n  next(); // Pass control to next function in stack\n});\n\n// Error-handling Middleware (takes 4 parameters)\napp.use((err, req, res, next) => {\n  res.status(500).json({ error: err.message });\n});\n```"
-      },
-      {
-        "title": "Module 3: REST API Design",
-        "content": "### REST Architectural Principles\n- **Uniform Interface**: Resources are defined by nouns in URLs, not actions (e.g. GET `/users` not GET `/getAllUsers`).\n- **HTTP Methods**: GET (read), POST (create), PUT (update), DELETE (remove).\n- **Stateless**: Each request contains all information needed to process it.\n\n### Standard Response Codes\n- `200 OK`: Success.\n- `201 Created`: Successful POST setup.\n- `400 Bad Request`: Invalid request inputs.\n- `401 Unauthorized`: Missing authentication keys.\n- `403 Forbidden`: Authenticated but lacks permissions.\n- `404 Not Found`: Resource missing."
-      },
-      {
-        "title": "Module 4: Security Hardening (Helmet & CORS)",
-        "content": "### CORS (Cross-Origin Resource Sharing)\nSecurity block by browsers that halts script requests to different domains unless headers permit.\n```javascript\nconst cors = require('cors');\napp.use(cors({\n  origin: 'https://trustedapp.com',\n  methods: ['GET', 'POST']\n}));\n```\n\n### Helmet.js Configuration\nHelmet sets HTTP response headers to defend against clickjacking, XSS, and sniff attacks.\n```javascript\nconst helmet = require('helmet');\napp.use(helmet());\n```"
-      },
-      {
-        "title": "Module 5: Data Validation & Sanitization",
-        "content": "### express-validator Setup\nPrevent malicious parameters from reaching controller functions:\n```javascript\nconst { body, validationResult } = require('express-validator');\n\napp.post('/register', [\n  body('email').isEmail().normalizeEmail(),\n  body('password').isLength({ min: 6 })\n], (req, res) => {\n  const errors = validationResult(req);\n  if (!errors.isEmpty()) {\n    return res.status(400).json({ errors: errors.array() });\n  }\n  res.send('Success!');\n});\n```"
-      },
-      {
-        "title": "Module 6: Authentication & Session Management",
-        "content": "### Stateless JWT Auth Flow\nAuthenticate Express requests using tokens:\n```javascript\nconst jwt = require('jsonwebtoken');\n\nfunction authenticateToken(req, res, next) {\n  const authHeader = req.headers['authorization'];\n  const token = authHeader && authHeader.split(' ')[1];\n  \n  if (!token) return res.sendStatus(401);\n  \n  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {\n    if (err) return res.sendStatus(403);\n    req.user = user;\n    next();\n  });\n}\n```"
+        "title": "Module 6: Compiler Configuration & Strict Flagging",
+        "content": "### tsconfig.json Best Practices\nConfigure the compiler strictness to catch bugs:\n```json\n{\n  \"compilerOptions\": {\n    \"target\": \"ES2022\",\n    \"module\": \"NodeNext\",\n    \"strict\": true,                   /* Enable all strict type-checking options */\n    \"noImplicitAny\": true,            /* Raise error on expressions with implied any */\n    \"strictNullChecks\": true,         /* Ensure null/undefined are handled */\n    \"noUnusedLocals\": true,           /* Report errors on unused variables */\n    \"esModuleInterop\": true\n  }\n}\n```"
       }
     ]
   },
   {
     "id": "mdn-docs",
-    "title": "MDN Web Docs (JavaScript & DOM)",
+    "title": "JavaScript Core Manual (MDN)",
     "category": "Documentation",
     "domain": "developer.mozilla.org",
     "urls": [
-      "https://developer.mozilla.org/en-US/docs/Web",
       "https://developer.mozilla.org/en-US/docs/Web/JavaScript"
     ],
-    "description": "The premier web reference site for HTML, CSS, JavaScript, Web APIs, and DOM manipulation.",
+    "description": "Scope, closures, prototype inheritance chain, execution stack, and async programming in Javascript.",
     "modules": [
       {
-        "title": "Module 1: Scope & Closures",
-        "content": "### Scopes in JS\n- **Global Scope**: Accessible everywhere.\n- **Function Scope**: Declared via `var`, bound to the containing function block.\n- **Block Scope**: Declared via `let` and `const`, bound to the closest brace block `{}`.\n\n### Closures\nA closure is the combination of a function bundled together with references to its surrounding state (lexical environment). Closures let inner functions access outer function variables.\n```javascript\nfunction outer() {\n  const secrets = 'hash123';\n  return () => console.log(secrets); // Captures secrets variable\n}\nconst myFunc = outer();\nmyFunc(); // logs 'hash123'\n```"
+        "title": "Module 1: Scopes, Execution Context & Closures",
+        "content": "### Variable Scoping & Hoisting\n- **Global Scope**: Declared outside blocks, accessible globally.\n- **Function Scope**: `var` variables are scoped to the nearest function block.\n- **Block Scope**: `let` and `const` variables are scoped to the nearest brace block `{}`.\n- **Hoisting**: V8 compiles files by storing declarations in memory. `var` is initialized to `undefined`, while `let`/`const` are hoisted but stay in the Temporal Dead Zone (TDZ).\n\n### Closures\nA closure is created when an inner function retains access to variables from its outer lexical scope even after the outer function finishes executing.\n```javascript\nfunction createCounter() {\n  let count = 0; // Private state\n  return () => {\n    count++;\n    return count;\n  };\n}\nconst counter = createCounter();\nconsole.log(counter()); // 1\nconsole.log(counter()); // 2\n```"
       },
       {
-        "title": "Module 2: Prototypes & Classes",
-        "content": "### Prototype Chain\nEvery object in JavaScript has an internal property link called its Prototype. Properties lookups travel up this chain until found or root is reached (`null`).\n\n### ES6 Class sugar\nClasses are syntactic sugar over prototypal inheritance.\n```javascript\nclass Developer {\n  constructor(name) { this.name = name; }\n  code() { console.log('Typing...'); }\n}\nconst dev = new Developer('Alice');\ndev.code();\nconsole.log(Object.getPrototypeOf(dev) === Developer.prototype); // true\n```"
+        "title": "Module 2: Prototypes & ES6 Classes",
+        "content": "### Prototypal Inheritance\nEvery object contains an internal link to its **Prototype** object. Property lookups traverse this prototype chain:\n```javascript\nconst animal = { eats: true };\nconst dog = Object.create(animal);\nconsole.log(dog.eats); // true (traverses up prototype link)\n```\n\n### ES6 Class Sugar\nClasses are syntactic sugar over prototypal inheritance:\n```javascript\nclass Human {\n  constructor(name) {\n    this.name = name;\n  }\n  greet() {\n    return `Hello, my name is ${this.name}`;\n  }\n}\n// Translates to Human.prototype.greet = function() { ... }\n```"
       },
       {
-        "title": "Module 3: Asynchronous JavaScript",
-        "content": "### Promise Combinators\n\n- **Promise.all**: Waits for all promises to resolve. Fails if *any* reject.\n- **Promise.allSettled**: Waits for all promises to resolve or reject, returning full outcomes statuses.\n- **Promise.race**: Resolves or rejects as soon as the *first* promise resolves/rejects.\n- **Promise.any**: Resolves as soon as the *first* promise resolves. Fails only if all reject.\n\n```javascript\n// async/await error handling\nasync function load() {\n  try {\n    const data = await fetch('url').then(r => r.json());\n  } catch (err) {\n    console.error(err);\n  }\n}\n```"
+        "title": "Module 3: Asynchronous JavaScript (Promises & Async/Await)",
+        "content": "### Promises lifecycle & states\n- **Pending**: Initial state.\n- **Fulfilled**: Operations completed successfully.\n- **Rejected**: Operations failed.\n\n### Promise Combinators\n- **Promise.all**: Resolves when *all* resolve. Rejects immediately if *any* promise rejects.\n- **Promise.allSettled**: Resolves when all promises settle (succeed or fail).\n- **Promise.race**: Settles as soon as the *first* promise resolves or rejects.\n- **Promise.any**: Resolves as soon as the *first* promise resolves successfully.\n\n```javascript\nasync function loadData() {\n  try {\n    const response = await fetch('/api');\n    const data = await response.json();\n    return data;\n  } catch (err) {\n    console.error('Error occurred:', err);\n  }\n}\n```"
       },
       {
-        "title": "Module 4: DOM Manipulation & Events",
-        "content": "### Event Flow Cycles\n1. **Capturing Phase**: Event trickles down from Document to Target node.\n2. **Target Phase**: Event triggers on targeted element.\n3. **Bubbling Phase**: Event bubbles back up to Document (default triggers behavior).\n\n### Event Delegation\nAttach a single listener to a parent element to handle events on dynamic child structures.\n```javascript\ndocument.querySelector('#parent-list').addEventListener('click', (e) => {\n  if (e.target.tagName === 'LI') {\n    console.log('Clicked item:', e.target.textContent);\n  }\n});\n```"
+        "title": "Module 4: The Event Loop & Memory Management",
+        "content": "### JS Concurrency Model\nJavaScript is a single-threaded runtime. Heavy operations are delegated to browser web APIs or libuv threads:\n1. **Call Stack**: Executes synchronous operations in order (LIFO).\n2. **Web APIs / Node API**: Runs operations like fetch, fs, or timers.\n3. **Microtask Queue**: Stores high-priority callbacks (Promises, `process.nextTick`). Checked between every execution phase.\n4. **Callback Queue**: Stores callbacks (DOM events, setTimeouts).\n5. **Event Loop**: Regularly checks if the Call Stack is empty. If it is, moves items from the Microtask queue, then the Callback queue to the Stack.\n\n### Garbage Collection\nV8 cleans heap allocations using the **Mark-and-Sweep** algorithm, tracing references starting from roots (global scopes) and sweeping un-referenced variables."
       },
       {
         "title": "Module 5: Modern ES6+ Features",
-        "content": "### Essential ES6 Syntaxes\n\n- **Destructuring**: Extract values easily.\n  `const { name, email } = user;`\n- **Spread Operator**: Duplicate array/object references.\n  `const clone = { ...original };`\n- **Rest Parameters**: Gather arguments into arrays.\n  `function sum(...nums) { return nums.reduce((a,b)=>a+b); }`\n- **Arrow Functions**: Syntactic shorthand that retains lexical `this` scope."
+        "content": "### Modern Syntax Cheatsheet\n- **Destructuring**: Extract values:\n  ```javascript\n  const { address: { city } } = user;\n  ```\n- **Spread & Rest Operators**:\n  - Spread: Creates shallow clones: `const copy = { ...user };`\n  - Rest: Gathers arguments: `function run(...args) { ... }`\n- **Optional Chaining & Nullish Coalescing**:\n  - Optional Chaining (`?.`): Safely accesses nested properties: `user?.details?.phone`\n  - Nullish Coalescing (`??`): Sets defaults only for `null` or `undefined`: `const score = data.score ?? 100;`"
       },
       {
-        "title": "Module 6: Browser Storage APIs",
-        "content": "### Storage Comparison\n\n| API | Capacity | Duration | Access |\n|---|---|---|---|\n| **LocalStorage** | ~5-10MB | Persistent | Synchronous |\n| **SessionStorage**| ~5MB | Window tab close | Synchronous |\n| **IndexedDB** | Unlimited | Persistent | Asynchronous |\n| **Cookies** | ~4KB | Expire dates set | Included in HTTP queries |"
+        "title": "Module 6: Browser Web APIs & DOM events",
+        "content": "### Event Capturing, Target and Bubbling\n1. **Capture Phase**: Event travels down from Document to target element.\n2. **Target Phase**: Event triggers on targeted node.\n3. **Bubble Phase**: Event travels back up to Document (default).\n\n### Event Delegation\nAttach a single listener to a parent node to catch events on dynamic children:\n```javascript\nconst list = document.querySelector('#ul-list');\nlist.addEventListener('click', (event) => {\n  if (event.target.matches('li.item-btn')) {\n    console.log('Clicked:', event.target.innerText);\n  }\n});\n```"
       }
     ]
   },
   {
-    "id": "owasp-security",
-    "title": "OWASP Foundation Security Standards",
+    "id": "html-css-docs",
+    "title": "HTML5 & CSS3 Layouts (MDN)",
+    "category": "Documentation",
+    "domain": "developer.mozilla.org/css",
+    "urls": [
+      "https://developer.mozilla.org/en-US/docs/Web/CSS"
+    ],
+    "description": "Semantic HTML5, CSS Flexbox grids, CSS Grid layouts, responsive designs, and custom theme systems.",
+    "modules": [
+      {
+        "title": "Module 1: Semantic HTML5 & Accessibility",
+        "content": "### Semantic Layouts\nSemantic HTML tags explain page structure to search engines and screen readers:\n- `<header>, <nav>, <main>, <article>, <section>, <aside>, <footer>`: Structure tags.\n- `<button>` vs `<a>`: Buttons trigger action routines; links traverse URL endpoints.\n\n### ARIA & WCAG guidelines\nWeb Content Accessibility Guidelines (WCAG) require:\n- Enforcing color contrast guidelines.\n- Providing `alt` attributes on all images.\n- Using ARIA attributes for complex elements: `aria-label`, `aria-expanded`, and `role=\"dialog\"`."
+      },
+      {
+        "title": "Module 2: CSS Flexbox Layouts",
+        "content": "### One-Dimensional Flexbox Properties\nFlexbox organizes elements along a single axis (row or column):\n- **Flex Container**:\n  - `display: flex`: Initiates flex layouts.\n  - `flex-direction`: Sets flow (`row`, `column`).\n  - `justify-content`: Aligns items along main axis (`center`, `space-between`).\n  - `align-items`: Aligns items along cross axis (`center`, `stretch`).\n- **Flex Items**:\n  - `flex-grow`: Determines how much items grow compared to siblings.\n  - `flex-shrink`: Controls how items shrink under container restrictions."
+      },
+      {
+        "title": "Module 3: CSS Grid Layouts",
+        "content": "### Two-Dimensional Grid Systems\nCSS Grid structures elements into rows and columns simultaneously:\n```css\n.grid-container {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));\n  gap: 1.5rem;\n}\n.grid-item-span {\n  grid-column: span 2;\n  grid-row: span 1;\n}\n```\nUse `grid-template-areas` to declare grid layouts:\n```css\ngrid-template-areas: \n  \"header header\"\n  \"sidebar main\"\n  \"footer footer\";\n```"
+      },
+      {
+        "title": "Module 4: Responsive Design & Viewports",
+        "content": "### Media Queries & Viewport Sizing\nResponsive designs adjust layouts to fit different devices:\n```css\n/* Mobile First Base */\n.layout { display: flex; flex-direction: column; }\n\n/* Desktop Viewport */\n@media (min-width: 1024px) {\n  .layout { flex-direction: row; }\n}\n```\n- Use relative units (`rem`, `em`, `vh`, `vw`) rather than absolute pixels (`px`).\n- Set viewport configuration in HTML header:\n  ```html\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  ```"
+      },
+      {
+        "title": "Module 5: CSS Variables & Animations",
+        "content": "### CSS Custom Properties & Variables\nDefine variables in the `:root` scope to enable theming (e.g. dark modes):\n```css\n:root {\n  --primary-color: #2563eb;\n  --bg-color: #ffffff;\n}\n[data-theme=\"dark\"] {\n  --bg-color: #0b132b;\n}\nbody {\n  background-color: var(--bg-color);\n  color: var(--primary-color);\n  transition: background-color 0.3s ease;\n}\n```\n- Use CSS transitions for simple hover effects.\n- Use keyframes for complex custom animations."
+      },
+      {
+        "title": "Module 6: CSS Preprocessors (Sass) & Tailwind CSS",
+        "content": "### CSS Preprocessors & Frameworks\n- **Sass (SCSS)**: Adds variables, nesting, mixins, and modular imports:\n  ```scss\n  .button {\n    background: $primary;\n    &:hover { background: darken($primary, 10%); }\n  }\n  ```\n- **Tailwind CSS**: A utility-first styling framework:\n  - Accelerates styling using pre-configured utility classes: `className=\"flex items-center justify-between p-4 bg-slate-900\"`.\n  - Automatically purges unused classes during the build process to minimize production CSS files."
+      }
+    ]
+  },
+  {
+    "id": "python-docs",
+    "title": "Python Core Manual",
+    "category": "Documentation",
+    "domain": "python.org",
+    "urls": [
+      "https://docs.python.org/3/"
+    ],
+    "description": "Core data structures, decorators, generator expressions, concurrency models, and standard libraries.",
+    "modules": [
+      {
+        "title": "Module 1: Data Structures & Built-in Types",
+        "content": "### Python Collections Reference\n- **List**: Mutable, ordered sequence: `items = [1, 2, 3]`\n- **Dictionary**: Key-value pairs: `user = {\"id\": 1, \"name\": \"Bob\"}`\n- **Tuple**: Immutable, ordered sequence: `point = (10, 20)`\n- **Set**: Unordered collection of unique items: `unique_ids = {101, 102}`\n\n### List and Dictionary Comprehensions\n```python\n# List comprehension\nsquares = [x * x for x in range(10) if x % 2 == 0]\n\n# Dictionary comprehension\nsquares_dict = {x: x * x for x in range(5)}\n```"
+      },
+      {
+        "title": "Module 2: Advanced OOP & Dunder Methods",
+        "content": "### Double Underscore (Dunder) Methods\nDunder methods define how Python objects behave under operations:\n- `__init__`: Object constructor initialization.\n- `__str__`: Returns a readable string representation (used by `print()`).\n- `__repr__`: Returns a formal string representation for debugging.\n- `__len__`: Custom length resolver.\n- `__eq__`: Evaluates object equality (`==`).\n\n```python\nclass Developer:\n    def __init__(self, name):\n        self.name = name\n    def __repr__(self):\n        return f\"Developer('{self.name}')\"\n```"
+      },
+      {
+        "title": "Module 3: Functional programming & Generators",
+        "content": "### Generators & Yield\nGenerators yield values one at a time using the `yield` keyword. They evaluation data lazily to minimize RAM usage:\n```python\ndef fibonacci(limit):\n    a, b = 0, 1\n    while a < limit:\n        yield a\n        a, b = b, a + b\n\n# Iterating over generator\nfor num in fibonacci(100):\n    print(num)\n```\n- Generators avoid creating large lists in memory, enabling memory-efficient data processing."
+      },
+      {
+        "title": "Module 4: Concurrency & Asyncio",
+        "content": "### Threads, Multiprocessing, & Asyncio\n- **Global Interpreter Lock (GIL)**: Prevents multiple native threads from executing Python bytecodes at once.\n- **Multithreading**: Ideal for I/O bound tasks (waiting on files/network responses).\n- **Multiprocessing**: Spawns processes on separate CPU cores to bypass the GIL for CPU-bound tasks.\n- **Asyncio**: Single-threaded concurrent loop:\n  ```python\n  import asyncio\n  async def fetch_api():\n      print(\"Querying API...\")\n      await asyncio.sleep(2) # Non-blocking sleep\n      return {\"data\": 200}\n  \n  asyncio.run(fetch_api())\n  ```"
+      },
+      {
+        "title": "Module 5: Standard Libraries & File System Operations",
+        "content": "### Core Standard Modules\n- **sys / os**: Query environment configurations and directory paths.\n- **json**: Serializes Python dicts to JSON strings and parses JSON payloads.\n- **pathlib**: Modern OOP file path manager:\n  ```python\n  from pathlib import Path\n  config_file = Path(__file__).parent / \"config.json\"\n  if config_file.exists():\n      content = config_file.read_text(encoding=\"utf-8\")\n  ```\n- **subprocess**: Spawns system processes to run CLI commands."
+      },
+      {
+        "title": "Module 6: Web Frameworks & Data Analysis Tools",
+        "content": "### Python Ecosystem Frameworks\n- **Flask**: Micro web framework:\n  ```python\n  from flask import Flask\n  app = Flask(__name__)\n  @app.route('/')\n  def home():\n      return \"Online\"\n  ```\n- **Django**: Batteries-included MVC framework with built-in ORM.\n- **NumPy & Pandas**: High-performance mathematical arrays and data structures (DataFrames) for analysis."
+      }
+    ]
+  },
+  {
+    "id": "go-docs",
+    "title": "Go (Golang) manual",
+    "category": "Documentation",
+    "domain": "go.dev",
+    "urls": [
+      "https://go.dev/doc/"
+    ],
+    "description": "Golang structural types, receiver methods, interfaces, CSP concurrency (channels), and tooling.",
+    "modules": [
+      {
+        "title": "Module 1: Go Basics and Control Flows",
+        "content": "### Compiled System Language Basics\nGo is a compiled, statically typed language developed by Google.\n- **Variables**: Declared via `var` or short assignment operator `:=`:\n  ```go\n  name := \"Tondev\"\n  var port int = 8080\n  ```\n- **Control Flows**: Only supports `for` loops (replaces while loops):\n  ```go\n  for i := 0; i < 10; i++ {\n      fmt.Println(i)\n  }\n  ```\n- **Errors**: Returned explicitly alongside results (does not support try/catch blocks):\n  ```go\n  file, err := os.Open(\"config.json\")\n  if err != nil {\n      log.Fatal(err)\n  }\n  ```"
+      },
+      {
+        "title": "Module 2: Composite Types: Slices, Maps, and Structs",
+        "content": "### Golang Collections\n- **Slices**: Dynamically-sized wrappers around arrays:\n  ```go\n  // Initializing slice\n  items := []string{\"apple\", \"banana\"}\n  items = append(items, \"orange\")\n  ```\n- **Maps**: Key-value hash tables:\n  ```go\n  scores := make(map[string]int)\n  scores[\"tonde\"] = 100\n  ```\n- **Structs**: Custom composite types:\n  ```go\n  type User struct {\n      ID   int\n      Name string\n  }\n  ```"
+      },
+      {
+        "title": "Module 3: Receiver Methods & Interfaces",
+        "content": "### Struct Receiver Methods\nGo supports defining methods on structures:\n- **Value Receiver**: Receives a copy of the structure. Cannot mutate fields.\n- **Pointer Receiver**: Receives the address of the structure. Can mutate fields.\n  ```go\n  func (u *User) SetName(name string) {\n      u.Name = name // Mutates original struct instance\n  }\n  ```\n\n### Implicit Interfaces\nInterfaces are satisfied implicitly; a struct satisfies an interface if it implements all required methods:\n```go\ntype Greeter interface {\n    Greet() string\n}\n// User struct implements Greeter implicitly if it has:\nfunc (u User) Greet() string {\n    return \"Hi, I'm \" + u.Name\n}\n```"
+      },
+      {
+        "title": "Module 4: Go Concurrency (Goroutines & Channels)",
+        "content": "### Communicating Sequential Processes (CSP)\nGo handles concurrency using **Goroutines** (lightweight execution threads managed by Go runtime):\n- **Goroutines**: Launched using the `go` keyword:\n  ```go\n  go processTask(id)\n  ```\n- **Channels**: Communication tubes to send data between goroutines, preventing race conditions:\n  ```go\n  ch := make(chan string)\n  go func() {\n      ch <- \"Job done\" // Send to channel\n  }()\n  msg := <-ch // Receive from channel (blocks until data arrives)\n  ```\n- **sync.WaitGroup**: Syncs goroutines executions:\n  ```go\n  var wg sync.WaitGroup\n  wg.Add(1)\n  go func() {\n      defer wg.Done()\n      // task\n  }()\n  wg.Wait() // Blocks until counter returns to zero\n  ```"
+      },
+      {
+        "title": "Module 5: Go Standard Library (net/http)",
+        "content": "### Native Production Web Server\nGo standard library includes high-performance HTTP engines:\n```go\npackage main\n\nimport (\n    \"fmt\"\n    \"net/http\"\n)\n\nfunc helloHandler(w http.ResponseWriter, r *http.Request) {\n    fmt.Fprintf(w, \"Hello, secure web server!\")\n}\n\nfunc main() {\n    http.HandleFunc(\"/hello\", helloHandler)\n    http.ListenAndServe(\":8080\", nil)\n}\n```"
+      },
+      {
+        "title": "Module 6: Project Tooling & Dependency Tracking",
+        "content": "### Modules & Compiling\n- **go mod init**: Initializes dependency manifests.\n- **go build**: Compiles files into a single, self-contained executable binary file.\n- **go test**: Runs built-in test suites:\n  ```go\n  func TestSum(t *testing.T) {\n      ans := Sum(1, 2)\n      if ans != 3 {\n          t.Errorf(\"Expected 3, got %d\", ans)\n      }\n  }\n  ```"
+      }
+    ]
+  },
+  {
+    "id": "rust-docs",
+    "title": "Rust Systems Programming (Cargo)",
+    "category": "Documentation",
+    "domain": "rust-lang.org",
+    "urls": [
+      "https://doc.rust-lang.org/book/"
+    ],
+    "description": "Ownership compiler rules, borrowing constraints, lifetimes, pattern matching, traits, and package tooling.",
+    "modules": [
+      {
+        "title": "Module 1: Safety & Mutability paradigm",
+        "content": "### Memory Safety Without Garbage Collection\nRust guarantees memory safety at compile-time:\n- **Variables**: Immutable by default:\n  ```rust\n  let x = 5; // Immutable\n  let mut y = 10; // Mutable\n  ```\n- **Memory Management**: No runtime garbage collector. Memory is managed using the ownership rules checked by the compiler."
+      },
+      {
+        "title": "Module 2: Ownership & Borrowing",
+        "content": "### Ownership Rules\n1. Each value has a owner variable.\n2. There can only be one owner at a time.\n3. When the owner goes out of scope, the value is dropped.\n\n### Borrowing (References)\nTo pass values without transferring ownership, use references (`&`):\n- You can have any number of immutable references (`&T`).\n- You can have only **one** mutable reference (`&mut T`) at a time.\n- You cannot mix mutable and immutable references.\n\n```rust\nfn calculate_len(s: &String) -> usize {\n    s.len()\n} // s goes out of scope but does not drop the referenced String\n```"
+      },
+      {
+        "title": "Module 3: Structs & Enums",
+        "content": "### Structs & Methods\n```rust\nstruct Rectangle {\n    width: u32,\n    height: u32,\n}\nimpl Rectangle {\n    fn area(&self) -> u32 {\n        self.width * self.height\n    }\n}\n```\n\n### Option and Result Enums\n- **Option<T>**: Safe replacement for null values (`Some(T)` or `None`).\n- **Result<T, E>**: Explicit error handling (`Ok(T)` or `Err(E)`)."
+      },
+      {
+        "title": "Module 4: Pattern Matching & Error Handling",
+        "content": "### Match Syntax & Error Propagation\nRust pattern matching acts as type assertion:\n```rust\nfn parse_number(s: &str) -> Result<i32, ParseIntError> {\n    s.parse::<i32>() // returns Result\n}\n\n// Propagating errors using ?\nfn run() -> Result<(), SomeError> {\n    let num = parse_number(\"123\")?; // unpacks Ok, returns Err early on failure\n    Ok(())\n}\n```"
+      },
+      {
+        "title": "Module 5: Traits & Generics",
+        "content": "### Shared Behavior Templates\n**Traits** define shared behavior structures (similar to interfaces):\n```rust\npub trait Summary {\n    fn summarize(&self) -> String;\n}\n\npub struct Article {\n    pub title: String,\n}\n\nimpl Summary for Article {\n    fn summarize(&self) -> String {\n        format!(\"Article: {}\", self.title)\n    }\n}\n```\nUse traits as parameters or generic bounds to enforce constraints."
+      },
+      {
+        "title": "Module 6: Cargo Package Manager & Concurrency",
+        "content": "### Rust Package Tooling\n- **Cargo**: Manages dependencies, compiles files, and runs tests.\n  - `cargo build`: Compiles source code.\n  - `cargo run`: Runs the executable binary.\n  - `cargo test`: Executes unit and integration test blocks.\n- **Safe Concurrency**: Compiler tracks ownership of values across threads, preventing data races:\n  ```rust\n  use std::thread;\n  let handle = thread::spawn(|| {\n      println!(\"Hello thread!\");\n  });\n  handle.join().unwrap();\n  ```"
+      }
+    ]
+  },
+  {
+    "id": "java-docs",
+    "title": "Java Core & OOP manual",
+    "category": "Documentation",
+    "domain": "oracle.com/java",
+    "urls": [
+      "https://docs.oracle.com/en/java/"
+    ],
+    "description": "Object-oriented programing pillars, Java collections, error scopes, streams, lambda expressions, and Maven/Gradle.",
+    "modules": [
+      {
+        "title": "Module 1: Java Basics and Class compilation",
+        "content": "### JVM Architecture & OOP\nJava is compiled to bytecode and run on the Virtual Machine (JVM), allowing write-once, run-anywhere execution:\n- **Main Class Structure**:\n  ```java\n  public class Main {\n      public static void main(String[] args) {\n          System.out.println(\"Hello JVM!\");\n      }\n  }\n  ```\n- **Variable Typing**: Statically typed, requires explicit primitive or object types."
+      },
+      {
+        "title": "Module 2: The Four Pillars of OOP",
+        "content": "### Object-Oriented Principles\n1. **Encapsulation**: Restrict direct access to fields using private attributes and public getters/setters.\n2. **Inheritance**: Subclasses inherit variables and methods from a parent class using the `extends` keyword.\n3. **Polymorphism**:\n   - Overloading: Same method name, different signatures.\n   - Overriding: Child class re-defines parent method implementation.\n4. **Abstraction**: Use abstract classes or interfaces to hide backend logic."
+      },
+      {
+        "title": "Module 3: Java Collections Framework",
+        "content": "### Core Collections API\n- **List**: Ordered collections:\n  ```java\n  List<String> list = new ArrayList<>();\n  list.add(\"Java\");\n  ```\n- **Set**: Unordered collections of unique values: `Set<Integer> set = new HashSet<>();`\n- **Map**: Key-value hashes:\n  ```java\n  Map<String, Integer> map = new HashMap<>();\n  map.put(\"score\", 100);\n  ```"
+      },
+      {
+        "title": "Module 4: Exception Handling & File I/O",
+        "content": "### Exception Structures\nHandle runtime hazards using try-catch blocks:\n```java\ntry {\n    FileReader reader = new FileReader(\"config.txt\");\n} catch (FileNotFoundException e) {\n    System.err.println(\"File missing: \" + e.getMessage());\n} finally {\n    System.out.println(\"Cleanup resources...\");\n}\n```"
+      },
+      {
+        "title": "Module 5: Java Streams & Lambda Expressions",
+        "content": "### Functional Programming in Java 8+\nStreams API enables declarative operations on collections:\n```java\nList<String> names = Arrays.asList(\"Alice\", \"Bob\", \"Charlie\");\nList<String> filtered = names.stream()\n    .filter(name -> name.startsWith(\"C\")) // Lambda expression\n    .map(String::toUpperCase)\n    .collect(Collectors.toList());\n```"
+      },
+      {
+        "title": "Module 6: Concurrency & Build Tooling (Maven)",
+        "content": "### Java Threads & Build Systems\n- **Thread Class**: Extend `Thread` or implement `Runnable` to create parallel tasks.\n- **synchronized**: Keyword that locks code blocks to prevent race conditions.\n- **Maven & Gradle**: Manage dependencies and lifecycle phases (compile, package, install)."
+      }
+    ]
+  },
+  {
+    "id": "cpp-docs",
+    "title": "C++ Systems Programming Reference",
+    "category": "Documentation",
+    "domain": "cppreference.com",
+    "urls": [
+      "https://en.cppreference.com/w/"
+    ],
+    "description": "Memory configurations, pointers, smart pointers (shared/unique), object lifecycles, templates, and makefile compilations.",
+    "modules": [
+      {
+        "title": "Module 1: Pointers & Reference memory",
+        "content": "### Pointer Mechanics\nPointers store memory addresses of variables:\n```cpp\nint val = 42;\nint* ptr = &val; // ptr stores address of val\ncout << *ptr;   // De-references ptr to output 42\n```\n- **References**: Aliases to variables, cannot be null or reassigned."
+      },
+      {
+        "title": "Module 2: Dynamic Memory & Smart Pointers",
+        "content": "### RAII & Memory Allocation\nResource Acquisition Is Initialization (RAII) ties resource lifecycles to object lifecycles:\n- **Raw Allocation**: `new` and `delete` (prone to memory leaks if delete is missed).\n- **Smart Pointers (C++11+)**:\n  - `std::unique_ptr`: Manages a single owner pointer.\n    ```cpp\n    std::unique_ptr<int> uptr = std::make_unique<int>(10);\n    ```\n  - `std::shared_ptr`: Reference-counted shared ownership pointers.\n  - `std::weak_ptr`: Non-owning observer pointers."
+      },
+      {
+        "title": "Module 3: Object-Oriented C++",
+        "content": "### Classes, Constructors and Polymorphism\n```cpp\nclass Base {\npublic:\n    virtual void show() { cout << \"Base class\"; } // Virtual enable overrides\n    virtual ~Base() = default; // Destructor\n};\nclass Derived : public Base {\npublic:\n    void show() override { cout << \"Derived class\"; }\n};\n```\n- Use virtual destructors to prevent memory leaks in derived classes."
+      },
+      {
+        "title": "Module 4: C++ Templates & STL library",
+        "content": "### Standard Template Library (STL)\n- **Templates**: Code templates parameterized by types:\n  ```cpp\n  template <typename T>\n  T add(T a, T b) { return a + b; }\n  ```\n- **STL Collections**:\n  - `std::vector`: Dynamic array.\n  - `std::map`: Balanced binary trees.\n  - `std::unordered_map`: Hash tables."
+      },
+      {
+        "title": "Module 5: File Operations & Preprocessor Macros",
+        "content": "### File Streams & Preprocessors\n- **fstream**: Read and write files:\n  ```cpp\n  #include <fstream>\n  std::ofstream out(\"log.txt\");\n  out << \"Logging activity\";\n  out.close();\n  ```\n- **Preprocessor Macros**: Handled before compiler starts:\n  ```cpp\n  #define MAX_SIZE 100\n  #ifndef HEADER_H\n  #define HEADER_H\n  #endif\n  ```"
+      },
+      {
+        "title": "Module 6: Multi-Threading & Compilation Processes",
+        "content": "### Compiling & Threads\n- **std::thread**: Spawns concurrent tasks:\n  ```cpp\n  #include <thread>\n  std::thread t([]() { cout << \"Child thread\"; });\n  t.join();\n  ```\n- **Compilation phases**: Preprocessing -> Compilation -> Assembly -> Linking.\n- **GNU Make**: Orchestrates compilation configurations using Makefiles."
+      }
+    ]
+  },
+  {
+    "id": "sql-docs",
+    "title": "SQL & Databases (PostgreSQL)",
+    "category": "Documentation",
+    "domain": "postgresql.org",
+    "urls": [
+      "https://www.postgresql.org/docs/"
+    ],
+    "description": "Schema normalizations, SQL joins, database indexes, database lock isolates, and cluster scales.",
+    "modules": [
+      {
+        "title": "Module 1: Relational Schema & Normalization",
+        "content": "### Normalization Forms (1NF, 2NF, 3NF)\nnormalization minimizes data redundancy:\n- **1NF**: Column cells must hold atomic values; rows must be unique.\n- **2NF**: Meets 1NF; all non-key attributes must fully depend on the primary key.\n- **3NF**: Meets 2NF; no transitive dependencies (columns must not depend on other non-key columns)."
+      },
+      {
+        "title": "Module 2: Advanced Joins & Subqueries",
+        "content": "### SQL Joins Reference\n- **INNER JOIN**: Returns rows with matching keys in both tables.\n- **LEFT JOIN**: Returns all rows from left table, matching rows from right.\n- **FULL OUTER JOIN**: Returns rows when there is a match in either table.\n- **Common Table Expressions (CTEs)**: Temporary result sets:\n  ```sql\n  WITH vip_users AS (\n      SELECT id FROM users WHERE status = 'VIP'\n  )\n  SELECT * FROM invoices WHERE user_id IN (SELECT id FROM vip_users);\n  ```"
+      },
+      {
+        "title": "Module 3: ACID Transactions & Isolations",
+        "content": "### Database ACID Constraints\n- **Atomicity**: Complete transaction executes successfully or rolls back completely.\n- **Consistency**: Data updates satisfy schema check rules and keys.\n- **Isolation**: Concurrent transactions execute without interfering.\n- **Durability**: Committed updates survive crash conditions.\n\n### Isolation Levels\nSet isolation levels to balance concurrency and data integrity:\n- Read Uncommitted, Read Committed, Repeatable Read, Serializable."
+      },
+      {
+        "title": "Module 4: Indexing & EXPLAIN ANALYZE",
+        "content": "### B-Tree Database Indices\nIndices accelerate lookup speeds but add storage size and slow writes.\n```sql\nCREATE INDEX idx_products_sku ON products(sku);\n```\n- Use `EXPLAIN ANALYZE` to trace query schedules, checking if scans utilize indices (Index Scan) or check entire datasets (Seq Scan)."
+      },
+      {
+        "title": "Module 5: Schema Constraints & Integrity",
+        "content": "### Integrity Constraints\nEnsure data validity using database-level checks:\n- **Primary Key / Foreign Key**: Establish linkages and prevent orphan child rows.\n- **UNIQUE**: Restricts duplicate values.\n- **CHECK constraints**:\n  ```sql\n  ALTER TABLE users ADD CONSTRAINT check_age CHECK (age >= 18);\n  ```"
+      },
+      {
+        "title": "Module 6: Connection Pooling & DB Scaling",
+        "content": "### Database Scalability Configurations\n- **Connection Pools**: Maintain pools of open, active DB client sockets (using pgpool or pgbouncer) to save handshake times.\n- **Read Replicas**: Primary node handles writes and replicates data to secondary nodes that handle read traffic.\n- **Sharding**: Horizontally splits tables across separate databases using a partition key."
+      }
+    ]
+  },
+  {
+    "id": "nosql-docs",
+    "title": "NoSQL & Redis Caching",
+    "category": "Documentation",
+    "domain": "mongodb.com",
+    "urls": [
+      "https://www.mongodb.com/docs/",
+      "https://redis.io/documentation"
+    ],
+    "description": "MongoDB collections, aggregation pipelines, replica sharding setups, Redis caching schemas, and data types.",
+    "modules": [
+      {
+        "title": "Module 1: Document Schema & Modeling",
+        "content": "### MongoDB Schema Modeling\nMongoDB stores data as BSON documents. Modeling involves:\n- **Embedded Documents**: Nesting structures. Best for 1-to-1 relationships and high-speed read requests.\n- **References (DBRefs)**: Linking collections via document IDs. Best for large data trees that grow without bounds."
+      },
+      {
+        "title": "Module 2: MongoDB Aggregation Pipelines",
+        "content": "### Aggregations Transformers\nProcess collections through sequential filtering stages:\n```javascript\nconst result = await Order.aggregate([\n  { $match: { date: { $gt: startDate } } },\n  { $group: { _id: '$category', totalAmount: { $sum: '$price' } } },\n  { $sort: { totalAmount: -1 } }\n]);\n```"
+      },
+      {
+        "title": "Module 3: MongoDB Replication & Sharding",
+        "content": "### High Availability & Scale\n- **Replica Sets**: Groups of MongoDB processes maintaining the same data set. Automatically handles node failures.\n- **Sharding**: Horizontal partitions across server clusters using a shard key, ensuring write scalability."
+      },
+      {
+        "title": "Module 4: Redis Data Structures",
+        "content": "### High-Performance In-Memory Key-Value Store\nRedis stores values in RAM for sub-millisecond response latency:\n- **Strings**: Key-value parameters.\n- **Lists**: Linked lists of string items.\n- **Hashes**: Maps of fields and values (ideal for storing user objects).\n- **Sets**: Unordered unique strings.\n- **Sorted Sets**: Unique strings mapped to scores (ideal for leaderboards)."
+      },
+      {
+        "title": "Module 5: Redis Caching Patterns & Evictions",
+        "content": "### Caching Strategies\n- **Cache-Aside**: Application checks cache first. If it misses, queries DB and updates cache.\n- **Write-Through**: Application writes to cache, and cache writes to DB immediately.\n- **TTL Eviction**: Automatically delete key allocations after designated times:\n  ```redis\n  SET user:session:1001 tokenData EX 3600 # Expires in 1 hour\n  ```"
+      },
+      {
+        "title": "Module 6: Redis Clusters & Persistence Models",
+        "content": "### Data Persistence Options\nSince Redis operates in RAM, data must be saved to disk to prevent loss on server crashes:\n- **RDB (Redis Database)**: Takes point-in-time snapshots of dataset at specified intervals.\n- **AOF (Append Only File)**: Logs every write command received by server, replaying logs on startup."
+      }
+    ]
+  },
+  {
+    "id": "docker-docs",
+    "title": "Docker Containerization",
+    "category": "Developer Tools",
+    "domain": "docker.com",
+    "urls": [
+      "https://docs.docker.com/"
+    ],
+    "description": "VM comparison, Dockerfile commands, multi-stage builds, volumes, compose structures, and security.",
+    "modules": [
+      {
+        "title": "Module 1: Containers vs Virtual Machines",
+        "content": "### Virtualization Engine Differences\n- **Virtual Machines**: Include a full operating system kernel, virtual device drivers, and applications. Run on top of a Hypervisor. Heavy footprint (gigabytes) and slow boot times (minutes).\n- **Containers**: Share the host OS kernel and run as isolated processes. Lightweight footprint (megabytes) and fast startup times (milliseconds)."
+      },
+      {
+        "title": "Module 2: Dockerfile Syntax and Commands",
+        "content": "### Dockerfile Directives\nConfigure instructions to compile image builds:\n- **FROM**: Sets base image reference.\n- **WORKDIR**: Sets container active directory.\n- **COPY / ADD**: Move files from host to container.\n- **RUN**: Executes commands during image compilation.\n- **CMD**: Executes default commands when container starts."
+      },
+      {
+        "title": "Module 3: Multi-Stage Builds & Optimization",
+        "content": "### Image Layer Optimization\nEach instruction creates a new cached read-only layer. Use multi-stage builds to minimize production image sizes by separating compile tools from execution binaries:\n```dockerfile\n# Stage 1: Build\nFROM node:18 AS build\nWORKDIR /app\nCOPY package*.json ./\nRUN npm ci\nCOPY . .\nRUN npm run build\n\n# Stage 2: Run\nFROM node:18-alpine\nWORKDIR /app\nCOPY --from=build /app/dist ./dist\nCOPY --from=build /app/package*.json ./\nRUN npm ci --only=production\nCMD [\"node\", \"dist/server.js\"]\n```"
+      },
+      {
+        "title": "Module 4: Docker Storage (Volumes) & Networks",
+        "content": "### Persistence & Container Communication\n- **Bind Mounts**: Mount host folders directly into container (ideal for real-time development).\n- **Volumes**: Managed storage units isolated from host directories:\n  ```bash\n  docker volume create db-data\n  docker run -v db-data:/var/lib/postgresql/data postgres\n  ```\n- **Bridge Network**: Default network layer isolating containers, allowing name resolution."
+      },
+      {
+        "title": "Module 5: Orchestration with Docker Compose",
+        "content": "### Multi-Container Configuration (`docker-compose.yml`)\n```yaml\nversion: '3.8'\nservices:\n  app:\n    build: .\n    ports:\n      - \"8080:8080\"\n    depends_on:\n      - cache\n  cache:\n    image: redis:7-alpine\n    ports:\n      - \"6379:6379\"\n```"
+      },
+      {
+        "title": "Module 6: Container Security Principles",
+        "content": "### Securing Containers\n- **Run as non-root**: Never run containers as root users. Use `USER node` or create custom users.\n- **Read-Only Root Filesystem**: Configure container filesystems as read-only.\n- **Vulnerability Scanning**: Scan production images regularly:\n  ```bash\n  docker scout cves my-app:latest\n  ```"
+      }
+    ]
+  },
+  {
+    "id": "k8s-docs",
+    "title": "Kubernetes Orchestration",
+    "category": "Developer Tools",
+    "domain": "kubernetes.io",
+    "urls": [
+      "https://kubernetes.io/docs/"
+    ],
+    "description": "Control plane components, pod deployments, service networking, configmaps, secrets, and volumes.",
+    "modules": [
+      {
+        "title": "Module 1: Kubernetes Architecture Overview",
+        "content": "### Control Plane & Nodes\nOrchestrates clusters of worker machines:\n- **Control Plane (Master Node)**:\n  - **kube-apiserver**: Gateway for cluster commands.\n  - **etcd**: Consistent distributed key-value store for cluster metadata state.\n  - **kube-scheduler**: Assigns pods to worker nodes.\n  - **kube-controller-manager**: Regulates replication states.\n- **Worker Nodes**: Run actual containers. Managed by **kubelet** and **kube-proxy** routing tools."
+      },
+      {
+        "title": "Module 2: Pods, ReplicaSets, and Deployments",
+        "content": "### K8s Deployment Manifest (`deployment.yaml`)\nDeployments manage replicas and handle rolling updates:\n```yaml\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: api-deployment\nspec:\n  replicas: 3\n  selector:\n    matchLabels:\n      app: api-server\n  template:\n    metadata:\n      labels:\n        app: api-server\n    spec:\n      containers:\n      - name: main-server\n        image: api-app:v1\n        ports:\n        - containerPort: 3000\n```"
+      },
+      {
+        "title": "Module 3: Service Networking & Load Balancing",
+        "content": "### Service Types & Ingress\nServices route network traffic to ephemeral pods:\n- **ClusterIP**: Exposes service internally (default).\n- **NodePort**: Opens a port on every node server, routing traffic to pods.\n- **LoadBalancer**: Provisions a cloud load balancer.\n- **Ingress**: Acts as an entry controller for external HTTP requests, managing domain routing and SSL configurations."
+      },
+      {
+        "title": "Module 4: ConfigMaps & Secrets Management",
+        "content": "### Decoupling Configurations from Images\n- **ConfigMap**: Stores non-confidential configuration key-value strings.\n- **Secret**: Stores base64 encoded sensitive keys, tokens, or passwords.\n  ```yaml\n  # Injecting Secret into Environment\n  env:\n  - name: DATABASE_PASSWORD\n    valueFrom:\n      secretKeyRef:\n        name: db-credentials\n        key: password\n  ```"
+      },
+      {
+        "title": "Module 5: Persistent Volumes & Storage",
+        "content": "### Persistent Storage Lifecycles\n- **Persistent Volume (PV)**: Cluster-level storage resource configured by administrators.\n- **Persistent Volume Claim (PVC)**: Storage request by user pods.\n- **StorageClass**: Automates dynamic volume provisioning."
+      },
+      {
+        "title": "Module 6: Monitoring, Scaling & HPA",
+        "content": "### Cluster Health & Auto-scaling\n- **Liveness & Readiness Probes**: Monitor pod health, restarting failed pods and stopping traffic to un-ready instances.\n- **Horizontal Pod Autoscaler (HPA)**: Auto-scales replica count based on CPU/RAM usage limits."
+      }
+    ]
+  },
+  {
+    "id": "terraform-docs",
+    "title": "Terraform Infrastructure as Code",
+    "category": "Developer Tools",
+    "domain": "terraform.io",
+    "urls": [
+      "https://developer.hashicorp.com/terraform"
+    ],
+    "description": "Declarative infrastructure, providers, HCL syntax variables, state files, modular components, and CLI commands.",
+    "modules": [
+      {
+        "title": "Module 1: Infrastructure as Code & HCL Syntax",
+        "content": "### Declarative Infrastructure\nTerraform uses HashiCorp Configuration Language (HCL) to declare target cloud infrastructure shapes:\n- **Declarative**: You specify *what* should exist, and Terraform calculates the plan to provision it.\n- **Imperative**: You specify actions (e.g. AWS CLI scripts). Hard to track updates or drift."
+      },
+      {
+        "title": "Module 2: Providers & Resource Declarations",
+        "content": "### Provider Configuration\nProviders translate HCL definitions to target API requests (AWS, GCP, Cloudflare):\n```hcl\nprovider \"aws\" {\n  region = \"us-east-1\"\n}\n\nresource \"aws_security_group\" \"web_sg\" {\n  name = \"allow-web-traffic\"\n  ingress {\n    from_port   = 80\n    to_port     = 80\n    protocol    = \"tcp\"\n    cidr_blocks = [\"0.0.0.0/0\"]\n  }\n}\n```"
+      },
+      {
+        "title": "Module 3: Variables, Locals & Outputs",
+        "content": "### Customizing HCL Configurations\n- **Variables**: Inputs configured via command line or file:\n  ```hcl\n  variable \"instance_type\" {\n    type    = string\n    default = \"t2.micro\"\n  }\n  ```\n- **Locals**: Temporary variables computed within module.\n- **Outputs**: Export variables to stdout or remote storage:\n  ```hcl\n  output \"public_ip\" {\n    value = aws_instance.web.public_ip\n  }\n  ```"
+      },
+      {
+        "title": "Module 4: State Files & Lock Locks",
+        "content": "### Mapping Configurations to Real resources\nTerraform stores the mapping between your configuration files and the actual physical resources created.\n- **State File**: Tracks configuration changes and physical resource IDs.\n- **Remote Backends**: Storing state files in remote storage (S3/GCS) with database locks (DynamoDB) to prevent concurrent applies."
+      },
+      {
+        "title": "Module 5: Modular Infrastructure Architecture",
+        "content": "### Modular Code Components\nModules allow packaging infrastructure resources into reusable blocks:\n```hcl\nmodule \"app_server\" {\n  source        = \"./modules/ec2\"\n  instance_type = \"t3.micro\"\n  subnet_id     = module.network.public_subnet_id\n}\n```"
+      },
+      {
+        "title": "Module 6: Production Workflows CLI",
+        "content": "### Core Terraform Commands\n- **terraform init**: Downloads provider dependencies and configures state backend.\n- **terraform plan**: Computes differences and previews additions, modifications, or destructions.\n- **terraform apply**: Executes the plan to modify physical resources.\n- **terraform destroy**: Destroys all provisioned resources."
+      }
+    ]
+  },
+  {
+    "id": "git-docs",
+    "title": "Git Workflows & Pipelines",
+    "category": "Developer Tools",
+    "domain": "git-scm.com",
+    "urls": [
+      "https://git-scm.com/doc"
+    ],
+    "description": "Git storage areas, branching models (GitFlow vs Trunk), rebase vs merge, GitHub Actions, and Jenkins pipelines.",
+    "modules": [
+      {
+        "title": "Module 1: Git Core Storage Model",
+        "content": "### The Three Git Areas\n1. **Working Directory**: Physical modified files on your local drive.\n2. **Staging Area (Index)**: Manifest log of changes staged for the next commit.\n3. **Git Repository (.git)**: permanent database of commits (blobs, trees, commit graphs).\n\n### DAG Structure\nGit stores history as a Directed Acyclic Graph (DAG) of commit nodes."
+      },
+      {
+        "title": "Module 2: Advanced Branch Operations",
+        "content": "### Rebase vs Merge\n- **Merge**: Creates a new merge commit combining branch histories. Preserves history but can lead to complex graphs.\n- **Rebase**: Moves your commits to the tip of the target branch. Rewrites history for a clean, linear git graph:\n  ```bash\n  git checkout feature-branch\n  git rebase main\n  ```\n- **cherry-pick**: Applies a specific commit from another branch onto your current branch."
+      },
+      {
+        "title": "Module 3: Git Branching Strategies",
+        "content": "### Team Branching Workflows\n- **GitFlow**: Multi-branch approach (develop, release, hotfix, master). Ideal for scheduled releases.\n- **Trunk-Based Development**: Developers commit directly to a single branch (`main`) using short-lived branches. Ideal for continuous integration."
+      },
+      {
+        "title": "Module 4: GitHub Actions Pipelines",
+        "content": "### CI/CD Workflow Setup (`workflow.yml`)\n```yaml\nname: Test Suite\non:\n  push:\n    branches: [ main ]\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n    - uses: actions/checkout@v3\n    - name: Setup Node\n      uses: actions/setup-node@v3\n      with:\n        node-version: 20\n    - run: npm ci\n    - run: npm test\n```"
+      },
+      {
+        "title": "Module 5: Declarative Jenkins Pipelines",
+        "content": "### Jenkinsfile Syntax\n```groovy\npipeline {\n    agent any\n    stages {\n        stage('Checkout') {\n            steps { checkout scm }\n        }\n        stage('Build') {\n            steps { sh 'npm run build' }\n        }\n    }\n}\n```"
+      },
+      {
+        "title": "Module 6: Deployment Pipelines Strategies",
+        "content": "### Deploying Without Downtime\n- **Blue-Green Deployments**: Maintain two identical server pools. Route traffic to Blue. Deploy code to Green, test it, then switch the router to Green.\n- **Canary Releases**: Roll out the update to a small percentage (e.g. 5%) of users first. Monitor error rates before updating the remaining servers."
+      }
+    ]
+  },
+  {
+    "id": "security-docs",
+    "title": "OWASP Web Security",
     "category": "Documentation",
     "domain": "owasp.org",
     "urls": [
-      "https://owasp.org/www-project-top-ten/",
-      "https://owasp.org/www-project-web-security-testing-guide/",
-      "https://owasp.org/www-community/",
-      "https://owasp.org/index.php/Main_Page",
-      "https://cheatsheetseries.owasp.org/"
+      "https://owasp.org/"
     ],
-    "description": "Web application vulnerability categories (OWASP Top 10), mitigation blueprints, and authentication checklists.",
+    "description": "OWASP Top 10 vulnerabilities, injection protections, XSS/CSRF mitigations, crypto failures, and logging audits.",
     "modules": [
       {
         "title": "Module 1: Broken Access Control & IDOR",
         "content": "### Insecure Direct Object References (IDOR)\nIDOR occurs when a server exposes database primary keys or file paths directly in parameters, allowing attackers to access other records by changing IDs.\n- *Insecure Route*: `GET /api/invoices/1001` (user changes to `1002`).\n- *Secure Fix*: Bind users ownership directly in query conditions:\n  ```javascript\n  // SELECT * FROM invoices WHERE id = $1 AND owner_id = $2\n  db.query(queryStr, [invoiceId, req.user.id]);\n  ```"
       },
       {
-        "title": "Module 2: Cryptographic Failures",
-        "content": "### Hashing vs Encryption\n- **Hashing**: One-way mathematical transformation (e.g. bcrypt, Argon2). Used for passwords. Cannot be reversed.\n- **Encryption**: Two-way operation with keys. Used to secure data during transit or storage. Requires keys to decrypt.\n\n### Secure Transport Rules\n- Enforce HTTPS across all domains.\n- Configure HTTP Strict Transport Security (HSTS) headers.\n- Set `Secure` flag on cookies."
+        "title": "Module 2: SQL Injection (SQLi) & Protections",
+        "content": "### SQL Injection\nAttackers submit SQL fragments inside inputs to run arbitrary queries.\n- *Insecure*: `db.query('SELECT * FROM users WHERE email = ' + req.body.email)`\n- *Secure*: Use parameters or ORM/query builders.\n  ```javascript\n  db.query('SELECT * FROM users WHERE email = $1', [req.body.email]);\n  ```"
       },
       {
-        "title": "Module 3: Injection Attacks (SQLi, Command Injection)",
-        "content": "### SQL Injection (SQLi)\nAttackers submit SQL fragments inside inputs to run arbitrary queries.\n- *Insecure*: `db.query('SELECT * FROM users WHERE email = ' + req.body.email)`\n- *Secure*: Use parameters or ORM/query builders.\n  ```javascript\n  db.query('SELECT * FROM users WHERE email = $1', [req.body.email]);\n  ```"
-      },
-      {
-        "title": "Module 4: Cross-Site Scripting (XSS) & CSRF",
+        "title": "Module 3: Cross-Site Scripting (XSS) & CSRF",
         "content": "### XSS Attacks\nScript injections executed on victims' browsers.\n- **Reflected**: Injected scripts reflect off query parameters.\n- **Stored**: Script saved directly in database (e.g. comments board).\n- **DOM-based**: Faulty client JS processes user input directly.\n\n### XSS Mitigations\n- Context-aware sanitizations.\n- Enforce strict Content Security Policies (CSP).\n- Store session identifiers in `HttpOnly` cookies."
+      },
+      {
+        "title": "Module 4: Cryptographic Failures",
+        "content": "### Hashing vs Encryption\n- **Hashing**: One-way mathematical transformation (e.g. bcrypt, Argon2). Used for passwords. Cannot be reversed.\n- **Encryption**: Two-way operation with keys. Used to secure data during transit or storage. Requires keys to decrypt.\n\n### Secure Transport Rules\n- Enforce HTTPS across all domains.\n- Configure HTTP Strict Transport Security (HSTS) headers.\n- Set `Secure` flag on cookies."
       },
       {
         "title": "Module 5: Security Misconfigurations & XML",
@@ -194,359 +578,15 @@
     ]
   },
   {
-    "id": "databases",
-    "title": "Database Guides: PostgreSQL & MongoDB",
-    "category": "Documentation",
-    "domain": "postgresql.org",
-    "urls": [
-      "https://www.postgresql.org/docs/",
-      "https://docs.mongodb.com/",
-      "https://www.mongodb.com/docs/"
-    ],
-    "description": "Official manuals, SQL query design, connection pooling guides, and MERN stack MongoDB architectures.",
-    "modules": [
-      {
-        "title": "Module 1: Relational Schema & ACID",
-        "content": "### Database Normalization\n- **1NF**: Atomic cell values, unique row entries.\n- **2NF**: Meets 1NF, no partial dependency (all columns depend on the primary key).\n- **3NF**: Meets 2NF, no transitive dependency (non-key columns do not depend on other non-key columns).\n\n### ACID Properties\n- **Atomicity**: Complete rollback or complete commit.\n- **Consistency**: Data adheres to constraints (types, foreign keys).\n- **Isolation**: Concurrent queries execute without data pollution.\n- **Durability**: Committed data is stored persistently."
-      },
-      {
-        "title": "Module 2: SQL Query Optimization",
-        "content": "### Database Indices\nIndices speed up searches but slow down insert/update queries.\n```sql\nCREATE INDEX idx_users_email ON users(email);\n```\n\n### EXPLAIN Query Analyze\nPrepend `EXPLAIN ANALYZE` to your queries to inspect execution plans, check if scans use indices (Index Scan) or check entire tables sequentially (Seq Scan)."
-      },
-      {
-        "title": "Module 3: MongoDB Document Modeling",
-        "content": "### Modeling Data: Embedding vs Referencing\n- **Embedded Document**: Nesting objects inside a document. Best for 1-to-1 relationships and static logs. Faster read latency.\n- **Reference Document**: Storing object IDs of documents in other collections. Best for 1-to-many or many-to-many relationships that grow infinitely."
-      },
-      {
-        "title": "Module 4: NoSQL Aggregation Pipeline",
-        "content": "### Aggregations Flow\nProcess data sets through multiple transformer pipelines:\n```javascript\nconst stats = await Order.aggregate([\n  { $match: { status: 'completed' } },\n  { $group: { _id: '$userId', totalSpent: { $sum: '$price' } } },\n  { $sort: { totalSpent: -1 } }\n]);\n```"
-      },
-      {
-        "title": "Module 5: Connection Pooling & Drivers",
-        "content": "### Connection Pools\nEstablishing database connections takes time. A **Connection Pool** maintains a set of open, reusable connections.\n- **Node-pg client configuration**:\n  ```javascript\n  const pool = new Pool({\n    max: 20, // Keep up to 20 client connections open\n    idleTimeoutMillis: 30000\n  });\n  ```"
-      },
-      {
-        "title": "Module 6: Replication & Sharding",
-        "content": "### Scaling Databases\n- **Primary-Secondary Replication**: Reads go to secondary replicas; writes go to the primary node. Provides high availability.\n- **Sharding**: Horizontally splits database records across separate server nodes based on a partition key (shard key)."
-      }
-    ]
-  },
-  {
-    "id": "devops-tools",
-    "title": "Docker & Kubernetes Deployment Guides",
-    "category": "Developer Tools",
-    "domain": "docker.com",
-    "urls": [
-      "https://docs.docker.com/",
-      "https://docs.docker.com/compose/",
-      "https://www.docker.com/",
-      "https://kubernetes.io/"
-    ],
-    "description": "Containerization configurations, multi-container compose settings, and Kubernetes orchestration architectures.",
-    "modules": [
-      {
-        "title": "Module 1: Containers vs Virtual Machines",
-        "content": "### Virtual Machines (VMs)\nInclude the guest operating system, virtual drivers, and bin libraries. Run on a Hypervisor. Heavy size, slow starts.\n\n### Containers\nShare the host operating system kernel, running isolated user spaces using Linux Namespaces and Cgroups. Lightweight size, starts in milliseconds."
-      },
-      {
-        "title": "Module 2: Dockerfile Mechanics",
-        "content": "### Layer Caching\nEach instruction in a Dockerfile creates a read-only filesystem layer. Order instructions from least-frequently changed to most-frequently changed to speed up builds:\n```dockerfile\nFROM node:18-alpine\nWORKDIR /app\nCOPY package*.json ./\nRUN npm ci --only=production\nCOPY . .\nCMD [\"node\", \"app.js\"]\n```"
-      },
-      {
-        "title": "Module 3: Multi-Container Apps (Compose)",
-        "content": "### Docker Compose File (`docker-compose.yml`)\nDefine and orchestrate multi-container application stacks.\n```yaml\nversion: '3.8'\nservices:\n  web:\n    build: .\n    ports:\n      - \"3000:3000\"\n    depends_on:\n      - database\n  database:\n    image: postgres:15\n    environment:\n      POSTGRES_PASSWORD: secretPassword\n```"
-      },
-      {
-        "title": "Module 4: Kubernetes Architecture",
-        "content": "### Control Plane (Master Node) Components\n- **API Server**: Entry gateway for administrative commands.\n- **etcd**: Consistent, highly-available key-value store for cluster metadata state.\n- **Scheduler**: Allocates pods to worker node servers.\n- **Controller Manager**: Manages replicas and node lifecycles."
-      },
-      {
-        "title": "Module 5: Pods, Services & Deployments",
-        "content": "### Kubernetes Deployments\nManages Pod replicas lifecycle and handles rollouts/rollbacks:\n```yaml\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: web-app-deployment\nspec:\n  replicas: 3\n  selector:\n    matchLabels:\n      app: web-node\n  template:\n    metadata:\n      labels:\n        app: web-node\n    spec:\n      containers:\n      - name: express-server\n        image: myapp:v1.0.0\n```"
-      },
-      {
-        "title": "Module 6: Storage & Configurations",
-        "content": "### K8s ConfigMaps & Secrets\n- **ConfigMap**: Stores non-confidential configuration key-value strings.\n- **Secret**: Stores base64 encoded sensitive keys, tokens, or passwords.\n- **Persistent Volumes (PV)**: Decoupled cluster storage assets that survive pod restarts."
-      }
-    ]
-  },
-  {
-    "id": "iac-terraform",
-    "title": "Terraform Infrastructure as Code Guides",
-    "category": "Developer Tools",
-    "domain": "terraform.io",
-    "urls": [
-      "https://www.terraform.io/",
-      "https://www.terraform.io/docs/",
-      "https://learn.hashicorp.com/terraform"
-    ],
-    "description": "HashiCorp Terraform syntax, configuration files, and AWS CloudFormation comparisons.",
-    "modules": [
-      {
-        "title": "Module 1: IaC Declarative Paradigm",
-        "content": "### Declarative Infrastructure\nYou describe the desired final state of your infrastructure in configuration files. Terraform calculates the diff against physical cloud state and performs adjustments.\n\n### HashiCorp Configuration Language (HCL)\nHCL is a declarative, human-readable language designed for provisioning resources."
-      },
-      {
-        "title": "Module 2: Providers & Resources",
-        "content": "### Provider Registries\nProviders translate HCL definitions to cloud API requests (e.g. AWS, Azure, GCP).\n```hcl\n# Resource block\nresource \"aws_vpc\" \"main_vpc\" {\n  cidr_block = \"10.0.0.0/16\"\n  tags = {\n    Name = \"prod-vpc\"\n  }\n}\n```"
-      },
-      {
-        "title": "Module 3: Variables & Outputs",
-        "content": "### Variable Input parameters\n```hcl\nvariable \"instance_type\" {\n  type    = string\n  default = \"t2.micro\"\n}\n\n# Accessing variable\nresource \"aws_instance\" \"app\" {\n  instance_type = var.instance_type\n  ami           = \"ami-123456\"\n}\n```"
-      },
-      {
-        "title": "Module 4: Terraform State Management",
-        "content": "### State File (`terraform.tfstate`)\nTerraform stores the mapping between your configuration files and the actual physical resources created.\n- **Remote State**: Storing state files in cloud object stores (like AWS S3) with locking features (DynamoDB) to avoid concurrent applies."
-      },
-      {
-        "title": "Module 5: Modular Infrastructure",
-        "content": "### Terraform Modules\nModules group resources together to create reusable blocks.\n```hcl\nmodule \"network\" {\n  source   = \"./modules/vpc\"\n  vpc_name = \"staging-vpc\"\n  ip_range = \"10.1.0.0/16\"\n}\n```"
-      },
-      {
-        "title": "Module 6: Production Workflows",
-        "content": "### Production Workflows\n\n- `terraform init`: Downloads providers, modules, and configures backend.\n- `terraform plan`: Generates execution steps, displaying additions, modifications, and deletions.\n- `terraform apply`: Runs the plan.\n- `terraform destroy`: Removes all resources."
-      }
-    ]
-  },
-  {
-    "id": "github-cicd",
-    "title": "Git, GitHub & Jenkins CI/CD",
-    "category": "Developer Tools",
-    "domain": "github.com",
-    "urls": [
-      "https://github.com/",
-      "https://docs.github.com/en/actions",
-      "https://www.jenkins.io/"
-    ],
-    "description": "Version control workflows, GitHub Actions CI/CD automation pipelines, and Jenkins servers.",
-    "modules": [
-      {
-        "title": "Module 1: Git Version Control Core",
-        "content": "### Git Three Areas\n1. **Working Directory**: Physical modified files on your drive.\n2. **Staging Area (Index)**: Manifest log of changes staged for the next commit.\n3. **Git Directory (Repository)**: Permanent database of commits (blobs, trees, commit graphs)."
-      },
-      {
-        "title": "Module 2: Advanced Git Workflows",
-        "content": "### Rebase vs Merge\n- **Merge**: Creates a new merge commit combining branches history. Preserves exact history.\n- **Rebase**: Moves your commits to the tip of the target branch. Rewrites history for a clean, linear git graph.\n  ```bash\n  git checkout feature\n  git rebase main\n  ```"
-      },
-      {
-        "title": "Module 3: Branching Strategies",
-        "content": "### GitFlow vs Trunk-based\n- **GitFlow**: Multi-branch approach (develop, release, hotfix, master). Better for scheduled releases.\n- **Trunk-Based**: Developers commit directly to a single branch (`main`) using short-lived branches. Better for continuous integration."
-      },
-      {
-        "title": "Module 4: GitHub Actions Pipelines",
-        "content": "### Actions Yaml Setup\n```yaml\nname: Node Linter\non: [push]\njobs:\n  lint:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v3\n      - uses: actions/setup-node@v3\n        with:\n          node-version: 18\n      - run: npm ci\n      - run: npm run lint\n```"
-      },
-      {
-        "title": "Module 5: Build Automation (Jenkins)",
-        "content": "### Jenkinsfile Declarative Pipeline\n```groovy\npipeline {\n    agent any\n    stages {\n        stage('Install') {\n            steps { sh 'npm install' }\n        }\n        stage('Test') {\n            steps { sh 'npm test' }\n        }\n    }\n}\n```"
-      },
-      {
-        "title": "Module 6: Deployment Strategies",
-        "content": "### Zero-Downtime Deployments\n- **Blue-Green Deployment**: Maintain two identical server setups (Blue and Green). Route traffic to Blue. Deploy new code to Green, test it, then switch the router to Green.\n- **Canary Release**: Roll out the update to a small percentage (e.g. 5%) of users first. Monitor error rates before updating the remaining servers."
-      }
-    ]
-  },
-  {
-    "id": "freecodecamp-tutorials",
-    "title": "freeCodeCamp Technical Learning",
-    "category": "Tutorials & Learning",
-    "domain": "freecodecamp.org",
-    "urls": [
-      "https://www.freecodecamp.org/news/devops-skills/",
-      "https://www.freecodecamp.org/news/how-to-learn-backend-development/",
-      "https://www.freecodecamp.org/news/how-to-learn-devops/"
-    ],
-    "description": "Consolidated guidelines on frontend skills, backend paths, and devops roadmaps from freeCodeCamp.",
-    "modules": [
-      {
-        "title": "Module 1: HTML Semantic Coding",
-        "content": "### Semantic Layout Tags\nAvoid structural `<div>` nests. Use semantic HTML tags:\n- `<header>`: Introductory content or navigation.\n- `<nav>`: Set of navigation links.\n- `<main>`: The dominant content of the document.\n- `<article>`: Self-contained independent content.\n- `<section>`: Thematic grouping of content.\n- `<footer>`: Author, copyright, or footer links."
-      },
-      {
-        "title": "Module 2: Responsive CSS Layouts",
-        "content": "### Responsive Layout Checklist\n- **CSS Grid/Flexbox**: Fluid layout structures.\n- **Viewport units**: `vw` (viewport width), `vh` (viewport height).\n- **Media Queries**:\n  ```css\n  @media (max-width: 768px) {\n    .sidebar { display: none; }\n  }\n  ```"
-      },
-      {
-        "title": "Module 3: JS Algorithms & Logic",
-        "content": "### Algorithm Best Practices\nMaster string manipulations, array filtering, recursion, and search:\n```javascript\n// Recursion example: factorial calculation\nfunction factorial(n) {\n  if (n <= 1) return 1;\n  return n * factorial(n - 1);\n}\n```"
-      },
-      {
-        "title": "Module 4: Frontend Framework Roadmaps",
-        "content": "### Frontend Master Path\n1. HTML, CSS, JavaScript basics.\n2. Build responsive layouts without templates.\n3. State management, props, routing (React/Vite).\n4. Fetch APIs and display async payloads."
-      },
-      {
-        "title": "Module 5: Backend & Database Integration",
-        "content": "### Backend Dev Path\n1. Understand client-server communication models (HTTP).\n2. Learn server logic using Node.js & Express.\n3. Establish data schemas using SQL (Postgres) or NoSQL (MongoDB).\n4. Secure endpoints using authentication tokens."
-      },
-      {
-        "title": "Module 6: Security and APIs",
-        "content": "### API Security Checklist\n- Secure backend access using API keys.\n- Prevent denial-of-service queries using rate-limiting middleware.\n- Configure secure CORS origins."
-      }
-    ]
-  },
-  {
-    "id": "smashing-magazine",
-    "title": "Smashing Magazine Engineering Deep Dives",
-    "category": "Tutorials & Learning",
-    "domain": "smashingmagazine.com",
-    "urls": [
-      "https://www.smashingmagazine.com/2020/01/back-end-challenges-2020/",
-      "https://www.smashingmagazine.com/2020/01/back-end-tools-2020/",
-      "https://www.smashingmagazine.com/2020/01/devops-challenges-2020/"
-    ],
-    "description": "Deep-dives into modern toolsets, scalability issues, and performance challenges facing developers.",
-    "modules": [
-      {
-        "title": "Module 1: Critical Rendering Path",
-        "content": "### Critical Rendering Path Steps\n1. **DOM (Document Object Model)**: Parsed HTML tree.\n2. **CSSOM (CSS Object Model)**: Parsed CSS style declarations.\n3. **Render Tree**: Intersection of DOM and CSSOM.\n4. **Layout**: Calculates coordinates for each element.\n5. **Paint**: Fills in pixels on screen."
-      },
-      {
-        "title": "Module 2: Performance Auditing (Lighthouse)",
-        "content": "### Core Web Vitals\n- **LCP (Largest Contentful Paint)**: Loading speed indicator. Ideal: < 2.5s.\n- **FID (First Input Delay)**: Interactivity indicator. Ideal: < 100ms.\n- **CLS (Cumulative Layout Shift)**: Layout stability. Ideal: < 0.1."
-      },
-      {
-        "title": "Module 3: Microservice Architectures",
-        "content": "### Microservice Scalability\nDeconstruct monolithic backends into specialized, independently scalable servers.\n- **API Gateways**: Act as a single entry point for clients, routing queries and handling auth.\n- **Service Mesh**: Manages internal networking between containerized microservices."
-      },
-      {
-        "title": "Module 4: Web Accessibility (a11y)",
-        "content": "### Accessible Web Principles\n- **Semantic elements**: Let screen readers identify controls.\n- **Keyboard navigation**: Tab navigates, Enter triggers buttons.\n- **ARIA attributes**: Provide context for complex elements (`aria-label`, `aria-live`)."
-      },
-      {
-        "title": "Module 5: Responsive Web Design",
-        "content": "### Fluid Grids & Queries\n- **Flexbox & Grid**: Standard layout constructs.\n- **Container Queries**: Shift layouts based on parent element size instead of global viewport width."
-      },
-      {
-        "title": "Module 6: Scalability Challenges",
-        "content": "### Backend Bottlenecks\n- **Database read locks**: Query congestion points.\n- **Memory leaks**: Event listeners left attached in Node server setups."
-      }
-    ]
-  },
-  {
-    "id": "realpython-tutorials",
-    "title": "Real Python Technical References",
-    "category": "Tutorials & Learning",
-    "domain": "realpython.com",
-    "urls": [
-      "https://realpython.com/",
-      "https://realpython.com/learn-python-basics/",
-      "https://realpython.com/primer-on-python-decorators/"
-    ],
-    "description": "Python syntax primers, decorator mechanics, memory/speed profiling, and coding tools from Real Python.",
-    "modules": [
-      {
-        "title": "Module 1: Python Fundamentals",
-        "content": "### Core Collections\n\n- **List**: Mutable, ordered values sequence. `[1, 2, 3]`\n- **Dictionary**: Key-value mappings. `{'name': 'Alice'}`\n- **Tuple**: Immutable ordered values sequence. `(1, 2, 3)`\n- **Set**: Unordered collection of unique items. `{1, 2, 3}`"
-      },
-      {
-        "title": "Module 2: Advanced OOP in Python",
-        "content": "### Dunder Methods (Double Under)\nSpecial methods in Python classes that define custom behaviors:\n```python\nclass Book:\n    def __init__(self, title):\n        self.title = title\n    def __str__(self):\n        return f\"Book: {self.title}\"\n\nmyBook = Book('Python Guide')\nprint(myBook) # Calls __str__ dunder method\n```"
-      },
-      {
-        "title": "Module 3: Functional Python",
-        "content": "### List Comprehensions & Generators\nList comprehensions build collections instantly; generators yield items lazily to save RAM.\n```python\n# List Comprehension\nsquares = [x * x for x in range(10)]\n\n# Generator Expression (RAM efficient)\nsquares_gen = (x * x for x in range(10))\nprint(next(squares_gen)) # 0\nprint(next(squares_gen)) # 1\n```"
-      },
-      {
-        "title": "Module 4: Performance Profiling",
-        "content": "### cProfile usage\nProfile script speed and trace execution:\n```bash\npython -m cProfile -s time my_script.py\n```"
-      },
-      {
-        "title": "Module 5: Web Frameworks (Django/Flask)",
-        "content": "### Minimal Flask App Setup\n```python\nfrom flask import Flask\napp = Flask(__name__)\n\n@app.route('/')\ndef home():\n    return \"Hello World!\"\n\nif __name__ == '__main__':\n    app.run(port=5000)\n```"
-      },
-      {
-        "title": "Module 6: Data Science Core",
-        "content": "### NumPy & Pandas\n- **NumPy**: Matrix computation.\n- **Pandas**: Data structures for table analysis.\n  ```python\n  import pandas as pd\n  df = pd.read_csv('stats.csv')\n  print(df.describe())\n  ```"
-      }
-    ]
-  },
-  {
-    "id": "career-guidance",
-    "title": "Career Portals & Job Market Statistics",
-    "category": "Career & Jobs",
-    "domain": "coursera.org",
-    "urls": [
-      "https://www.coursera.org/articles/a-day-in-the-life-of-a-front-end-developer",
-      "https://www.coursera.org/articles/a-day-in-the-life-of-a-back-end-developer",
-      "https://www.coursera.org/articles/a-day-in-the-life-of-a-devops-engineer"
-    ],
-    "description": "Job scopes, career path roadmaps, and Bureau of Labor Statistics data for software engineering roles.",
-    "modules": [
-      {
-        "title": "Module 1: Software Engineer Role Specs",
-        "content": "### Industry Levels\n- **Junior Developer**: Focuses on implementing clear coding tasks and learning tools.\n- **Mid-level Developer**: Implements complex features, refactors systems, and writes unit tests.\n- **Senior Developer**: Designs system architectures, leads reviews, and defines workflows."
-      },
-      {
-        "title": "Module 2: Frontend Dev Career Path",
-        "content": "### Frontend Career Path\nHTML, CSS, Vanilla JS -> CSS Layouts (Grid/Flexbox) -> React/TypeScript -> State management and build tools -> Unit/E2E testing (Jest/Playwright)."
-      },
-      {
-        "title": "Module 3: Backend Dev Career Path",
-        "content": "### Backend Career Path\nProgramming core -> Server APIs (Node/Express) -> Database modeling (SQL/NoSQL) -> Auth (JWT/Sessions) -> Security hardening -> Cloud servers deployment."
-      },
-      {
-        "title": "Module 4: DevOps Career Path",
-        "content": "### DevOps Career Path\nSystem administration (Linux) -> Scripting (Bash/Python) -> Containerization (Docker) -> Orchestration (Kubernetes) -> Infrastructure as Code (Terraform) -> CI/CD pipelines."
-      },
-      {
-        "title": "Module 5: Job Growth & Salaries (BLS)",
-        "content": "### Industry growth projections (BLS)\nSoftware development roles are projected to grow **25%** over the decade, much faster than the average for all occupations. Median annual wage sits near $127,000 in the US."
-      },
-      {
-        "title": "Module 6: Technical Interview Prep",
-        "content": "### Interview Blueprint\n1. **Data Structures & Algorithms**: Arrays, linked lists, hash tables, sorting.\n2. **System Design**: Scaling, API models, database selections.\n3. **Behavioral Interviews**: Star method (Situation, Task, Action, Result)."
-      }
-    ]
-  },
-  {
-    "id": "cybersecurity-career",
-    "title": "Cybersecurity Pathways (Cyberseek)",
-    "category": "Career & Jobs",
-    "domain": "cyberseek.org",
-    "urls": [
-      "https://www.cyberseek.org/entry-level.html",
-      "https://www.cyberseek.org/heatmap.html",
-      "https://www.cyberseek.org/pathway.html"
-    ],
-    "description": "Vulnerability analysis paths, certification checklists (CISSP, CEH), and workforce heatmaps from Cyberseek.",
-    "modules": [
-      {
-        "title": "Module 1: Career Pathways Heatmap",
-        "content": "### Cybersecurity Supply & Demand\nGrids showing employment metrics, average salaries, and certifications demanded per sub-category."
-      },
-      {
-        "title": "Module 2: Penetration Testing Core",
-        "content": "### Penetration Testing Phases\n1. **Reconnaissance**: Information gathering (Whois, Nmap).\n2. **Scanning**: Active ports scanning (Nessus, Nikto).\n3. **Exploitation**: Injecting payloads (Metasploit).\n4. **Post-Exploitation**: Privilege escalation, data gathering.\n5. **Reporting**: Documenting vulnerability findings."
-      },
-      {
-        "title": "Module 3: Security Operations (SOC)",
-        "content": "### SOC Analyst Role\n- Monitor security event logs (SIEM tools).\n- Handle firewall alarms, isolate suspicious servers, and configure rules."
-      },
-      {
-        "title": "Module 4: Network Auditing (Wireshark)",
-        "content": "### Wireshark packet capture analysis\n- Analyze TCP three-way handshakes (SYN, SYN-ACK, ACK).\n- Track plaintext packets (HTTP, FTP) to find leaked credentials."
-      },
-      {
-        "title": "Module 5: Vulnerability Scanning",
-        "content": "### Scanning Tools\n- **Nessus**: Enterprise vulnerability scanner.\n- **OWASP ZAP**: Open-source web app scanner."
-      },
-      {
-        "title": "Module 6: Security Governance (CISSP/CEH)",
-        "content": "### Certifications Track\n- **Security+**: Baseline fundamentals.\n- **CEH**: Practical scanning and exploitation skills.\n- **CISSP**: Managerial policy and governance."
-      }
-    ]
-  },
-  {
     "id": "mobile-development",
-    "title": "Mobile App Architectures (Apple & Android)",
+    "title": "Mobile App Development",
     "category": "Documentation",
     "domain": "developer.android.com",
     "urls": [
       "https://developer.android.com/docs",
-      "https://developer.android.com/studio",
       "https://developer.apple.com/documentation"
     ],
-    "description": "Native SDKs (Android Room, iOS CoreData), cross-platform mobile compilers (Flutter vs React Native), and tools.",
+    "description": "Kotlin native SDKs, Swift native iOS layout engines, React Native Hermes performance, and Flutter Dart compilation.",
     "modules": [
       {
         "title": "Module 1: Native Android (Kotlin & Room)",
@@ -571,6 +611,42 @@
       {
         "title": "Module 6: Local Storage & Caching",
         "content": "### Secure Storage\n- **iOS Keychain / Android Keystore**: Secure encryption engines for credentials.\n- **SQLite / Hive**: Databases for offline data caching."
+      }
+    ]
+  },
+  {
+    "id": "career-guidance",
+    "title": "Career & Interview Preparation",
+    "category": "Career & Jobs",
+    "domain": "coursera.org",
+    "urls": [
+      "https://www.coursera.org/"
+    ],
+    "description": "Software engineering career levels, resume writing guides, system design mockups, and behavioral templates.",
+    "modules": [
+      {
+        "title": "Module 1: Software Engineer Role Specs",
+        "content": "### Industry Levels\n- **Junior Developer**: Focuses on implementing easy coding tasks and learning tools.\n- **Mid-level Developer**: Implements complex features, refactors systems, and writes unit tests.\n- **Senior Developer**: Designs system architectures, leads reviews, and defines workflows."
+      },
+      {
+        "title": "Module 2: Technical Interview Blueprint",
+        "content": "### Interview Sections\n1. **Coding (Data Structures & Algorithms)**: Arrays, lists, hash maps, trees, recursion, sorting.\n2. **System Design**: Scaling, API designs, databases, cache layers, message queues.\n3. **Behavioral Interviews**: STAR Method (Situation, Task, Action, Result) templates."
+      },
+      {
+        "title": "Module 3: System Design Fundamentals",
+        "content": "### Key Scalability Rules\n- **Load Balancers**: Distribute client queries across app server nodes.\n- **Caching (Redis/Memcached)**: Caches hot values in memory to protect database loads.\n- **Database Scaling**: Read replicas (reads), sharding partitions (writes)."
+      },
+      {
+        "title": "Module 4: Resume Writing Guide",
+        "content": "### Resume Guidelines\n- Focus on accomplishments using action verbs and impact metrics.\n- Keep resumes clean, single-page (unless > 5 years experience), and structured for ATS scans."
+      },
+      {
+        "title": "Module 5: Career Growth and Mentorship",
+        "content": "### Growing in Roles\n- Regularly ask for feedback from peers and seniors.\n- Seek out mentorship opportunities.\n- Document accomplishments and contributions throughout the year."
+      },
+      {
+        "title": "Module 6: High EQ Team Collaboration",
+        "content": "### Emotional Intelligence in Engineering\n- Empathy: Understand constraints and difficulties faced by peers.\n- Active Listening: Listen to build collective solutions during reviews instead of defending opinions.\n- Conflict Resolution: Address disagreements constructively and align on standards."
       }
     ]
   }
