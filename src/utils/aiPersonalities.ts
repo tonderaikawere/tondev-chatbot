@@ -576,6 +576,31 @@ function isFuzzyMatch(tokenA: string, tokenB: string): boolean {
   return distance <= maxAllowedTypos;
 }
 
+// Developer abbreviations and synonyms dictionary for offline search resolving
+const ALIAS_MAP: Record<string, string[]> = {
+  'js': ['javascript', 'ecmascript'],
+  'ts': ['typescript'],
+  'py': ['python'],
+  'k8s': ['kubernetes'],
+  'tf': ['terraform'],
+  'db': ['database', 'databases', 'sql', 'nosql', 'postgresql', 'mongodb'],
+  'docker': ['container', 'containers', 'containerization'],
+  'aws': ['cloud', 'amazon'],
+  'gcp': ['cloud', 'google'],
+  'azure': ['cloud', 'microsoft'],
+  'ml': ['machine', 'learning', 'ai', 'artificial', 'intelligence'],
+  'ai': ['machine', 'learning', 'neural', 'llm', 'transformer'],
+  'doc': ['documentation', 'reference', 'guide', 'manual'],
+  'docs': ['documentation', 'reference', 'guide', 'manual'],
+  'sec': ['security', 'owasp', 'vulnerability', 'attack'],
+  'auth': ['authentication', 'authorization', 'login', 'jwt', 'token'],
+  'network': ['networking', 'internet', 'vpc', 'subnet', 'ports'],
+  'react': ['nextjs', 'next.js', 'rsc', 'jsx'],
+  'next': ['nextjs', 'next.js', 'routing', 'app'],
+  'springboot': ['spring', 'boot', 'kotlin', 'java'],
+  'rails': ['ruby', 'ror', 'activejob', 'activerecord']
+};
+
 // Stemming and fuzzy matching combinator
 function isWordMatch(tokenA: string, tokenB: string): boolean {
   if (tokenA === tokenB) return true;
@@ -585,6 +610,13 @@ function isWordMatch(tokenA: string, tokenB: string): boolean {
   if (tokenA.length >= 6 && tokenB.length >= 6) {
     if (tokenA.substring(0, 6) === tokenB.substring(0, 6)) return true;
   }
+
+  // Check alias mappings
+  for (const [key, synonyms] of Object.entries(ALIAS_MAP)) {
+    if (tokenA === key && synonyms.includes(tokenB)) return true;
+    if (tokenB === key && synonyms.includes(tokenA)) return true;
+  }
+  
   return false;
 }
 
