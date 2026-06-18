@@ -897,7 +897,113 @@ ${bestGKMatch.answer}
     }
   }
 
-  // Fallback if no matching topic
+  // --- GLOBAL SEARCH ENGINE FALLBACK ---
+  // If no match was found in the current mentor's database or general knowledge,
+  // query all available offline databases (all 8 mentors, student notes, general chat, and 216 course modules).
+  
+  const allKBs = [
+    { name: "Cybersecurity", kb: cybersecurityKB },
+    { name: "Frontend Development", kb: frontendKB },
+    { name: "Backend Development", kb: backendKB },
+    { name: "Fullstack Development", kb: fullstackKB },
+    { name: "Python Programming", kb: pythonKB },
+    { name: "Mobile Development", kb: mobileKB },
+    { name: "Cloud Operations", kb: cloudopsKB },
+    { name: "Full-Stack Course Notes", kb: studentNotesKB },
+    { name: "General Knowledge", kb: generalKnowledgeKB }
+  ];
+
+  let bestGlobalMatch: any = null;
+  let bestGlobalScore = 0;
+  let globalSource = "";
+
+  for (const item of allKBs) {
+    const currentKb = item.kb && (item.kb as any).knowledgeBase 
+      ? (item.kb as any).knowledgeBase 
+      : item.kb;
+    if (!currentKb) continue;
+
+    const concepts = currentKb.coreConcepts || [];
+    const faqs = currentKb.faqs || [];
+    const combined = [...concepts, ...faqs];
+
+    for (const concept of combined) {
+      let score = 0;
+      const question = (concept.question || "").toLowerCase();
+      const questionTokens = question.split(/\W+/).filter(Boolean);
+
+      for (const token of significantTokens) {
+        if (questionTokens.some(qToken => isWordMatch(token, qToken))) {
+          score += 10;
+        } else if (question.includes(token)) {
+          score += 3;
+        }
+      }
+
+      if (score > bestGlobalScore) {
+        bestGlobalScore = score;
+        bestGlobalMatch = concept;
+        globalSource = item.name;
+      }
+    }
+  }
+
+  // Search all 216 modules in the expanded offline resources
+  let bestModuleMatch: any = null;
+  let bestModuleResource: any = null;
+  let bestModuleScore = 0;
+
+  for (const res of offlineResources) {
+    if (!res.modules) continue;
+    for (const mod of res.modules) {
+      let score = 0;
+      const titleLower = mod.title.toLowerCase();
+      const contentLower = mod.content.toLowerCase();
+      const resTitleLower = res.title.toLowerCase();
+
+      for (const token of significantTokens) {
+        if (titleLower.includes(token)) {
+          score += 15; // High score if keyword matches module title
+        }
+        if (resTitleLower.includes(token)) {
+          score += 5;  // Medium score if keyword matches course name
+        }
+        if (contentLower.includes(token)) {
+          score += 2;  // Low score if keyword matches body text
+        }
+      }
+
+      if (score > bestModuleScore) {
+        bestModuleScore = score;
+        bestModuleMatch = mod;
+        bestModuleResource = res;
+      }
+    }
+  }
+
+  // Evaluate the best match found globally
+  if (bestGlobalMatch && bestGlobalScore >= 8 && bestGlobalScore >= bestModuleScore) {
+    return `🧠 **Global Offline Search Engine**
+
+**Question**: ${bestGlobalMatch.question}
+**Source**: ${globalSource}
+
+${bestGlobalMatch.answer}
+
+---
+*Retrieved from local offline ${globalSource} files.*`;
+  }
+
+  if (bestModuleMatch && bestModuleScore >= 8) {
+    return `📚 **Offline Course Guide: ${bestModuleResource.title} - ${bestModuleMatch.title}**
+
+${bestModuleMatch.content}
+
+---
+*Retrieved from the offline course library.*`;
+  }
+
+  // Fallback if no matching topic is found anywhere
   let available = [];
   if (kb.coreConcepts) available = available.concat(kb.coreConcepts.map((c: any) => c.question));
   if (kb.faqs) available = available.concat(kb.faqs.map((f: any) => f.question));
