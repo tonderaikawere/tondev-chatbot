@@ -138,15 +138,15 @@ export function retrieveRAGContext(message: string, kb: any): string {
   if (kb.coreConcepts && Array.isArray(kb.coreConcepts)) {
     for (const concept of kb.coreConcepts) {
       let score = 0;
-      const question = concept.question.toLowerCase();
-      const answer = concept.answer.toLowerCase();
+      const question = (concept.question || '').toLowerCase();
+      const answer = (concept.answer || concept.description || '').toLowerCase();
       for (const token of queryTokens) {
         if (question.includes(token)) score += 3;
         if (answer.includes(token)) score += 1;
       }
       if (score > 0) {
         matchedItems.push({
-          content: `Concept: ${concept.question}\nAnswer: ${concept.answer}`,
+          content: `Concept: ${concept.question}\nAnswer: ${concept.answer || concept.description || ''}`,
           score
         });
       }
@@ -157,15 +157,15 @@ export function retrieveRAGContext(message: string, kb: any): string {
   if (kb.faqs && Array.isArray(kb.faqs)) {
     for (const faq of kb.faqs) {
       let score = 0;
-      const question = faq.question.toLowerCase();
-      const answer = faq.answer.toLowerCase();
+      const question = (faq.question || '').toLowerCase();
+      const answer = (faq.answer || faq.description || '').toLowerCase();
       for (const token of queryTokens) {
         if (question.includes(token)) score += 3;
         if (answer.includes(token)) score += 1;
       }
       if (score > 0) {
         matchedItems.push({
-          content: `FAQ: ${faq.question}\nAnswer: ${faq.answer}`,
+          content: `FAQ: ${faq.question}\nAnswer: ${faq.answer || faq.description || ''}`,
           score
         });
       }
@@ -176,7 +176,7 @@ export function retrieveRAGContext(message: string, kb: any): string {
   if (kb.codeExamples && Array.isArray(kb.codeExamples)) {
     for (const ex of kb.codeExamples) {
       let score = 0;
-      const name = ex.name.toLowerCase();
+      const name = (ex.name || '').toLowerCase();
       const desc = (ex.description || '').toLowerCase();
       for (const token of queryTokens) {
         if (name.includes(token)) score += 3;
@@ -668,7 +668,7 @@ ${modulesContent}
     if (kb.coreConcepts && Array.isArray(kb.coreConcepts)) {
       for (const concept of kb.coreConcepts) {
         let score = 0;
-        const question = concept.question.toLowerCase();
+        const question = (concept.question || '').toLowerCase();
         const questionTokens = question.split(/\W+/).filter(Boolean);
         
         for (const token of significantTokens) {
@@ -690,7 +690,7 @@ ${modulesContent}
     if (kb.faqs && Array.isArray(kb.faqs)) {
       for (const faq of kb.faqs) {
         let score = 0;
-        const question = faq.question.toLowerCase();
+        const question = (faq.question || '').toLowerCase();
         const questionTokens = question.split(/\W+/).filter(Boolean);
         
         for (const token of significantTokens) {
@@ -742,7 +742,7 @@ ${modulesContent}
       if (gk.coreConcepts && Array.isArray(gk.coreConcepts)) {
         for (const concept of gk.coreConcepts) {
           let score = 0;
-          const question = concept.question.toLowerCase();
+          const question = (concept.question || '').toLowerCase();
           const questionTokens = question.split(/\W+/).filter(Boolean);
           
           for (const token of significantTokens) {
@@ -763,7 +763,7 @@ ${modulesContent}
       if (gk.faqs && Array.isArray(gk.faqs)) {
         for (const faq of gk.faqs) {
           let score = 0;
-          const question = faq.question.toLowerCase();
+          const question = (faq.question || '').toLowerCase();
           const questionTokens = question.split(/\W+/).filter(Boolean);
           
           for (const token of significantTokens) {
@@ -1177,7 +1177,7 @@ export async function routeAndGenerateAIResponse(
       if (kb) {
         if (kb.coreConcepts && Array.isArray(kb.coreConcepts)) {
           for (const concept of kb.coreConcepts) {
-            const question = concept.question.toLowerCase();
+            const question = (concept.question || '').toLowerCase();
             const questionTokens = question.split(/\W+/).filter(Boolean);
             
             for (const token of significantTokens) {
@@ -1191,7 +1191,7 @@ export async function routeAndGenerateAIResponse(
 
         if (kb.faqs && Array.isArray(kb.faqs)) {
           for (const faq of kb.faqs) {
-            const question = faq.question.toLowerCase();
+            const question = (faq.question || '').toLowerCase();
             const questionTokens = question.split(/\W+/).filter(Boolean);
             
             for (const token of significantTokens) {
