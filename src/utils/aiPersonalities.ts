@@ -983,10 +983,9 @@ ${bestGKMatch.answer}
 
   // Evaluate the best match found globally
   if (bestGlobalMatch && bestGlobalScore >= 8 && bestGlobalScore >= bestModuleScore) {
-    return `🧠 **Global Offline Search Engine**
+    return `> 🧠 **Source**: Local Offline Database (${globalSource})
 
-**Question**: ${bestGlobalMatch.question}
-**Source**: ${globalSource}
+**${bestGlobalMatch.question}**
 
 ${bestGlobalMatch.answer}
 
@@ -995,7 +994,9 @@ ${bestGlobalMatch.answer}
   }
 
   if (bestModuleMatch && bestModuleScore >= 8) {
-    return `📚 **Offline Course Guide: ${bestModuleResource.title} - ${bestModuleMatch.title}**
+    return `> 📚 **Source**: Offline Course Library (${bestModuleResource.title})
+
+### ${bestModuleMatch.title}
 
 ${bestModuleMatch.content}
 
