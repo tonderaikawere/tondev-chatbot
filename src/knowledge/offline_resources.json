@@ -940,5 +940,366 @@
         "content": "### Background Job Queues\nDelegate heavy tasks (sending emails, image processing) to background workers:\n- **Jobs**: PHP classes representing background tasks, executing a `handle()` method.\n  ```php\n  SendWelcomeEmail::dispatch($user); // Pushes job to queue\n  ```\n- **Queue Workers**: Background CLI daemon executing queued items:\n  ```bash\n  php artisan queue:work\n  ```\n- **Task Scheduler**: Replaces system crontab listings, managed inside `routes/console.php`:\n  ```php\n  Schedule::command('emails:send')->daily();\n  ```"
       }
     ]
+  },
+  {
+    "id": "ruby-rails-docs",
+    "title": "Ruby & Ruby on Rails guide",
+    "category": "Documentation",
+    "domain": "rubyonrails.org",
+    "urls": [
+      "https://rubyonrails.org/"
+    ],
+    "description": "Ruby dynamic metaprogramming, Rails MVC routing engines, Active Record database schemas, and background job systems.",
+    "modules": [
+      {
+        "title": "Module 1: Ruby OOP & Metaprogramming",
+        "content": "### Ruby Blocks, Procs & Lambdas\n- **Blocks**: Anonymous chunks of code passed to methods, executed using the `yield` keyword.\n- **Procs**: Objects wrapping blocks of code, allowing storage and reuse.\n- **Lambdas**: Strict Procs enforcing argument counts and returning flow locally.\n  ```ruby\n  my_lambda = ->(x) { x * 2 }\n  puts my_lambda.call(5) # 10\n  ```\n\n### Metaprogramming & Dynamic Code\nRuby classes can alter themselves dynamically during runtime using hooks like `method_missing` and `define_method`."
+      },
+      {
+        "title": "Module 2: Rails MVC Architecture & Routing",
+        "content": "### Rails Router Engine (`config/routes.rb`)\nDeclares resource endpoints mapping HTTP queries to Controller actions:\n```ruby\nRails.application.routes.draw do\n  resources :products do\n    resources :reviews, only: [:create, :destroy]\n  end\nend\n```\n- Generates dynamic helper paths (e.g. `product_reviews_path(product)`).\n- **Filters**: Run pre/post actions using controller callback wrappers (e.g. `before_action :authenticate_user!`)."
+      },
+      {
+        "title": "Module 3: Active Record ORM & Migrations",
+        "content": "### Database Mapping Rules\nActive Record maps database rows to Ruby classes automatically:\n```ruby\nclass User < ApplicationRecord\n  has_many :posts, dependent: :destroy\n  validates :email, presence: true, uniqueness: true\n  \n  before_save :normalize_email\n  \n  private\n  def normalize_email\n    self.email = email.downcase.strip\n  end\nend\n```\n- Supports transactional callbacks and automated relationship lookups."
+      },
+      {
+        "title": "Module 4: Rails Action Controller & Action View",
+        "content": "### Controllers & Rendering pipelines\nControllers process requests and compile variables for view templates:\n```ruby\nclass ProductsController < ApplicationController\n  def index\n    @products = Product.where(active: true) # Available in view\n    respond_to do |format|\n      format.html # renders index.html.erb\n      format.json { render json: @products }\n    end\n  end\nend\n```\n- Utilizes **Blade-like** ERB layouts containing embedded Ruby tags (`<%= %>`)."
+      },
+      {
+        "title": "Module 5: Background Jobs & Active Job",
+        "content": "### Asynchronous Processing with Sidekiq\nActive Job abstracts queue runners, allowing easy background execution:\n```ruby\nclass SendInvoiceJob < ApplicationJob\n  queue_as :default\n\n  def perform(user_id)\n    user = User.find(user_id)\n    UserMailer.invoice(user).deliver_now\n  end\nend\n```\nTrigger jobs asynchronously: `SendInvoiceJob.perform_later(user.id)`."
+      },
+      {
+        "title": "Module 6: Rails Testing & RSpec Framework",
+        "content": "### Writing BDD specs using RSpec\nDescribe model behaviors and controller responses cleanly:\n```ruby\nRSpec.describe User, type: :model do\n  it \"is invalid without an email\" do\n    user = User.new(email: nil)\n    expect(user).to_not be_valid\n  end\nend\n```\n- **FactoryBot**: Generates mock records dynamically for tests, avoiding SQL script duplicates."
+      }
+    ]
+  },
+  {
+    "id": "kotlin-spring-docs",
+    "title": "Kotlin & Spring Boot guide",
+    "category": "Documentation",
+    "domain": "spring.io",
+    "urls": [
+      "https://spring.io/projects/spring-boot"
+    ],
+    "description": "Kotlin language null-safety, Spring Boot autoconfigurations, REST controller architectures, and Spring Security setups.",
+    "modules": [
+      {
+        "title": "Module 1: Kotlin Language Features & Coroutines",
+        "content": "### Kotlin Safe Call & Null Checking\nKotlin compile checks null errors, avoiding null-pointer-exceptions:\n```kotlin\nval name: String? = null // Nullable type\nprintln(name?.length ?: 0) // Elvis operator defaults to 0\n```\n- **Coroutines**: Lightweight concurrency engine executing non-blocking suspend functions.\n- **Data Classes**: Auto-generates getters, setters, `equals()`, `hashCode()`, and `toString()` methods."
+      },
+      {
+        "title": "Module 2: Spring Boot Starter Configurations",
+        "content": "### Autoconfiguration Engine\nSpring Boot simplifies dependency configurations by automatically resolving bean packages based on classpath indicators (e.g. including `spring-boot-starter-data-jpa` registers datasource connections).\n- Configure environment properties inside `src/main/resources/application.yml`.\n- Use `@SpringBootApplication` to bootstrap configurations."
+      },
+      {
+        "title": "Module 3: Spring Web MVC REST API Controllers",
+        "content": "### Writing REST endpoints\nMap API paths and bind requests to Kotlin classes:\n```kotlin\n@RestController\n@RequestMapping(\"/api/products\")\nclass ProductController(private val service: ProductService) {\n\n    @GetMapping(\"/{id}\")\n    fun getProduct(@PathVariable id: Long): ResponseEntity<Product> {\n        val product = service.findById(id)\n        return ResponseEntity.ok(product)\n    }\n}\n```"
+      },
+      {
+        "title": "Module 4: Spring Data JPA & Hibernate mapping",
+        "content": "### Persistence Operations\nCreate repository interfaces to query databases automatically without writing raw SQL:\n```kotlin\n@Entity\n@Table(name = \"customers\")\ndata class Customer(\n    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: Long = 0,\n    val email: String\n)\n\ninterface CustomerRepository : JpaRepository<Customer, Long> {\n    fun findByEmail(email: String): Customer?\n}\n```"
+      },
+      {
+        "title": "Module 5: Spring Security & JWT Filter Chains",
+        "content": "### Securing REST Controllers\nIntercept requests using filter chains to authenticate users and check roles:\n```kotlin\n@Bean\nfun filterChain(http: HttpSecurity): SecurityFilterChain {\n    http.csrf { it.disable() }\n        .authorizeHttpRequests { auth ->\n            auth.requestMatchers(\"/api/auth/**\").permitAll()\n                .anyRequest().authenticated()\n        }\n        .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }\n    return http.build()\n}\n```"
+      },
+      {
+        "title": "Module 6: Actuator Metrics & Testing",
+        "content": "### Health Checks & Auditing\n- **Actuator**: Exposes JSON endpoints reporting server health, database connectivity, and JVM memory utilization.\n- **MockMvc Tests**: Test API routes without launching actual web servers:\n  ```kotlin\n  @SpringBootTest\n  @AutoConfigureMockMvc\n  class ApiTest @Autowired constructor(val mockMvc: MockMvc) {\n      @Test\n      fun getHealth() {\n          mockMvc.perform(get(\"/actuator/health\")).andExpect(status().isOk)\n      }\n  }\n  ```"
+      }
+    ]
+  },
+  {
+    "id": "graphql-docs",
+    "title": "GraphQL & Apollo APIs guide",
+    "category": "Documentation",
+    "domain": "graphql.org",
+    "urls": [
+      "https://graphql.org/"
+    ],
+    "description": "GraphQL schema type systems, resolver contexts, Apollo client caching configurations, and N+1 query DataLoader decoders.",
+    "modules": [
+      {
+        "title": "Module 1: Schema Definitions & Types",
+        "content": "### Strongly-Typed APIs\nGraphQL defines API endpoints using a Schema Definition Language (SDL):\n```graphql\ntype User {\n  id: ID!\n  name: String!\n  email: String\n  posts(limit: Int): [Post!]!\n}\n\ntype Query {\n  user(id: ID!): User\n}\n```\n- **!** signifies non-nullable properties.\n- Clients fetch only required fields, preventing **over-fetching**."
+      },
+      {
+        "title": "Module 2: Resolver Functions & Context",
+        "content": "### Backend Execution Model\nResolvers compile values for schema fields. They receive four parameters:\n- `parent`: Result of the parent resolver.\n- `args`: Parameters passed in query (e.g. `id`).\n- `context`: Shared request state (e.g., current user, DB connections).\n- `info`: AST query parameters.\n```javascript\nconst resolvers = {\n  Query: {\n    user: async (_, { id }, { db }) => db.users.find(id)\n  }\n};\n```"
+      },
+      {
+        "title": "Module 3: Apollo Client Cache Mechanics",
+        "content": "### React Client Integrations\nQuery and mutate GraphQL endpoints inside React using hooks:\n```javascript\nimport { useQuery, gql } from '@apollo/client';\n\nconst GET_USER = gql`\n  query GetUser($id: ID!) {\n    user(id: $id) { name }\n  }\n`;\n// useQuery caches queries locally in memory\nconst { data, loading } = useQuery(GET_USER, { variables: { id: \"1\" } });\n```"
+      },
+      {
+        "title": "Module 4: Advanced Schema: Interfaces & Unions",
+        "content": "### Polymorphic Types\n- **Interfaces**: Define common fields that other object types must inherit.\n- **Unions**: Allow fields to return different object types:\n  ```graphql\n  union SearchResult = Post | Author\n  \n  query Search($text: String!) {\n    search(q: $text) {\n      ... on Post { title }\n      ... on Author { name }\n    }\n  }\n  ```"
+      },
+      {
+        "title": "Module 5: N+1 DB Query Problem & DataLoader",
+        "content": "### Solving Database Query Cascades\nIf a query fetches 10 users and their posts, naive resolvers run 1 query for users, then 10 separate queries for each user's posts (N+1 queries).\n- **DataLoader**: A utility library that batches and caches database requests within a single request frame:\n  ```javascript\n  // DataLoader batches post queries to a single: SELECT * FROM posts WHERE user_id IN (1..10)\n  const postsLoader = new DataLoader(keys => batchGetPostsForUsers(keys));\n  ```"
+      },
+      {
+        "title": "Module 6: GraphQL Subscriptions & WebSockets",
+        "content": "### Real-Time Event Streams\nSubscriptions utilize WebSockets to push live data updates from server to client:\n```graphql\nsubscription OnMessageAdded {\n  messageAdded(chatId: \"42\") { text sender }\n}\n```\n- Triggered on server mutations using publisher utilities (e.g. `pubsub.publish('MSG_ADDED', { messageAdded: msg })`)."
+      }
+    ]
+  },
+  {
+    "id": "nextjs-advanced-docs",
+    "title": "Next.js Advanced App Router",
+    "category": "Documentation",
+    "domain": "nextjs.org",
+    "urls": [
+      "https://nextjs.org/"
+    ],
+    "description": "Next.js Server Component boundaries, parallel routes, Server Actions form hooks, PPR, and Core Web Vitals optimizations.",
+    "modules": [
+      {
+        "title": "Module 1: Server Components Architecture",
+        "content": "### Client-Server Component Boundaries\n- **Server Components (Default)**: Rendered on the server. Code files are not sent to browser bundle. No access to hooks or event listeners.\n- **Client Components**: Declared with `\"use client\"`. Support hooks (`useState`, `useEffect`) and DOM event bindings.\n\n### Serializing Props\nWhen passing data from a Server Component to a Client Component, props must be JSON serializable. Databases instances or class models cannot be passed directly."
+      },
+      {
+        "title": "Module 2: Routing, Layouts & Parallel Slots",
+        "content": "### File-system Routing configurations\n- **Layouts**: Wrap matching sub-pages, preserving state during page traversals.\n- **Parallel Routes**: Render multiple pages simultaneously inside the same layout using slots (e.g. `@analytics` and `@team` mapping to `layout.tsx` parameters).\n- **Intercepting Routes**: Load route paths inside modals on the active page without changing page background content."
+      },
+      {
+        "title": "Module 3: Server Actions & Form State",
+        "content": "### Writing Server Actions\nSecure RPC functions executing on server, called directly from client forms:\n```javascript\n// app/actions.ts\n'use server';\n\nexport async function createComment(formData: FormData) {\n  const text = formData.get('comment');\n  await db.save(text);\n  revalidatePath('/blog'); // Clear server cache and Hydrate client UI\n}\n```\n- Bind actions inside forms: `<form action={createComment}>`."
+      },
+      {
+        "title": "Module 4: PPR & Hybrid Rendering Strategies",
+        "content": "### Next Rendering Engine Configurations\n- **SSR (Server-Side Rendering)**: Generates HTML on each HTTP query.\n- **SSG (Static Site Generation)**: Pre-compiles static pages during build steps.\n- **Partial Prerendering (PPR)**: Combines static and dynamic rendering. The static page shell loads instantly, while dynamic segments are streamed in as Suspense fallback placeholders resolve."
+      },
+      {
+        "title": "Module 5: Middleware & Edge runtime routing",
+        "content": "### Request Interceptor Middleware\nRun code before requests complete, resolving rewrites, redirects, and cookies:\n```javascript\n// middleware.ts\nimport { NextResponse } from 'next/server';\nimport type { NextRequest } from 'next/server';\n\nexport function middleware(request: NextRequest) {\n  const token = request.cookies.get('token');\n  if (!token && request.nextUrl.pathname.startsWith('/dashboard')) {\n    return NextResponse.redirect(new URL('/login', request.url));\n  }\n}\n```"
+      },
+      {
+        "title": "Module 6: Performance & Web Vitals Optimization",
+        "content": "### Caching & Image Helpers\n- **Next Image**: Automatically resizes image sizes, sets WebP conversion, and prevents layout shifts (CLS).\n- **Font Optimization**: Downloads Google Fonts at build time to host them locally, preventing font flashes.\n- **Caching**: Next.js aggressive caching layers: Request Memoization, Data Cache, Full Route Cache, Router Cache."
+      }
+    ]
+  },
+  {
+    "id": "ai-ml-docs",
+    "title": "AI & Machine Learning Engineering",
+    "category": "Tutorials & Learning",
+    "domain": "pytorch.org",
+    "urls": [
+      "https://pytorch.org/",
+      "https://tensorflow.org/"
+    ],
+    "description": "PyTorch tensor operations, transformer self-attention calculations, RAG vector chunking, and HNSW index partitioning.",
+    "modules": [
+      {
+        "title": "Module 1: ML Fundamentals & Linear Algebra",
+        "content": "### Core Mathematics for ML\n- **Vectors & Matrices**: Data arrays representing inputs. Matrix multiplication forms the basis of neural layers.\n- **Supervised Learning**: Model trains on labeled datasets (e.g. predicting house prices based on features).\n- **Gradient Descent**: Optimization algorithm adjusting network weights to minimize prediction losses."
+      },
+      {
+        "title": "Module 2: PyTorch Neural Network Basics",
+        "content": "### Building Sequential Models\nDefine layers and execute forward execution pipelines:\n```python\nimport torch\nimport torch.nn as nn\n\nclass Classifier(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.network = nn.Sequential(\n            nn.Linear(28 * 28, 128), # Input layer\n            nn.ReLU(),              # Activation function\n            nn.Linear(128, 10)      # Output layer\n        )\n    def forward(self, x):\n        return self.network(x)\n```"
+      },
+      {
+        "title": "Module 3: NLP & Transformer Attention Model",
+        "content": "### Transformer Architecture\nTransformers process entire texts concurrently, replacing sequential RNNs:\n- **Self-Attention**: Computes correlation weights between all words in a sentence to capture semantic context.\n- **Softmax Scale**:\n  $$\\text{Attention}(Q, K, V) = \\text{softmax}\\left(\\frac{QK^T}{\\sqrt{d_k}}\\right)V$$\n- **Query, Key, Value (Q, K, V)**: Vectors mapping relationship properties."
+      },
+      {
+        "title": "Module 4: Large Language Models (LLMs) & Configurations",
+        "content": "### Generation Configuration Settings\nParameters regulating how LLM decoders select output tokens:\n- **Temperature**: Controls randomness. Higher temperature = creative, lower = deterministic.\n- **Top-K**: Restricts selection to the top K most probable tokens.\n- **Top-P (Nucleus Sampling)**: Restricts selection to tokens whose cumulative probability exceeds P."
+      },
+      {
+        "title": "Module 5: RAG Data Chunking Strategies",
+        "content": "### Optimizing Context Retrieval\nChunking documents is critical to fit text within context windows:\n- **Fixed Size Chunking**: Split text at exact character boundaries (e.g., 500 characters). Can break sentences.\n- **Recursive Character Chunking**: Splits at paragraphs, then sentences, then words to keep semantic blocks together.\n- **Overlap**: Include overlap boundaries (e.g., 50 characters) to preserve context continuity."
+      },
+      {
+        "title": "Module 6: Vector Databases & HNSW Search",
+        "content": "### High-Speed Dimensional Search\nVector search computes cosine distances across thousands of dimensions:\n- **Flat Index**: Computes distances across *all* vectors. Slow, exact.\n- **HNSW (Hierarchical Navigable Small World)**: Builds multi-layered graphs for Approximate Nearest Neighbor (ANN) search. Extremely fast.\n- **Metadata Filters**: Restrict searches to specific categories/tenants."
+      }
+    ]
+  },
+  {
+    "id": "web3-solidity-docs",
+    "title": "Web3 & Solidity smart Contracts",
+    "category": "Documentation",
+    "domain": "soliditylang.org",
+    "urls": [
+      "https://soliditylang.org/"
+    ],
+    "description": "Solidity smart contract visibility modifiers, gas optimizations, ERC-20 token standards, and Hardhat test compiler tools.",
+    "modules": [
+      {
+        "title": "Module 1: Blockchain Fundamentals & Cryptography",
+        "content": "### Distributed Consensus Systems\n- **Blockchain**: Chain of cryptographically linked blocks containing verified transactions.\n- **Consensus**: Algorithms confirming ledger states (e.g. Proof of Work, Proof of Stake).\n- **Public-Private Keys**: Public keys act as wallet addresses; private keys sign transactions."
+      },
+      {
+        "title": "Module 2: Solidity Smart Contract Basics",
+        "content": "### Standard Contract Layout\nDeploy code directly to the Ethereum Virtual Machine (EVM):\n```solidity\n// SPDX-License-Identifier: MIT\npragma solidity ^0.8.20;\n\ncontract SimpleStorage {\n    uint256 private data;\n\n    function set(uint256 x) public {\n        data = x;\n    }\n\n    function get() public view returns (uint256) {\n        return data;\n    }\n}\n```"
+      },
+      {
+        "title": "Module 3: Security & Gas Optimization Rules",
+        "content": "### Reentrancy Attack Defense\nReentrancy happens when a contract sends funds to a malicious contract before updating its state, allowing the attacker to recursively call the withdraw function:\n- **Defense**: Implement checks-effects-interactions patterns or use ReentrancyGuard modifiers.\n- **Gas**: Optimize storage layouts by packing variables and using memory arrays instead of state variables."
+      },
+      {
+        "title": "Module 4: Token Standards (ERC-20 & ERC-721)",
+        "content": "### Token Contracts\n- **ERC-20**: Standard interface for fungible (identical) tokens (e.g. USDC).\n- **ERC-721**: Standard for Non-Fungible Tokens (NFTs) representing unique asset ownership.\n- **OpenZeppelin**: Production-grade, pre-audited base contract implementations."
+      },
+      {
+        "title": "Module 5: Hardhat compiling & Test Environments",
+        "content": "### Developer Toolchains\nHardhat compiles and tests smart contracts locally:\n- **Hardhat Config**: Configure local network ports, compilers, and infura nodes.\n- **Solidity Testing**: Write tests in JS/TS using mocha and chai:\n  ```javascript\n  const { expect } = require(\"chai\");\n  const { ethers } = require(\"hardhat\");\n  // deploy and assert state...\n  ```"
+      },
+      {
+        "title": "Module 6: Client Web3 Integrations (Ethers.js)",
+        "content": "### Connecting Wallets in React\nEthers.js translates browser provider queries to smart contract invocations:\n```javascript\nimport { ethers } from 'ethers';\n\nconst provider = new ethers.BrowserProvider(window.ethereum);\nconst signer = await provider.getSigner();\nconst contract = new ethers.Contract(address, abi, signer);\nconst tx = await contract.set(100);\nawait tx.wait(); // Wait for block confirmation\n```"
+      }
+    ]
+  },
+  {
+    "id": "svelte-sveltekit-docs",
+    "title": "Svelte & SvelteKit reference",
+    "category": "Documentation",
+    "domain": "svelte.dev",
+    "urls": [
+      "https://svelte.dev/"
+    ],
+    "description": "Svelte compiler reactivity declarations, store setups, SvelteKit dynamic folder routes, and form actions.",
+    "modules": [
+      {
+        "title": "Module 1: Svelte Reactivity Model",
+        "content": "### No Virtual DOM Overhead\nSvelte is a compiler. It compiles components down to surgical DOM updates during build time, bypassing runtime Virtual DOM diffs.\n- **Reactivity**: Automatically triggered by assignments (`=`):\n  ```html\n  <script>\n    let count = 0;\n    // Reactive declaration ($:) updates when count shifts\n    $: doubled = count * 2;\n  </script>\n  <button on:click={() => count++}>Count: {count}</button>\n  ```"
+      },
+      {
+        "title": "Module 2: Component Props & Custom Events",
+        "content": "### Layout & Prop Syntax\n- **Props**: Declared using the `export` keyword:\n  ```html\n  <script>\n    export let title = \"Default Title\";\n  </script>\n  ```\n- **Events Dispatcher**: Send events up to parent nodes:\n  ```javascript\n  import { createEventDispatcher } from 'svelte';\n  const dispatch = createEventDispatcher();\n  dispatch('save', data);\n  ```"
+      },
+      {
+        "title": "Module 3: SvelteKit Directory Routing",
+        "content": "### File-Based Routing System\n- **src/routes/**: Directory path mappings (e.g. `src/routes/about/+page.svelte` maps to `/about`).\n- **+layout.svelte**: UI shell layouts wrapping nested sub-pages.\n- **+page.js / +page.server.js**: Contain `load()` hooks to fetch data before page rendering."
+      },
+      {
+        "title": "Module 4: SvelteKit Form Actions & Enhancements",
+        "content": "### Form Actions Engine\nSubmit forms to server endpoints without writing complex API routes:\n```html\n<!-- +page.svelte -->\n<form method=\"POST\" action=\"?/login\">\n  <input name=\"email\">\n  <button>Login</button>\n</form>\n```\nServer handlers in `+page.server.js`:\n```javascript\nexport const actions = {\n  login: async ({ request }) => {\n    const data = await request.formData();\n    // process login...\n  }\n};\n```"
+      },
+      {
+        "title": "Module 5: Server-Side Rendering Hydrations",
+        "content": "### Rendering Options\n- **SSR (Server-Side Rendering)**: SvelteKit compiles pages to HTML on server, hydratng them with JS in the browser.\n- **Prerendering**: Generates static pages at build time.\n- **Adapters**: Adapters target hosting platforms during build (e.g. `@sveltejs/adapter-vercel` or `@sveltejs/adapter-static`)."
+      },
+      {
+        "title": "Module 6: Svelte Global Stores Setup",
+        "content": "### Reactive Global State\nStores manage reactive state outside components:\n```javascript\nimport { writable } from 'svelte/store';\n\nexport const themeStore = writable('dark');\n```\nConsume store values inside components using the `$` prefix:\n```html\n<script>\n  import { themeStore } from './store.js';\n</script>\n<main class={$themeStore}>App</main>\n```"
+      }
+    ]
+  },
+  {
+    "id": "fastapi-docs",
+    "title": "FastAPI & Async Python guide",
+    "category": "Documentation",
+    "domain": "fastapi.tiangolo.com",
+    "urls": [
+      "https://fastapi.tiangolo.com/"
+    ],
+    "description": "FastAPI async path routing, Pydantic type validations, SQLAlchemy database engines, and JWT secure credential schemes.",
+    "modules": [
+      {
+        "title": "Module 1: FastAPI Routing & Request Parameters",
+        "content": "### Async Path Handlers\nFastAPI compiles high-performance APIs leveraging Python async features:\n```python\nfrom fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get(\"/items/{item_id}\")\nasync def read_item(item_id: int, q: str = None):\n    return {\"item_id\": item_id, \"query\": q}\n```\n- Validates types at runtime; returns 422 errors automatically on bad inputs."
+      },
+      {
+        "title": "Module 2: Pydantic Schema Declarations",
+        "content": "### Validating Data Objects\nPydantic checks schemas and structures JSON response shapes:\n```python\nfrom pydantic import BaseModel, EmailStr, Field\n\nclass UserSchema(BaseModel):\n    username: str\n    email: EmailStr\n    password: str = Field(min_length=8)\n```\n- Serializes Python classes to JSON output blocks automatically."
+      },
+      {
+        "title": "Module 3: Async Database Engines & SQLAlchemy",
+        "content": "### Relational Database Mapping\nConfigure async database connectors to execute parallel DB sessions:\n```python\nfrom sqlalchemy.ext.asyncio import create_async_engine, AsyncSession\nfrom sqlalchemy.orm import declarative_base, sessionmaker\n\nDATABASE_URL = \"postgresql+asyncpg://user:pass@localhost/db\"\nengine = create_async_engine(DATABASE_URL, echo=True)\nasync_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)\n```"
+      },
+      {
+        "title": "Module 4: Dependency Injection System",
+        "content": "### Injecting Services to Routes\nManage connections and authorization scopes using the `Depends` keyword:\n```python\nasync def get_db():\n    async with async_session() as session:\n        yield session\n\n@app.post(\"/users\")\nasync def create_user(user: UserSchema, db: AsyncSession = Depends(get_db)):\n    db.add(user)\n    await db.commit()\n    return {\"status\": \"success\"}\n```"
+      },
+      {
+        "title": "Module 5: OAuth2 & JWT Security Handlers",
+        "content": "### Authenticating API requests\nEnforce authorization using JWT tokens:\n- **OAuth2PasswordBearer**: Directs route requests to tokens headers.\n- **JWT Helper**: Encrypts payloads and signs signatures.\n```python\ndef create_access_token(data: dict):\n    to_encode = data.copy()\n    expire = datetime.utcnow() + timedelta(minutes=30)\n    to_encode.update({\"exp\": expire})\n    return jwt.encode(to_encode, SECRET_KEY, algorithm=\"HS256\")\n```"
+      },
+      {
+        "title": "Module 6: Background Tasks & Pytest Suites",
+        "content": "### Task queues & Integration Tests\n- **BackgroundTasks**: Delegate post-request tasks (e.g. sending emails) to be run after returning response, keeping routes fast.\n- **TestClient**: Write high-speed integration tests:\n  ```python\n  from fastapi.testclient import TestClient\n  client = TestClient(app)\n  def test_root():\n      assert client.get(\"/\").status_code == 200\n  ```"
+      }
+    ]
+  },
+  {
+    "id": "tailwind-css-docs",
+    "title": "Tailwind CSS & Modern Styling",
+    "category": "Developer Tools",
+    "domain": "tailwindcss.com",
+    "urls": [
+      "https://tailwindcss.com/"
+    ],
+    "description": "Utility-first design patterns, custom theme configurations, responsive breakpoints, and custom animation hooks.",
+    "modules": [
+      {
+        "title": "Module 1: Utility-First Architecture",
+        "content": "### Rapid Component Styling\nStyle elements directly in HTML classes:\n- **Spacing**: `p-4` (padding), `m-2` (margin), `gap-3` (grid gaps).\n- **Typography**: `text-lg font-bold text-slate-900`.\n- **States**: Modifiers for hover, focus, active:\n  ```html\n  <button class=\"bg-blue-600 hover:bg-blue-700 focus:ring-2 active:scale-95 text-white px-4 py-2 rounded-lg\">\n    Submit\n  </button>\n  ```"
+      },
+      {
+        "title": "Module 2: Tailwind Config Themes",
+        "content": "### Theme Configurations (`tailwind.config.js`)\nCustomize colors, fonts, and animation constants:\n```javascript\nmodule.exports = {\n  theme: {\n    extend: {\n      colors: {\n        brand: {\n          dark: '#0b132b',\n          light: '#243b6b'\n        }\n      }\n    }\n  }\n}\n```\nAllows using custom classes like `bg-brand-dark` and `text-brand-light`."
+      },
+      {
+        "title": "Module 3: Responsive layouts & Breakpoints",
+        "content": "### Mobile-First Layout Rules\nTailwind uses min-width media queries. Unprefixed classes target mobile, while breakpoint prefixes scale layout dimensions:\n- **sm**: 640px\n- **md**: 768px\n- **lg**: 1024px\n- **xl**: 1280px\n```html\n<div class=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4\">\n  <!-- 1 column on mobile, 2 on tablet, 4 on desktop -->\n</div>\n```"
+      },
+      {
+        "title": "Module 4: Dark Mode & Theme Switches",
+        "content": "### Class-Based Dark Mode\nConfigure Tailwind to toggle styles when a `.dark` class is present on the root `<html>` tag:\n```javascript\n// tailwind.config.js\nmodule.exports = {\n  darkMode: 'class',\n}\n```\nApply dark styles using the `dark:` modifier:\n```html\n<div class=\"bg-white dark:bg-slate-900 text-slate-900 dark:text-white\"></div>\n```"
+      },
+      {
+        "title": "Module 5: Transitions, Transforms & Keyframes",
+        "content": "### Animation Classes\n- **Transitions**: Smooth properties shifts: `transition-all duration-300 ease-in-out`.\n- **Transforms**: Rotate, scale, translate: `hover:scale-105 hover:rotate-2`.\n- **Custom Keyframes**: Declare custom animation loops inside configurations:\n  ```javascript\n  extend: {\n    animation: { 'fade-in': 'fadeIn 0.5s ease-out' },\n    keyframes: { fadeIn: { '0%': { opacity: 0 }, '100%': { opacity: 1 } } }\n  }\n  ```"
+      },
+      {
+        "title": "Module 6: Reusable Utilities & Plugins",
+        "content": "### Adding Custom Plugins\nExtend Tailwind using helper plugins to register custom CSS segments:\n```javascript\nconst plugin = require('tailwindcss/plugin');\n\nmodule.exports = {\n  plugins: [\n    plugin(function({ addUtilities }) {\n      addUtilities({\n        '.scrollbar-none': {\n          '-ms-overflow-style': 'none',\n          'scrollbar-width': 'none',\n          '&::-webkit-scrollbar': { 'display': 'none' }\n        }\n      })\n    })\n  ]\n}\n```"
+      }
+    ]
+  },
+  {
+    "id": "nginx-docs",
+    "title": "Nginx web Server & Proxies",
+    "category": "Developer Tools",
+    "domain": "nginx.org",
+    "urls": [
+      "https://nginx.org/"
+    ],
+    "description": "Nginx reverse proxy configurations, load balancing upstream algorithms, SSL redirects, and rate limiting protections.",
+    "modules": [
+      {
+        "title": "Module 1: Nginx Architecture & Server Blocks",
+        "content": "### Event-Driven Concurrency\nUnlike Apache, which spawns threads for each HTTP query, Nginx handles requests asynchronously on a single master process and worker threads, resulting in low memory footprint.\n- **Server Blocks**: Define host domain rules and port mappings inside `/etc/nginx/sites-available/`."
+      },
+      {
+        "title": "Module 2: Reverse Proxy configurations",
+        "content": "### proxy_pass Configuration\nRoute incoming traffic to application servers running locally:\n```nginx\nserver {\n    listen 80;\n    server_name api.mysite.com;\n\n    location / {\n        proxy_pass http://localhost:8080;\n        proxy_set_header Host $host;\n        proxy_set_header X-Real-IP $remote_addr;\n        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n    }\n}\n```"
+      },
+      {
+        "title": "Module 3: Load Balancing Upstream Blocks",
+        "content": "### Distributing Traffic\nConfigure upstream blocks to distribute workloads across a cluster of server nodes:\n```nginx\nupstream backend_servers {\n    least_conn; # Upstream algorithm choice\n    server 10.0.0.10:8080;\n    server 10.0.0.11:8080;\n}\nserver {\n    listen 80;\n    location / {\n        proxy_pass http://backend_servers;\n    }\n}\n```"
+      },
+      {
+        "title": "Module 4: SSL/TLS Configurations & Let's Encrypt",
+        "content": "### Securing Connections (Port 443)\nConfigure SSL keys and automatically redirect HTTP requests to HTTPS:\n```nginx\nserver {\n    listen 80;\n    server_name mysite.com;\n    return 301 https://$host$request_uri; # Redirect rule\n}\nserver {\n    listen 443 ssl;\n    server_name mysite.com;\n\n    ssl_certificate /etc/letsencrypt/live/mysite.com/fullchain.pem;\n    ssl_certificate_key /etc/letsencrypt/live/mysite.com/privkey.pem;\n}\n```"
+      },
+      {
+        "title": "Module 5: Caching & Gzip Compression",
+        "content": "### Performance Tweaks\n- **Gzip**: Compress response payloads to speed up page load times:\n  ```nginx\n  gzip on;\n  gzip_types text/plain text/css application/json application/javascript;\n  ```\n- **Proxy Cache**: Cache static responses in Nginx memory to protect database nodes."
+      },
+      {
+        "title": "Module 6: Security Hardening & Rate Limiting",
+        "content": "### Restricting Abusive Clients\n- **Rate Limiting**: Deny requests exceeding access thresholds:\n  ```nginx\n  limit_req_zone $binary_remote_addr zone=mylimit:10m rate=10r/s;\n  server {\n      location /login {\n          limit_req zone=mylimit burst=5 nodelay;\n      }\n  }\n  ```\n- **Secure Headers**: Append headers to prevent XSS and clickjacking: `add_header X-Frame-Options DENY;`."
+      }
+    ]
   }
 ]
