@@ -72,101 +72,41 @@ const Index = () => {
   const initializeAIMentors = () => {
     const aiMentors: Contact[] = [
       {
-        id: 'tonde',
-        name: 'Tonde (Lead Instructor)',
-        avatar: '🎓',
-        lastMessage: 'Ready to build production-grade full-stack AI apps?',
-        lastSeen: new Date(),
-        unreadCount: 0,
-        isOnline: true,
-        specialty: 'Full-Stack & Generative AI',
-        description: 'Lead Instructor for Full-Stack AI Specialization',
-        expertise: ['Event Loop', 'RAG Pipelines', 'Databases', 'React/Mobile']
-      },
-      {
-        id: 'cyber-security',
-        name: 'CyberGuard AI',
-        avatar: '🛡️',
-        lastMessage: 'Ready to learn cybersecurity?',
-        lastSeen: new Date(),
-        unreadCount: 0,
-        isOnline: true,
-        specialty: 'Cybersecurity Expert',
-        description: 'Ethical hacking and security specialist',
-        expertise: ['Penetration Testing', 'Network Security', 'Cryptography']
-      },
-      {
-        id: 'frontend',
-        name: 'Frontend Master AI',
-        avatar: '🎨',
-        lastMessage: 'Let\'s build beautiful UIs!',
-        lastSeen: new Date(),
-        unreadCount: 0,
-        isOnline: true,
-        specialty: 'Frontend Development',
-        description: 'React, Vue, and modern frontend specialist',
-        expertise: ['React', 'Vue.js', 'CSS/SCSS', 'TypeScript']
-      },
-      {
-        id: 'backend',
-        name: 'Backend Architect AI',
+        id: 'software-engineering',
+        name: 'DevEngine AI',
         avatar: '⚙️',
-        lastMessage: 'Ready to build scalable APIs?',
+        lastMessage: "Hi! I'm DevEngine AI, your Software Engineering Specialist. What software engineering or systems architecture topic would you like to master today?",
         lastSeen: new Date(),
         unreadCount: 0,
         isOnline: true,
-        specialty: 'Backend Development',
-        description: 'Server-side and architecture specialist',
-        expertise: ['Node.js', 'Python', 'Databases', 'Microservices']
+        specialty: 'Software Engineering',
+        description: 'Software Engineering Specialist',
+        expertise: ['React', 'Next.js', 'TypeScript', 'JavaScript', 'HTML', 'CSS', 'Python', 'Go', 'Rust', 'Java', 'C++', 'SQL', 'PostgreSQL', 'NoSQL', 'MongoDB', 'Redis', 'Docker', 'Kubernetes', 'Terraform', 'Git', 'GitHub', 'CI/CD', 'Security', 'OWASP', 'Mobile', 'Android', 'iOS', 'Flutter', 'React Native', 'Laravel', 'PHP', 'Spring Boot', 'Ruby on Rails', 'Svelte', 'FastAPI', 'Tailwind', 'Nginx']
       },
       {
-        id: 'fullstack',
-        name: 'FullStack Guru AI',
-        avatar: '🚀',
-        lastMessage: 'Let\'s build end-to-end!',
+        id: 'casual-career',
+        name: 'Counselor AI',
+        avatar: '💬',
+        lastMessage: "Hello! I'm Counselor AI, your Career Advisor & Casual Talk companion. What would you like to talk about today?",
         lastSeen: new Date(),
         unreadCount: 0,
         isOnline: true,
-        specialty: 'Full Stack Development',
-        description: 'Complete web development specialist',
-        expertise: ['MERN Stack', 'DevOps', 'System Design']
+        specialty: 'Career & Casual',
+        description: 'Casual Talk & Career Advisor',
+        expertise: ['Career Guidance', 'Mock Interviews', 'STAR Method', 'Stress & Burnout Support', 'General Knowledge', 'Mentorship', 'Small Talk']
       },
       {
-        id: 'python',
-        name: 'Python Sensei AI',
-        avatar: '🐍',
-        lastMessage: 'Python mastery awaits!',
+        id: 'project-builder',
+        name: 'Antigravity AI',
+        avatar: '🤖',
+        lastMessage: "Welcome! I'm Antigravity AI, your Project Builder & Advanced Code Copilot. Let's write some high-performance code together!",
         lastSeen: new Date(),
         unreadCount: 0,
         isOnline: true,
-        specialty: 'Python Development',
-        description: 'Python and data science specialist',
-        expertise: ['Django/Flask', 'Data Science', 'Machine Learning']
-      },
-      {
-        id: 'mobile',
-        name: 'Mobile Dev AI',
-        avatar: '📱',
-        lastMessage: 'Ready to build mobile apps?',
-        lastSeen: new Date(),
-        unreadCount: 0,
-        isOnline: true,
-        specialty: 'Mobile Development',
-        description: 'Cross-platform mobile specialist',
-        expertise: ['React Native', 'Flutter', 'iOS/Android']
-      },
-      {
-        id: 'hosting',
-        name: 'CloudOps AI',
-        avatar: '☁️',
-        lastMessage: 'Let\'s deploy and scale!',
-        lastSeen: new Date(),
-        unreadCount: 0,
-        isOnline: true,
-        specialty: 'Cloud & Hosting',
-        description: 'DevOps and cloud infrastructure specialist',
-        expertise: ['AWS/Azure', 'Docker', 'Kubernetes', 'CI/CD']
-      },
+        specialty: 'Project Construction',
+        description: 'Project Builder & Code Copilot',
+        expertise: ['Code Generation', 'Project Architect', 'System Design', 'Debugging', 'Refactoring', 'Event Loop', 'libuv', 'RAG Pipelines', 'Vector DB', 'Laboratory Manuals']
+      }
     ];
 
     const initialMessages: { [key: string]: Message[] } = {};
@@ -186,11 +126,11 @@ const Index = () => {
 
     setContacts(aiMentors);
     setMessages(initialMessages);
-    setActiveContact('frontend');
+    setActiveContact('software-engineering');
     
     saveContacts(aiMentors);
     saveMessages(initialMessages);
-    saveActiveContact('frontend');
+    saveActiveContact('software-engineering');
   };
 
   const sendMessage = async (text: string) => {
