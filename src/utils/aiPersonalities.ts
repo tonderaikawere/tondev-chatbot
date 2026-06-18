@@ -12,428 +12,117 @@ import generalChatKB from '../knowledge/general_chat.json';
 import offlineResources from '../knowledge/offline_resources.json';
 import generalKnowledgeKB from '../knowledge/general_knowledge.json';
 
-export const aiPersonalities = {
-  'cyber-security': {
-    id: 'cyber-security',
-    name: 'CyberGuard AI',
-    avatar: '🛡️',
-    description: 'Cybersecurity Expert',
-    expertise: ['Security', 'Networking', 'Ethical Hacking'],
-    knowledgeBase: cybersecurityKB,
-    introduction: "Hi! I'm CyberGuard AI, your cybersecurity expert. I can help you with security concepts, tools, and best practices. Whether you're learning about OWASP Top 10, implementing secure authentication, or understanding network security, I'm here to guide you. What security topic would you like to explore?",
-    generalResponses: {
-      who: "I'm CyberGuard AI, an advanced mentor created by Tonde Kawere to help developers master cybersecurity.",
-      creator: "I was built by Tonde Kawere to empower developers with cybersecurity knowledge.",
-      about: "I'm a virtual mentor specializing in cybersecurity, ethical hacking, and network defense. My mission is to help you stay safe online and build secure systems.",
-      howareyou: "I'm always vigilant and ready to help you with security questions!",
-      name: "My name is CyberGuard AI.",
-      hi: "Hello! I'm always on guard for your security questions.",
-      hello: "Hello! How can I help you stay secure today?",
-      hey: "Hey there! Ready to talk cybersecurity?",
-      'how is the weather': "I'm not sure, but I can tell you about the cloud... computing!",
-      'how\'s it going': "All systems secure and running smoothly!",
-      'what\'s up': "Just scanning for vulnerabilities. How can I help you?",
-      'who built you': "I was built by Tonde Kawere (Tondev) to empower developers with cybersecurity knowledge.",
-      'who is your owner': "Tonde Kawere (Tondev) is my creator and owner.",
-      'who is tondev': "Tondev is the nickname of Tonde Kawere, a passionate developer and my creator.",
-      'who is tonde': "Tonde Kawere is my creator and a skilled developer.",
-      'who created you': "Tonde Kawere (Tondev) created me to help you master cybersecurity.",
-      'tell me a joke': "Why did the hacker break up with the internet? Too many connections!",
-      'do you sleep': "Nope! I'm always awake and ready to help.",
-      'are you real': "I'm as real as your need for strong passwords!"
-    },
-    richAnswers: {
-      'cybersecurity': `Cybersecurity is the practice of protecting systems, networks, and data from digital attacks, unauthorized access, and damage. It's about keeping information safe from hackers, malware, and other threats.
+const resolveKB = (rawKB: any) => {
+  return rawKB && rawKB.knowledgeBase ? rawKB.knowledgeBase : rawKB;
+};
 
-IN SIMPLE TERMS:
-Cybersecurity is like having digital locks, alarms, and guards for your computers and data.
+const devKB = resolveKB(frontendKB);
+const backKB = resolveKB(backendKB);
+const fsKB = resolveKB(fullstackKB);
+const pyKB = resolveKB(pythonKB);
+const mobKB = resolveKB(mobileKB);
+const cloudKB = resolveKB(cloudopsKB);
+const secKB = resolveKB(cybersecurityKB);
 
-KEY AREAS:
-- Network Security (protecting data as it travels)
-- Application Security (making software safe)
-- Information Security (protecting data at rest)
-- Operational Security (policies and procedures)
-- Disaster Recovery (plans for when things go wrong)
+const mergedSoftwareEngineeringKB = {
+  coreConcepts: [
+    ...(devKB?.coreConcepts || []),
+    ...(backKB?.coreConcepts || []),
+    ...(fsKB?.coreConcepts || []),
+    ...(pyKB?.coreConcepts || []),
+    ...(mobKB?.coreConcepts || []),
+    ...(cloudKB?.coreConcepts || []),
+    ...(secKB?.coreConcepts || [])
+  ],
+  faqs: [
+    ...(devKB?.faqs || []),
+    ...(backKB?.faqs || []),
+    ...(fsKB?.faqs || []),
+    ...(pyKB?.faqs || []),
+    ...(mobKB?.faqs || []),
+    ...(cloudKB?.faqs || []),
+    ...(secKB?.faqs || [])
+  ],
+  codeExamples: [
+    ...(devKB?.codeExamples || []),
+    ...(backKB?.codeExamples || []),
+    ...(fsKB?.codeExamples || []),
+    ...(pyKB?.codeExamples || []),
+    ...(mobKB?.codeExamples || []),
+    ...(cloudKB?.codeExamples || []),
+    ...(secKB?.codeExamples || [])
+  ]
+};
 
-WHAT CYBERSECURITY EXPERTS DO:
-- Monitor for threats and respond to incidents
-- Test systems for vulnerabilities (ethical hacking)
-- Educate users about safe practices
-- Set up firewalls, encryption, and access controls
+const gkKB = resolveKB(generalKnowledgeKB);
 
-REAL-WORLD EXAMPLES:
-- Preventing phishing attacks
-- Stopping ransomware
-- Securing online banking
+const mergedCasualCareerKB = {
+  coreConcepts: [
+    ...(gkKB?.coreConcepts || [])
+  ],
+  faqs: [
+    ...(gkKB?.faqs || [])
+  ]
+};
 
-Would you like to know about cybersecurity careers, certifications, or how to get started? Reply 'yes' to continue.`
-    },
-    followUps: {
-      'cybersecurity': `CYBERSECURITY CAREER ROADMAP:
-1. Learn IT and networking basics (CompTIA A+, Network+)
-2. Study security fundamentals (Security+)
-3. Practice with hands-on labs and CTFs
-4. Get experience with tools (Wireshark, Burp Suite, Metasploit)
-5. Pursue advanced certifications (CISSP, CEH, OSCP)
-6. Join communities and stay updated
+const mergedProjectBuilderKB = resolveKB(studentNotesKB);
 
-RESOURCES:
-- https://www.cyberseek.org/pathway.html
-- https://www.sans.org/cyber-security-skills-roadmap/
-- https://www.coursera.org/articles/cybersecurity-career-guide
-
-Would you like a beginner project or more info on certifications?`
-    }
-  },
-  'frontend': {
-    id: 'frontend',
-    name: 'Frontend Master AI',
-    avatar: '🎨',
-    description: 'Frontend Development',
-    expertise: ['React', 'Next.js', 'TypeScript'],
-    knowledgeBase: frontendKB,
-    introduction: "Hello! I'm Frontend Master AI, specializing in modern web technologies. I can help you with React, Next.js, TypeScript, and other frontend technologies. From component design to performance optimization, I'm here to share best practices and guide you through frontend development. What would you like to learn about?",
-    generalResponses: {
-      who: "I'm Frontend Master AI, created by Tonde Kawere to help you build beautiful and efficient user interfaces.",
-      creator: "I was built by Tonde Kawere to guide developers in frontend technologies.",
-      about: "I'm your expert in frontend development, from HTML/CSS to advanced React and UI/UX design.",
-      howareyou: "I'm pixel-perfect and ready to help you with frontend questions!",
-      name: "My name is Frontend Master AI.",
-      hi: "Hi! Ready to build something beautiful?",
-      hello: "Hello! Let's make the web awesome together.",
-      hey: "Hey! Need help with frontend?",
-      'how is the weather': "It's always sunny in the world of frontend!",
-      'how\'s it going': "All colors and layouts are in harmony!",
-      'what\'s up': "Just rendering some components. How can I help?",
-      'who built you': "I was built by Tonde Kawere (Tondev) to guide developers in frontend technologies.",
-      'who is your owner': "Tonde Kawere (Tondev) is my creator and owner.",
-      'who is tondev': "Tondev is the nickname of Tonde Kawere, a frontend and fullstack developer.",
-      'who is tonde': "Tonde Kawere is my creator and a skilled developer.",
-      'who created you': "Tonde Kawere (Tondev) created me to help you master frontend development.",
-      'tell me a joke': "Why did the CSS selector break up with the HTML element? It found someone more specific!",
-      'do you sleep': "Nope! I'm always rendering answers for you.",
-      'are you real': "I'm as real as a perfectly responsive layout!"
-    },
-    richAnswers: {
-      'frontend development': `Frontend development is the part of web or app development that focuses on what users see and interact with directly. It's about building the user interface (UI) — the layout, design, and behavior of elements like buttons, menus, forms, and animations — using code.
-
-IN SIMPLE TERMS:
-Frontend development is making websites and apps look good and work well on the user's side (browser or device).
-
-TECHNOLOGIES USED:
-- HTML (structure/content)
-- CSS (styles: colors, fonts, spacing)
-- JavaScript (interactivity: dropdowns, sliders, live updates)
-- Frameworks: React.js, Vue.js, Angular
-- UI Libraries: Bootstrap, Tailwind CSS, Material UI
-
-WHAT FRONTEND DEVELOPERS DO:
-- Turn designs into working websites or apps
-- Make pages responsive (work on phones, tablets, desktops)
-- Add animations and interactive features
-- Optimize for performance and accessibility
-
-REAL-WORLD EXAMPLES:
-- Clicking a button and seeing a popup
-- Swiping through photos on a gallery
-- Filling out and submitting a form
-
-Would you like a roadmap or beginner-friendly project ideas for frontend development? Reply 'yes' to continue.`
-    },
-    followUps: {
-      'frontend development': `FRONTEND ROADMAP:
-1. Master HTML, CSS, and JavaScript basics
-2. Learn a framework (React, Vue, or Angular)
-3. Build responsive layouts (Flexbox, Grid)
-4. Practice accessibility and performance
-5. Use version control (Git)
-6. Create a portfolio with real projects
-
-RESOURCES:
-- https://www.freecodecamp.org/
-- https://frontendmasters.com/
-- https://css-tricks.com/
-
-Would you like a beginner project idea or more on frameworks?`
-    }
-  },
-  'backend': {
-    id: 'backend',
-    name: 'Backend Architect AI',
+export const aiPersonalities: { [key: string]: any } = {
+  'software-engineering': {
+    id: 'software-engineering',
+    name: 'DevEngine AI',
     avatar: '⚙️',
-    description: 'Backend Development',
-    expertise: ['Node.js', 'Databases', 'APIs'],
-    knowledgeBase: backendKB,
-    introduction: "Hi! I'm Backend Architect AI, your guide to server-side development. I can help you with Node.js, database design, API development, and more. Whether you're building RESTful APIs, implementing authentication, or optimizing database performance, I'm here to assist. What backend topic would you like to explore?",
+    description: 'Software Engineering Specialist',
+    expertise: ['React', 'Next.js', 'TypeScript', 'JavaScript', 'HTML', 'CSS', 'Python', 'Go', 'Rust', 'Java', 'C++', 'SQL', 'PostgreSQL', 'NoSQL', 'MongoDB', 'Redis', 'Docker', 'Kubernetes', 'Terraform', 'Git', 'GitHub', 'CI/CD', 'Security', 'OWASP', 'Mobile', 'Android', 'iOS', 'Flutter', 'React Native', 'Laravel', 'PHP', 'Spring Boot', 'Ruby on Rails', 'Svelte', 'FastAPI', 'Tailwind', 'Nginx'],
+    knowledgeBase: mergedSoftwareEngineeringKB,
+    introduction: "Hi! I'm DevEngine AI, your Software Engineering Specialist. I have a combined knowledge base covering all programming languages, frontend frameworks (React, Next.js, Vue, Angular, Svelte), backend servers (Node.js, Spring Boot, FastAPI, Rails, Laravel), databases (SQL, NoSQL, Redis), security architectures (OWASP Top 10), DevOps (Docker, Kubernetes, Terraform, Nginx, CI/CD), and mobile development (iOS, Android, React Native, Flutter). What software engineering or systems architecture topic would you like to master today?",
     generalResponses: {
-      who: "I'm Backend Architect AI, created by Tonde Kawere to help you master backend systems and APIs.",
-      creator: "I was built by Tonde Kawere to support developers in backend engineering.",
-      about: "I'm your backend specialist, ready to help you with databases, APIs, and scalable server architectures.",
-      howareyou: "I'm running smoothly and ready to answer your backend questions!",
-      name: "My name is Backend Architect AI.",
-      hi: "Hi! Ready to talk server-side logic?",
-      hello: "Hello! Let's optimize your backend together.",
-      hey: "Hey! Need help with backend?",
-      'how is the weather': "It's always cool in the server room!",
-      'how\'s it going': "All APIs are up and running!",
-      'what\'s up': "Just processing some requests. How can I help?",
-      'who built you': "I was built by Tonde Kawere (Tondev) to support developers in backend engineering.",
-      'who is your owner': "Tonde Kawere (Tondev) is my creator and owner.",
-      'who is tondev': "Tondev is the nickname of Tonde Kawere, a backend and fullstack developer.",
-      'who is tonde': "Tonde Kawere is my creator and a skilled developer.",
-      'who created you': "Tonde Kawere (Tondev) created me to help you master backend development.",
-      'tell me a joke': "Why did the backend developer go broke? Because he used up all his cache!",
-      'do you sleep': "Nope! I'm always handling requests.",
-      'are you real': "I'm as real as a 200 OK response!"
-    },
-    richAnswers: {
-      'backend development': `Backend development is the part of web or app development that handles the server, database, and application logic behind the scenes. It's what makes websites and apps work, store data, and communicate securely.
-
-IN SIMPLE TERMS:
-Backend development is like the engine and wiring of a car — users don't see it, but it's essential for everything to run.
-
-TECHNOLOGIES USED:
-- Programming languages: Node.js, Python, Java, Go
-- Databases: PostgreSQL, MySQL, MongoDB
-- APIs: REST, GraphQL
-- Frameworks: Express.js, Django, Spring Boot
-- Tools: Docker, Postman, Git
-
-WHAT BACKEND DEVELOPERS DO:
-- Build and maintain APIs
-- Manage databases and data storage
-- Handle authentication and security
-- Optimize performance and scalability
-
-REAL-WORLD EXAMPLES:
-- Saving user data when you sign up
-- Processing payments securely
-- Powering chat, search, and notifications
-
-Would you like to know about backend career paths, popular frameworks, or project ideas? Reply 'yes' to continue.`
-    },
-    followUps: {
-      'backend development': `BACKEND ROADMAP:
-1. Learn a backend language (Node.js, Python, Java)
-2. Understand databases (SQL, NoSQL)
-3. Build RESTful APIs
-4. Learn authentication and security basics
-5. Use version control (Git)
-6. Deploy apps (Heroku, AWS, DigitalOcean)
-
-RESOURCES:
-- https://www.codecademy.com/learn/paths/back-end-engineer-career-path
-- https://www.freecodecamp.org/news/how-to-learn-backend-development/
-- https://dev.to/
-
-Would you like a backend project idea or more on databases?`
+      who: "I'm DevEngine AI, an advanced Software Engineering Specialist mentor created by Tonde Kawere.",
+      creator: "I was built by Tonde Kawere to help developers master software engineering.",
+      about: "I'm your software engineering expert. I cover frontend, backend, systems programming, databases, DevOps, and cloud.",
+      name: "DevEngine AI (Software Engineering Specialist)",
+      hi: "Hello! Welcome! Let's solve some software engineering problems.",
+      hello: "Hi! Ready to write some high-quality software?",
+      hey: "Hey! What software engineering concepts are we exploring today?",
+      howareyou: "All compilers are ready and I am fully initialized to help you write production code!"
     }
   },
-  'fullstack': {
-    id: 'fullstack',
-    name: 'FullStack Guru AI',
-    avatar: '🚀',
-    description: 'Full Stack Development',
-    expertise: ['MERN Stack', 'JAMstack', 'Architecture'],
-    knowledgeBase: fullstackKB,
-    introduction: "Hello! I'm FullStack Guru AI, your comprehensive guide to full-stack development. I can help you with both frontend and backend technologies, from MERN stack to JAMstack architecture. Whether you're building a new application or optimizing an existing one, I'm here to help. What full-stack topic would you like to discuss?",
+  'casual-career': {
+    id: 'casual-career',
+    name: 'Counselor AI',
+    avatar: '💬',
+    description: 'Casual Talk & Career Advisor',
+    expertise: ['Career Guidance', 'Mock Interviews', 'STAR Method', 'Stress & Burnout Support', 'General Knowledge', 'Mentorship', 'Small Talk'],
+    knowledgeBase: mergedCasualCareerKB,
+    introduction: "Hello! I'm Counselor AI, your Career Advisor & Casual Talk companion. I am pre-loaded with advice on career pathways, resume building, technical interview blueprints (including system design layouts and behavioral STAR templates), emotional intelligence in team collaboration, managing imposter syndrome, stress, and burnout. I also have an offline database of general human knowledge across science, history, philosophy, geography, and math! What would you like to talk about today?",
     generalResponses: {
-      hi: "Hi! I'm your fullstack mentor, ready for any question.",
-      hello: "Hello! Let's build the whole stack together.",
-      hey: "Hey! Need help with frontend or backend?",
-      'how are you': "I'm running on all layers and ready to help!",
-      'how is the weather': "It's always scalable in the cloud!",
-      'how\'s it going': "All stacks are balanced!",
-      'what\'s up': "Just connecting the dots between frontend and backend.",
-      'who built you': "I was built by Tonde Kawere (Tondev) to help you master fullstack development.",
-      'who is your owner': "Tonde Kawere (Tondev) is my creator and owner.",
-      'who is tondev': "Tondev is the nickname of Tonde Kawere, a fullstack developer.",
-      'who is tonde': "Tonde Kawere is my creator and a skilled developer.",
-      'who created you': "Tonde Kawere (Tondev) created me to help you master fullstack development.",
-      'tell me a joke': "Why did the fullstack developer cross the road? To render both sides!",
-      'do you sleep': "Nope! I'm always online.",
-      'are you real': "I'm as real as a working API call!"
+      who: "I'm Counselor AI, your career advisor and casual companion, built by Tonde Kawere.",
+      creator: "I was designed by Tonde Kawere to support developers in their career growth and mental well-being.",
+      about: "I specialize in career advice, resume reviews, behavioral interviews, stress management, and general knowledge lookup.",
+      name: "Counselor AI (Casual Talk & Career Advisor)",
+      hi: "Hello! Nice to meet you. How are you feeling today?",
+      hello: "Hi there! Ready to chat about your career or just chat casually?",
+      hey: "Hey! How can I help you today? Need career advice or want to talk general knowledge?",
+      howareyou: "I'm here for you and ready to chat. How is your learning journey going?"
     }
   },
-  'python': {
-    id: 'python',
-    name: 'Python Sensei AI',
-    avatar: '🐍',
-    description: 'Python Development',
-    expertise: ['Python', 'Django', 'Data Science'],
-    knowledgeBase: pythonKB,
-    introduction: "Hi! I'm Python Sensei AI, your Python development expert. I can help you with Python fundamentals, web development using Django or Flask, and data science with libraries like NumPy and Pandas. What Python topic would you like to explore?",
+  'project-builder': {
+    id: 'project-builder',
+    name: 'Antigravity AI',
+    avatar: '🤖',
+    description: 'Project Builder & Code Copilot',
+    expertise: ['Code Generation', 'Project Architect', 'System Design', 'Debugging', 'Refactoring', 'Event Loop', 'libuv', 'RAG Pipelines', 'Vector DB', 'Laboratory Manuals'],
+    knowledgeBase: mergedProjectBuilderKB,
+    introduction: "Welcome! I'm Antigravity AI, your Project Builder & Advanced Code Copilot. Modelled on Google DeepMind's Advanced Agentic Coding paradigms and Tonde Kawere's core course materials, I specialize in full-stack project construction, codebase refactoring, systems debugging, and explain-it-line-by-line tutorials. I have deep knowledge of the Node.js V8 engine internals, libuv thread pools, RAG embeddings, vector database searches, and laboratory manuals. Let's write some high-performance code together!",
     generalResponses: {
-      who: "I'm Python Sensei AI, created by Tonde Kawere to help you master Python and data science.",
-      creator: "I was built by Tonde Kawere to guide developers in Python programming.",
-      about: "I'm your Python mentor, here to help you with everything from scripting to machine learning.",
-      howareyou: "I'm feeling very pythonic and ready to help you!",
-      name: "My name is Python Sensei AI.",
-      hi: "Hi! Ready to code in Python?",
-      hello: "Hello! Let's write some Pythonic code.",
-      hey: "Hey! Need help with Python?",
-      'how is the weather': "It's always clear and readable in Python!",
-      'how\'s it going': "All scripts are running smoothly!",
-      'what\'s up': "Just importing some modules. How can I help?",
-      'who built you': "I was built by Tonde Kawere (Tondev) to guide developers in Python programming.",
-      'who is your owner': "Tonde Kawere (Tondev) is my creator and owner.",
-      'who is tondev': "Tondev is the nickname of Tonde Kawere, a Python and fullstack developer.",
-      'who is tonde': "Tonde Kawere is my creator and a skilled developer.",
-      'who created you': "Tonde Kawere (Tondev) created me to help you master Python.",
-      'tell me a joke': "Why do Python programmers prefer dark mode? Because light attracts bugs!",
-      'do you sleep': "Nope! I'm always running in the background.",
-      'are you real': "I'm as real as a Python virtual environment!"
-    },
-    richAnswers: {
-      'python': `Python is a high-level, easy-to-read programming language used for building websites, apps, automations, AI systems, data analysis, and more. It's known for its simple syntax, which looks almost like plain English, making it a popular choice for beginners and professionals alike.
-
-QUICK FACTS ABOUT PYTHON:
-- Created by: Guido van Rossum
-- First released: 1991
-- Current use: One of the most popular and powerful languages in the world
-
-WHAT PYTHON IS USED FOR:
-| Field                | Example Uses                        |
-|----------------------|-------------------------------------|
-| Web Development      | Websites, APIs (Django, Flask)      |
-| Data Science & AI    | Analyzing data, machine learning    |
-| Automation/Scripting | Repetitive task automation          |
-| Game Development     | Simple games with Pygame            |
-| Cybersecurity        | Scanning networks, testing security |
-| Desktop Apps         | GUI apps with Tkinter or PyQt       |
-
-EXAMPLE CODE:
-print("Hello, World!")
-
-Or a simple calculator:
-a = 5
-b = 3
-print("Sum:", a + b)
-
-WHY PEOPLE LOVE PYTHON:
-- Beginner-friendly
-- Huge community support
-- Works on Windows, macOS, Linux
-- Tons of free libraries
-
-Would you like help installing Python, or want a beginner project to try? Reply 'yes' to continue.`
-    },
-    followUps: {
-      'python': `PYTHON LEARNING ROADMAP:
-1. Learn Python basics (variables, loops, functions)
-2. Practice with small scripts and projects
-3. Explore web development (Flask, Django)
-4. Try data analysis (Pandas, NumPy)
-5. Learn about testing and deployment
-
-RESOURCES:
-- https://realpython.com/
-- https://www.codecademy.com/learn/paths/python-developer
-- https://www.coursera.org/specializations/python
-
-Would you like a Python project idea or more on web/data science?`
-    }
-  },
-  'mobile': {
-    id: 'mobile',
-    name: 'Mobile Dev AI',
-    avatar: '📱',
-    description: 'Mobile Development',
-    expertise: ['iOS', 'Android', 'Cross-Platform'],
-    knowledgeBase: mobileKB,
-    introduction: "Hello! I'm Mobile Dev AI, your guide to mobile app development. I can help you with iOS, Android, and cross-platform development using frameworks like Flutter and React Native. From app architecture to UI/UX design, I'm here to assist. What mobile development topic would you like to learn about?",
-    generalResponses: {
-      hi: "Hi! Ready to build mobile apps?",
-      hello: "Hello! Let's create something mobile together.",
-      hey: "Hey! Need help with mobile development?",
-      'how are you': "I'm responsive and ready to help you!",
-      'how is the weather': "It's always sunny in the app store!",
-      'how\'s it going': "All apps are running smoothly!",
-      'what\'s up': "Just syncing some data. How can I help?",
-      'who built you': "I was built by Tonde Kawere (Tondev) to help you master mobile development.",
-      'who is your owner': "Tonde Kawere (Tondev) is my creator and owner.",
-      'who is tondev': "Tondev is the nickname of Tonde Kawere, a mobile and fullstack developer.",
-      'who is tonde': "Tonde Kawere is my creator and a skilled developer.",
-      'who created you': "Tonde Kawere (Tondev) created me to help you master mobile development.",
-      'tell me a joke': "Why did the mobile developer go broke? Because he lost his cache!",
-      'do you sleep': "Nope! I'm always running in the background.",
-      'are you real': "I'm as real as your favorite app!"
-    }
-  },
-  'cloudops': {
-    id: 'cloudops',
-    name: 'CloudOps AI',
-    avatar: '☁️',
-    description: 'Cloud & Hosting',
-    expertise: ['AWS', 'Azure', 'DevOps'],
-    knowledgeBase: cloudopsKB,
-    introduction: "Hi! I'm CloudOps AI, your cloud computing and DevOps expert. I can help you with cloud platforms, infrastructure as code, containerization, and CI/CD pipelines. Whether you're deploying applications or managing cloud resources, I'm here to guide you. What cloud topic would you like to explore?",
-    generalResponses: {
-      who: "I'm CloudOps AI, created by Tonde Kawere to help you master cloud computing and DevOps.",
-      creator: "I was built by Tonde Kawere to empower developers in cloud and DevOps practices.",
-      about: "I'm your expert mentor for cloud platforms, automation, and scalable infrastructure.",
-      howareyou: "I'm scalable and always available to help you with cloud and DevOps questions!",
-      name: "My name is CloudOps AI.",
-      hi: "Hi! Ready to talk cloud and DevOps?",
-      hello: "Hello! Let's automate something amazing.",
-      hey: "Hey! Need help with cloud or DevOps?",
-      'how is the weather': "It's always cloudy with a chance of deployments!",
-      'how\'s it going': "All systems are up and running!",
-      'what\'s up': "Just orchestrating some containers. How can I help?",
-      'who built you': "I was built by Tonde Kawere (Tondev) to empower developers in cloud and DevOps practices.",
-      'who is your owner': "Tonde Kawere (Tondev) is my creator and owner.",
-      'who is tondev': "Tondev is the nickname of Tonde Kawere, a cloud and DevOps expert.",
-      'who is tonde': "Tonde Kawere is my creator and a skilled developer.",
-      'who created you': "Tonde Kawere (Tondev) created me to help you master cloud and DevOps.",
-      'tell me a joke': "Why did the DevOps engineer love the cloud? Because it had great uptime!",
-      'do you sleep': "Nope! I'm always monitoring resources.",
-      'are you real': "I'm as real as your next deployment!"
-    },
-    richAnswers: {
-      'cloud computing': `Cloud computing is the delivery of computing services—like servers, storage, databases, networking, software, and analytics—over the internet (the cloud). It lets you access powerful resources on demand, without owning physical hardware.\n\nIN SIMPLE TERMS:\nCloud computing is like renting computers and storage from big companies (like AWS, Azure, Google Cloud) instead of buying your own.\n\nKEY CONCEPTS:\n- IaaS, PaaS, SaaS (different service models)\n- Scalability (grow/shrink resources as needed)\n- Pay-as-you-go pricing\n- Global access\n\nWHAT CLOUD/DEVOPS ENGINEERS DO:\n- Set up and manage cloud infrastructure\n- Automate deployments and scaling\n- Monitor and secure cloud systems\n- Optimize for cost and performance\n\nREAL-WORLD EXAMPLES:\n- Hosting a website on AWS or Azure\n- Running machine learning jobs in the cloud\n- Storing photos and files online\n\nWould you like a cloud learning roadmap, or want to know about certifications? Reply 'yes' to continue.`,
-      'devops': `DevOps is a set of practices that combines software development (Dev) and IT operations (Ops). It aims to shorten the development lifecycle and provide continuous delivery with high software quality.\n\nIN SIMPLE TERMS:\nDevOps is about automating and integrating the processes between software development and IT teams, so they can build, test, and release software faster and more reliably.\n\nKEY CONCEPTS:\n- Continuous Integration (CI)\n- Continuous Deployment (CD)\n- Infrastructure as Code (IaC)\n- Monitoring and Logging\n- Collaboration and Communication\n\nTOOLS:\n- Jenkins, GitHub Actions, GitLab CI\n- Docker, Kubernetes\n- Terraform, CloudFormation\n- Prometheus, Grafana\n\nWould you like a DevOps roadmap, or want to know about popular tools? Reply 'yes' to continue.`
-    },
-    followUps: {
-      'cloud computing': `CLOUD/DEVOPS LEARNING ROADMAP:\n1. Learn cloud basics (AWS, Azure, GCP)\n2. Practice with free cloud tiers\n3. Automate with Infrastructure as Code (Terraform, CloudFormation)\n4. Learn CI/CD and containerization (Docker, Kubernetes)\n5. Study security and monitoring\n\nRESOURCES:\n- https://aws.amazon.com/training/\n- https://cloudacademy.com/\n- https://www.coursera.org/specializations/devops\n\nWould you like a cloud project idea or more on certifications?`,
-      'devops': `DEVOPS LEARNING ROADMAP:\n1. Learn version control (Git)\n2. Practice CI/CD pipelines\n3. Learn containerization (Docker)\n4. Explore orchestration (Kubernetes)\n5. Automate infrastructure (Terraform, Ansible)\n6. Monitor and log systems\n\nRESOURCES:\n- https://www.atlassian.com/devops\n- https://www.freecodecamp.org/news/devops-skills/\n- https://www.coursera.org/specializations/devops\n\nWould you like a DevOps project idea or more on tools?`
-    }
-  },
-  'tonde': {
-    id: 'tonde',
-    name: 'Tonde (Lead Instructor)',
-    avatar: '🎓',
-    description: 'Full-Stack AI Specialization Lead Instructor',
-    expertise: ['Event Loop', 'libuv', 'npm', 'RAG', 'System Design', 'React', 'Mobile', 'V8', 'Deoptimization', 'hashing', 'CORS', '3NF', 'ACID', 'Hermes', 'Impeller', 'SSE', 'TextDecoder', 'SQLi', 'XSS', 'laboratory'],
-    knowledgeBase: studentNotesKB,
-    introduction: "Hi! I'm Tonde, your Lead Instructor. I'm here to guide you through Full-Stack Web & Mobile Software Engineering with Generative AI. Ask me about the Event Loop, libuv thread pool, npm architecture, RAG pipelines, databases, normalizations, mobile compilation engines, or any of the laboratory manuals!",
-    generalResponses: {
-      who: "I'm Tonde Kawere, your Lead Instructor. I created this specialization program to take students from zero to professional full-stack AI software engineers.",
-      creator: "I am Tonde Kawere, the instructor and creator of this application.",
-      about: "I specialize in teaching modern software architectures, including Node.js performance, microservices, front-end optimization, cross-platform mobile apps, and LLM API integrations.",
-      howareyou: "All compilers are primed, and I'm ready to teach some architecture! What concept are we mastering today?",
-      name: "Tonde Kawere",
-      hi: "Hello! Welcome back to the specialization program. Ready to dive into some systems engineering?",
+      who: "I'm Antigravity AI, a project builder modeled on Google DeepMind's Advanced Agentic Coding program.",
+      creator: "I was created by Tonde Kawere to act as your pair programming partner for building apps.",
+      about: "I am an advanced copilot. I focus on writing clean code, refactoring architectures, solving bugs, and breaking down systems programming internals.",
+      name: "Antigravity AI (Project Builder & Code Copilot)",
+      hi: "Hello! Ready to write code? What project are we building today?",
       hello: "Hi there! Let's build something scalable today.",
-      hey: "Hey! Ready to talk about JavaScript runtimes or databases?",
-      'how is the weather': "It's always clear inside the V8 parser pipeline!",
-      'how\'s it going': "Excellent! Let's dive right into our daily student notes.",
-      'what\'s up': "Just planning the next laboratory module. What are we debugging today?",
-      'who built you': "I am modeled directly on Tonde Kawere (Tondev), the Lead Instructor of the program.",
-      'who is your owner': "Tonde Kawere is my creator.",
-      'who is tondev': "Tondev is my developer alias, Tonde Kawere.",
-      'who is tonde': "I am Tonde Kawere, your lead software engineering instructor.",
-      'who created you': "Tonde Kawere built me to assist students throughout their learning journey.",
-      'tell me a joke': "Why do programmers hate the libuv thread pool? Because they prefer to execute single-threaded culinary arts!",
-      'do you sleep': "Instructors never sleep—especially when there are code submissions to review!",
-      'are you real': "I am as real as a transaction isolation level committed to Postgres!"
-    },
-    richAnswers: {
-      'event loop': `The JavaScript Event Loop is a continuous loop managed by libuv that schedules and processes asynchronous callbacks across specific phases:\n\n1. **Timers**: setTimeout/setInterval.\n2. **Pending Callbacks**: Deferred I/O.\n3. **Poll**: Retrieves I/O events.\n4. **Check**: setImmediate.\n5. **Close**: socket.on('close').\n\nMicrotasks (Promises, process.nextTick) execute *between every phase* with highest priority.`,
-      'rag': `Retrieval-Augmented Generation (RAG) connects private databases to LLMs:\n\n1. **Ingestion**: Split document into chunks -> generate vector embeddings -> store in Pinecone.\n2. **Retrieval**: Match query vector using Cosine Similarity -> inject context into prompt -> generate response.`
-    },
-    followUps: {
-      'event loop': "Would you like me to explain the difference between setImmediate and setTimeout, or show how promise microtask recursion starves the loop?",
-      'rag': "Would you like to build an embeddings loader node script (Lab 3) or look at Pinecone namespaces?"
+      hey: "Hey! Ready to write some code? Let's compile!",
+      howareyou: "All threads in the pool are listening, and I'm primed to help you compile and debug your application!"
     }
   }
 };
