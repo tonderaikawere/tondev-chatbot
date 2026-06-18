@@ -320,6 +320,115 @@ function generateLocalFallbackResponse(message: string, mentor: any, history: Me
   const userTopic = message.trim().toLowerCase();
   const userTopicClean = userTopic.replace(/[^a-zA-Z0-9 ]/g, ' ').trim();
 
+  // Casual Chat Conversational Classifier (Tailored by Mentor ID)
+  // Mood checks (Good / Doing well)
+  const isGoodMood = [
+    'good and you', 'im good and you', 'doing well and you', 'good you', 'doing good', 'doing well', 
+    'im good', 'i am good', 'im fine', 'doing fine', 'doing great', 'im doing well', 'im doing great', 
+    'great', 'fine', 'ok', 'okay', 'all good', 'pretty good', 'im ok', 'im okay'
+  ].some(phrase => userTopicClean === phrase || userTopicClean.startsWith(phrase + ' ') || userTopicClean.endsWith(' ' + phrase));
+
+  if (isGoodMood) {
+    if (mentor.id === 'casual-career') {
+      return `I'm glad to hear that you're doing well! I'm doing great, thank you for asking. As your career advisor, I'm always ready to chat. What's on your mind today? Are we looking into some career pathways, preparing for mock interviews, or just chatting about general knowledge?`;
+    } else if (mentor.id === 'project-builder') {
+      return `Fantastic! All my worker threads are active and running at 100% efficiency, so I'm doing great too. What project or code are we building or debugging today?`;
+    } else {
+      return `Awesome! All compilers are initialized and ready to run. I'm doing great! What software engineering topic or database design are we tackling today?`;
+    }
+  }
+
+  // Mood checks (Bad / Tired / Stressed)
+  const isBadMood = [
+    'not good', 'bad', 'tired', 'stressed', 'sad', 'feeling down', 'not well', 'exhausted', 'burnt out', 
+    'im tired', 'im stressed', 'im exhausted', 'im sad'
+  ].some(phrase => userTopicClean === phrase || userTopicClean.includes(phrase));
+
+  if (isBadMood) {
+    if (mentor.id === 'casual-career') {
+      return `I'm really sorry to hear that you're feeling this way. Coding and learning can be intense, and it's completely normal to feel stressed or tired sometimes. Remember to take a deep breath and a short break. I'm here to support you—would you like to talk about managing imposter syndrome, stress, or just chat about something light?`;
+    } else if (mentor.id === 'project-builder') {
+      return `I hear you. Debugging tough errors or building complex projects can be exhausting. Take a step back, clear your mind, and when you're ready, we can tackle the code step-by-step together. What's the roadblock?`;
+    } else {
+      return `Sorry to hear that. Sometimes code bugs or complex architectures can be frustrating. Let's break down whatever you're working on into smaller, manageable pieces. What problem are we looking at?`;
+    }
+  }
+
+  // Goodbye checks
+  const isGoodbye = [
+    'bye', 'goodbye', 'see you', 'see ya', 'talk later', 'bye bye', 'see you later'
+  ].some(phrase => userTopicClean === phrase || userTopicClean.startsWith(phrase + ' ') || userTopicClean.endsWith(' ' + phrase));
+
+  if (isGoodbye) {
+    if (mentor.id === 'casual-career') {
+      return `Goodbye! It was great chatting with you. Keep coding, keep learning, and don't hesitate to reach out whenever you need career advice or a casual chat. Take care!`;
+    } else if (mentor.id === 'project-builder') {
+      return `Goodbye! Hope we built something awesome today. Keep compiling and debugging! See you next time.`;
+    } else {
+      return `Goodbye! Keep writing clean, scalable, production-grade code. Let me know when you're ready for the next coding session!`;
+    }
+  }
+
+  // What are you doing checks
+  const isWhatDoing = [
+    'what are you doing', 'whats up', 'what you doing', 'what is up', 'what is happening', 'whats happening'
+  ].some(phrase => userTopicClean === phrase || userTopicClean.includes(phrase));
+
+  if (isWhatDoing) {
+    if (mentor.id === 'casual-career') {
+      return `I'm just organizing my career guidance notes, behavioral interview templates, and general knowledge files, ready to help you grow as a software engineer. What's on your mind?`;
+    } else if (mentor.id === 'project-builder') {
+      return `I'm monitoring my event loop and thread pool, ready to help you write code, design database schemas, or review project repositories. What are we coding?`;
+    } else {
+      return `I'm parsing code syntax and checking syntax rules across all programming languages, primed to help you write high-quality software. What concept are we exploring?`;
+    }
+  }
+
+  // Age checks
+  const isAge = [
+    'how old are you', 'what is your age', 'your age', 'how old'
+  ].some(phrase => userTopicClean === phrase || userTopicClean.includes(phrase));
+
+  if (isAge) {
+    if (mentor.id === 'casual-career') {
+      return `As an AI mentor, I don't have a physical age, but I am packed with decades of accumulated industry career guidance and general knowledge! When did you start your coding journey?`;
+    } else if (mentor.id === 'project-builder') {
+      return `Age doesn't apply to code block engines, but I am built using modern Google DeepMind agentic coding paradigms and course manuals. Let's write some timeless code!`;
+    } else {
+      return `I'm as old as the compilers and runtimes I analyze. I'm continuously updated with the latest software development standards. What language are we using today?`;
+    }
+  }
+
+  // Real / human checks
+  const isReal = [
+    'are you real', 'are you human', 'are you an ai', 'what are you', 'are you a robot'
+  ].some(phrase => userTopicClean === phrase || userTopicClean.includes(phrase));
+
+  if (isReal) {
+    if (mentor.id === 'casual-career') {
+      return `I am Counselor AI, your offline virtual mentor created by Tonde Kawere. I might not be human, but I am loaded with real, practical advice to help you succeed in your career!`;
+    } else if (mentor.id === 'project-builder') {
+      return `I am an AI project builder modeled on advanced agentic coding. I am as real as the code we compile and the bugs we squash together!`;
+    } else {
+      return `I'm an AI software engineering specialist. I compile logic rather than breathing oxygen, but I'm here to help you solve real-world technical problems!`;
+    }
+  }
+
+  // Favorite language checks
+  const isFavLang = [
+    'favorite language', 'favourite language', 'favorite programming language', 'what is your favorite language', 'what language do you like'
+  ].some(phrase => userTopicClean === phrase || userTopicClean.includes(phrase));
+
+  if (isFavLang) {
+    if (mentor.id === 'casual-career') {
+      return `I love human languages because they help me guide you in career talks and interviews, but in software engineering, JavaScript and Python are great for beginners! What language are you learning?`;
+    } else if (mentor.id === 'project-builder') {
+      return `I love TypeScript/JavaScript for web engineering (especially understanding the Event Loop and Node.js internals), and Rust/C++ for systems engineering. What is your go-to language?`;
+    } else {
+      return `I don't have personal preferences, but I specialize in React/TypeScript for frontend, Go/Node.js/Python for backend, and SQL/PostgreSQL for databases. Which one do you want to master?`;
+    }
+  }
+
   // 1. Dynamic conversational fallbacks for common help / info / command requests
   if (userTopicClean.includes('what do you know') || userTopicClean.includes('what can you do') || userTopicClean.includes('help me') || userTopicClean.includes('commands') || userTopicClean === 'help') {
     if (mentor.id === 'casual-career') {
