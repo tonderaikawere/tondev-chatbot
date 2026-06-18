@@ -39,6 +39,7 @@ const Index = () => {
     };
 
     checkExistingSession();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadUserData = (userId: string) => {

@@ -320,22 +320,82 @@ function generateLocalFallbackResponse(message: string, mentor: any, history: Me
   const userTopic = message.trim().toLowerCase();
   const userTopicClean = userTopic.replace(/[^a-zA-Z0-9 ]/g, ' ').trim();
 
-  // Dynamic conversational fallbacks for common unhandled phrases
-  if (userTopicClean.includes('date') || userTopicClean.includes('time')) {
-    return `Since I'm running offline right now, I don't have access to a real-time clock to check the current date or time. However, I can help you with software engineering! Ask me a question about HTML, CSS, JavaScript, or React, and let's get started.`;
-  }
+  // 1. Dynamic conversational fallbacks for common help / info / command requests
   if (userTopicClean.includes('what do you know') || userTopicClean.includes('what can you do') || userTopicClean.includes('help me') || userTopicClean.includes('commands') || userTopicClean === 'help') {
-    return `I am pre-loaded with an offline database of software engineering concepts! Here is a summary of what you can ask me about:
+    if (mentor.id === 'casual-career') {
+      return `I am Counselor AI, your Career Advisor & Casual Talk companion! Here is a summary of what you can ask me offline:
+- **Career Pathways**: Job levels, software engineer role profiles, junior vs senior developers.
+- **Interview Blueprints**: Technical interview checklists, mock interviews, system design interview formats.
+- **Behavioral Prep**: The STAR method, templates for behavioral questions.
+- **Mental Support**: Managing stress, preventing burnout, dealing with imposter syndrome.
+- **General Knowledge**: Science, math, history, philosophy, geography, and more.
+- **Casual Talk**: Small talk, questions about your day, and career guidance.
+
+Just ask me a question like **"What is the STAR method?"** or **"How do I manage burnout?"** or **"Tell me about junior vs senior roles"** to begin!`;
+    } else if (mentor.id === 'project-builder') {
+      return `I am Antigravity AI, your Project Builder & Code Copilot! Here is a summary of what you can ask me offline:
+- **Project Architecture**: Designing and building full-stack applications.
+- **Debugging & Refactoring**: Finding bugs, optimizing code blocks, explaining syntax line-by-line.
+- **Systems Engineering**: Node.js V8 engine internals, single-threaded Event Loop phases, libuv thread pools.
+- **RAG & Vector Search**: Vector embeddings, cosine similarity, pinecone namespaces, RAG pipelines.
+- **Database Modeling**: SQL vs NoSQL, 3NF normalization, ACID transactions, Prisma ORM setups.
+- **API Construction**: Express middlewares, SSE stream decoding, JWT authorization.
+
+Just ask me a question like **"Explain the Event Loop step-by-step"** or **"How do I set up a RAG pipeline?"** to begin!`;
+    } else {
+      return `I am DevEngine AI, your Software Engineering Specialist! Here is a summary of what you can ask me offline:
 - **Core Web**: HTML structure, CSS layouts (Flexbox/Grid), JavaScript DOM manipulation, event handling.
-- **Modern Frameworks**: React components, state, props, hooks, Next.js routing.
+- **Modern Frameworks**: React components, state, props, hooks, Next.js routing, Svelte, Vue.
 - **Foundations**: Variables, loops, functions, array methods (map/filter/reduce), promises, async/await.
 - **Backend & Network**: APIs, REST APIs, JSON data, HTTP methods, database modeling (SQL vs NoSQL), CORS errors.
 - **Tools**: Git version control, GitHub workflows, package managers, TypeScript configuration.
 
 Just ask me a question like **"What is an API?"** or **"Explain React hooks"** to begin!`;
+    }
   }
 
-  // Intercept offline resources queries (e.g. "show me resources for react", "what is at reactjs.org", specific URL paste)
+  // 2. Date/Time checks
+  if (userTopicClean.includes('date') || userTopicClean.includes('time')) {
+    if (mentor.id === 'casual-career') {
+      return `Since I'm running offline right now, I don't have access to a real-time clock to check the current date or time. However, I can help you with career guidance or casual talk! Ask me about job pathways, behavioral interviews, or general knowledge.`;
+    } else if (mentor.id === 'project-builder') {
+      return `Since I'm running offline right now, I don't have access to a real-time clock to check the current date or time. However, I can help you build and debug applications! Ask me about Node.js internals, database normalizations, or code logic.`;
+    } else {
+      return `Since I'm running offline right now, I don't have access to a real-time clock to check the current date or time. However, I can help you with software engineering! Ask me a question about HTML, CSS, JavaScript, or React, and let's get started.`;
+    }
+  }
+
+  // 3. Mentor Personality Specific Social / Greetings / Info Checks (PRIORITIZED over generalChatKB)
+  if (mentor.generalResponses) {
+    const normMsg = userTopicClean.replace(/\s+/g, '');
+    
+    // Check direct keys first
+    for (const key of Object.keys(mentor.generalResponses)) {
+      const keyNorm = key.toLowerCase().replace(/\s+/g, '');
+      if (normMsg === keyNorm || normMsg.includes(keyNorm)) {
+        return mentor.generalResponses[key];
+      }
+    }
+    
+    // Check specific aliases
+    if (userTopicClean.includes('who are you') || userTopicClean.includes('what is your name') || userTopicClean.includes('whats your name') || userTopicClean === 'who' || userTopicClean.includes('who is this')) {
+      if (mentor.generalResponses.who) return mentor.generalResponses.who;
+    }
+    if (userTopicClean.includes('who created you') || userTopicClean.includes('who built you') || userTopicClean.includes('creator') || userTopicClean.includes('developer') || userTopicClean.includes('owner') || userTopicClean.includes('built you')) {
+      if (mentor.generalResponses.creator) return mentor.generalResponses.creator;
+    }
+    if (userTopicClean.includes('how are you') || userTopicClean.includes('how is it going') || userTopicClean.includes('hows it going') || userTopicClean.includes('how do you feel') || userTopicClean.includes('how are you doing')) {
+      if (mentor.generalResponses.howareyou) return mentor.generalResponses.howareyou;
+    }
+    if (userTopicClean.includes('about') || userTopicClean.includes('what do you do') || userTopicClean.includes('expertise') || userTopicClean.includes('specialty')) {
+      if (mentor.generalResponses.about) return mentor.generalResponses.about;
+    }
+    if (userTopicClean === 'hi' || userTopicClean === 'hello' || userTopicClean === 'hey' || userTopicClean === 'yo') {
+      if (mentor.generalResponses.hi) return mentor.generalResponses.hi;
+    }
+  }
+
+  // 4. Intercept offline resources queries (e.g. "show me resources for react", "what is at reactjs.org", specific URL paste)
   if (userTopicClean.includes('resource') || userTopicClean.includes('documentation') || userTopicClean.includes('docs') || userTopicClean.includes('link')) {
     const matchedRes = offlineResources.find(res => 
       userTopic.includes(res.domain) || 
@@ -367,7 +427,7 @@ Here are some categories you can browse offline:
 *To open the library and explore these guides, click the **Offline Resources Hub** book button in the sidebar footer!*`;
   }
 
-  // Intercept direct domain matches without "resource" keyword
+  // 5. Intercept direct domain matches without "resource" keyword
   const domainRes = offlineResources.find(res => 
     userTopic.includes(res.domain) || 
     res.urls.some(url => userTopic.includes(url))
@@ -386,7 +446,7 @@ ${domainRes.markdown}
   const queryTokens = userTopic.split(/\W+/).filter(Boolean);
   const significantTokens = queryTokens.filter(token => !STOP_WORDS.has(token));
 
-  // 1. Try general conversation match first
+  // 6. Try general conversation match secondary fallback
   if (generalChatKB && generalChatKB.conversations) {
     let bestGeneralMatch = null;
     let bestGeneralScore = 0;
@@ -414,7 +474,7 @@ ${domainRes.markdown}
     }
   }
   
-  // 2. Dialog context and follow-up handling
+  // 7. Dialog context and follow-up handling
   if (history.length > 0) {
     const lastAssistantMsg = [...history].reverse().find(msg => msg.senderId !== 'me');
     if (lastAssistantMsg) {
@@ -454,33 +514,23 @@ ${domainRes.markdown}
     }
   }
 
-  // 3. General responses (social/small talk specific to personality, e.g. hi/hello fallback)
+  // 8. General fallback responses for social/small talk specific to personality if not matched by aliases
   if (mentor.generalResponses) {
-    const userNorm = userTopic.replace(/[^a-zA-Z0-9 ]/g, ' ').trim();
-    const userTokens = userNorm.split(/\s+/).filter(Boolean);
-
-    for (const key of Object.keys(mentor.generalResponses)) {
-      const keyNorm = key.replace(/[^a-zA-Z0-9 ]/g, ' ').trim();
-      const keyTokens = keyNorm.split(/\s+/).filter(Boolean);
-      
-      // Match if the key matches exactly as tokens
-      const isMatch = keyTokens.every(token => userTokens.includes(token)) && 
-                      (userNorm.includes(keyNorm) || keyNorm.includes(userNorm));
-      
-      if (isMatch) {
-        return mentor.generalResponses[key];
-      }
-    }
-
     const socialWords = ['hi', 'hello', 'hey', 'how are you', 'how is the weather', 'whats up', 'who built you', 'who created you', 'joke', 'sleep', 'are you real'];
     const matchesSocial = socialWords.some(w => {
       const wNorm = w.replace(/[^a-zA-Z0-9 ]/g, ' ').trim();
       const wTokens = wNorm.split(/\s+/).filter(Boolean);
-      return wTokens.every(token => userTokens.includes(token));
+      return wTokens.every(token => queryTokens.includes(token));
     });
 
     if (matchesSocial) {
-      return `Hello! I'm ${mentor.name}, your ${mentor.description} mentor. I'm here to help you understand complex technical concepts in simple terms. Ask me a question about my specialty, and let's learn together!`;
+      if (mentor.id === 'casual-career') {
+        return `Hello! I'm Counselor AI, your Career Advisor & Casual Talk companion. I'm here to chat casually, offer career guidance, mock interviews, or answer general knowledge questions. How are you doing today?`;
+      } else if (mentor.id === 'project-builder') {
+        return `Hello! I'm Antigravity AI, your Project Builder & Code Copilot. I'm here to help you design code, debug errors, refactor codebases, and explain systems architecture step-by-step. What are we building today?`;
+      } else {
+        return `Hello! I'm DevEngine AI, your Software Engineering Specialist. I'm here to help you write code, explain programming concepts, and solve database or frontend problems step-by-step. What language or framework are we working with today?`;
+      }
     }
   }
 
