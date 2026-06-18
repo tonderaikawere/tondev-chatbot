@@ -265,24 +265,21 @@ const ChatLayout = ({
                 </div>
               )}
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
                 {[
-                  { icon: '🎓', title: 'Tonde (Lead Instructor)', id: 'tonde', desc: 'Event Loop, RAG, full-stack notes & labs' },
-                  { icon: '🎨', title: 'Frontend master', id: 'frontend', desc: 'React, layouts & UI designs' },
-                  { icon: '⚙️', title: 'Backend master', id: 'backend', desc: 'Server APIs & DB queries' },
-                  { icon: '🛡️', title: 'Cyber Security', id: 'cyber-security', desc: 'Threats & security concepts' },
-                  { icon: '🐍', title: 'Python sensei', id: 'python', desc: 'Data structures & scripts' },
-                  { icon: '🚀', title: 'CloudOps Architect', id: 'cloudops', desc: 'Docker, Kubernetes, CI/CD' }
+                  { icon: '⚙️', title: 'DevEngine AI', id: 'software-engineering', desc: 'Full-stack code, tools & languages' },
+                  { icon: '🤖', title: 'Antigravity AI', id: 'project-builder', desc: 'Project builds, copilot & debugs' },
+                  { icon: '💬', title: 'Counselor AI', id: 'casual-career', desc: 'Career guides, resumes & chats' }
                 ].map((item, index) => (
                   <button
                     key={index}
-                    className="bg-white p-3.5 rounded-xl border border-slate-200/70 hover:border-blue-500 hover:shadow-md transition-all duration-200 text-left flex items-center space-x-3 cursor-pointer group"
+                    className="bg-white p-3.5 rounded-xl border border-slate-200/70 hover:border-blue-500 hover:shadow-md transition-all duration-200 text-left flex flex-col justify-between h-28 cursor-pointer group"
                     onClick={() => handleContactSelect(item.id)}
                   >
-                    <div className="text-2xl p-1.5 bg-slate-50 rounded-lg group-hover:bg-blue-50 border border-slate-100 transition-colors">{item.icon}</div>
-                    <div className="min-w-0 flex-1">
+                    <div className="text-2xl p-1.5 bg-slate-50 rounded-lg group-hover:bg-blue-50 border border-slate-100 transition-colors w-fit">{item.icon}</div>
+                    <div className="min-w-0 w-full mt-2">
                       <div className="text-xs font-bold text-[#0B132B] group-hover:text-blue-600 transition-colors leading-tight">{item.title}</div>
-                      <div className="text-[10px] text-slate-400 truncate mt-0.5">{item.desc}</div>
+                      <div className="text-[10px] text-slate-400 line-clamp-2 mt-1 leading-normal">{item.desc}</div>
                     </div>
                   </button>
                 ))}
