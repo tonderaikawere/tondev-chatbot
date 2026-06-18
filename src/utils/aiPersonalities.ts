@@ -482,7 +482,13 @@ Just ask me a question like **"What is an API?"** or **"Explain React hooks"** t
     // Check direct keys first
     for (const key of Object.keys(mentor.generalResponses)) {
       const keyNorm = key.toLowerCase().replace(/\s+/g, '');
-      if (normMsg === keyNorm || normMsg.includes(keyNorm)) {
+      const isShortKey = keyNorm.length <= 3;
+      
+      const isExactMatch = normMsg === keyNorm;
+      const isWordMatch = userTopicClean.split(/\s+/).includes(keyNorm);
+      const isSubstringMatch = !isShortKey && normMsg.includes(keyNorm);
+      
+      if (isExactMatch || isWordMatch || isSubstringMatch) {
         return mentor.generalResponses[key];
       }
     }
@@ -514,11 +520,16 @@ Just ask me a question like **"What is an API?"** or **"Explain React hooks"** t
     );
 
     if (matchedRes) {
+      const modulesContent = matchedRes.modules && Array.isArray(matchedRes.modules)
+        ? matchedRes.modules.map((mod: any) => `### ${mod.title}\n\n${mod.content}`).join('\n\n')
+        : '';
       return `📚 **Offline Library Match: ${matchedRes.title}**
 
 I found an offline documentation guide for **${matchedRes.title}** (${matchedRes.domain}) in my local resources hub! Here is the compiled reference guide:
 
-${matchedRes.markdown}
+${matchedRes.description}
+
+${modulesContent}
 
 ---
 *To search and browse all 183+ offline developer resource websites visually, click the **Offline Resources Hub** book button in the sidebar footer!*`;
@@ -543,11 +554,16 @@ Here are some categories you can browse offline:
     res.urls.some(url => userTopic.includes(url))
   );
   if (domainRes) {
+    const modulesContent = domainRes.modules && Array.isArray(domainRes.modules)
+      ? domainRes.modules.map((mod: any) => `### ${mod.title}\n\n${mod.content}`).join('\n\n')
+      : '';
     return `📚 **Offline Library Match: ${domainRes.title}**
 
 I found an offline documentation guide for **${domainRes.title}** (${domainRes.domain}) in my local resources hub! Here is the compiled reference guide:
 
-${domainRes.markdown}
+${domainRes.description}
+
+${modulesContent}
 
 ---
 *To search and browse all 183+ offline developer resource websites visually, click the **Offline Resources Hub** book button in the sidebar footer!*`;
@@ -588,7 +604,7 @@ ${domainRes.markdown}
   if (history.length > 0) {
     const lastAssistantMsg = [...history].reverse().find(msg => msg.senderId !== 'me');
     if (lastAssistantMsg) {
-      const lastText = lastAssistantMsg.text.toLowerCase();
+      const lastText = (lastAssistantMsg.text || '').toLowerCase();
       
       // Handle short conversational follow-ups
       if (userTopic === 'really' || userTopic === 'really?') {
@@ -905,6 +921,25 @@ Or, if you are online, go to the **Gear Settings** at the bottom of the sidebar 
   return `I'm sorry, I couldn't process your request in offline fallback mode. Please check your AI Settings to enable the online Gemini model or connect to a local Ollama server.`;
 }
 
+function withTimeout<T>(promise: Promise<T>, timeoutMs: number, errorMessage: string): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => {
+      reject(new Error(errorMessage));
+    }, timeoutMs);
+
+    promise.then(
+      (res) => {
+        clearTimeout(timer);
+        resolve(res);
+      },
+      (err) => {
+        clearTimeout(timer);
+        reject(err);
+      }
+    );
+  });
+}
+
 export async function generateAIResponse(message: string, mentorId: string, history: Message[] = []): Promise<string> {
   const mentor = aiPersonalities[mentorId];
   if (!mentor) return "I'm not sure how to help with that.";
@@ -942,6 +977,9 @@ export async function generateAIResponse(message: string, mentorId: string, hist
         });
       }
 
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 seconds timeout
+
       const response = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${settings.geminiApiKey}`,
         {
@@ -954,9 +992,11 @@ export async function generateAIResponse(message: string, mentorId: string, hist
             systemInstruction: {
               parts: [{ text: systemPrompt }]
             }
-          })
+          }),
+          signal: controller.signal
         }
       );
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -994,6 +1034,9 @@ export async function generateAIResponse(message: string, mentorId: string, hist
         });
       }
 
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 seconds timeout
+
       const response = await fetch(`${settings.ollamaUrl.replace(/\/$/, '')}/api/chat`, {
         method: 'POST',
         headers: {
@@ -1003,8 +1046,10 @@ export async function generateAIResponse(message: string, mentorId: string, hist
           model: settings.ollamaModel,
           messages,
           stream: false
-        })
+        }),
+        signal: controller.signal
       });
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
         throw new Error(`Server returned HTTP ${response.status}`);
@@ -1030,13 +1075,17 @@ export async function generateAIResponse(message: string, mentorId: string, hist
 
       let session;
       if (ai.assistant) {
-        session = await ai.assistant.create({
-          systemPrompt: systemPrompt
-        });
+        session = await withTimeout(
+          ai.assistant.create({ systemPrompt: systemPrompt }),
+          6000,
+          'Chrome AI session creation timed out.'
+        );
       } else if (ai.createTextSession) {
-        session = await ai.createTextSession({
-          systemPrompt: systemPrompt
-        });
+        session = await withTimeout(
+          ai.createTextSession({ systemPrompt: systemPrompt }),
+          6000,
+          'Chrome AI session creation timed out.'
+        );
       } else {
         throw new Error('Unsupported Prompt API version.');
       }
@@ -1054,7 +1103,11 @@ export async function generateAIResponse(message: string, mentorId: string, hist
       }
       promptText += `\nAssistant:`;
 
-      const result = await session.prompt(promptText);
+      const result = await withTimeout(
+        session.prompt(promptText),
+        8000,
+        'Chrome AI prompt response timed out.'
+      );
       session.destroy(); // Clean up session memory
       if (result && result.trim()) {
         return result;

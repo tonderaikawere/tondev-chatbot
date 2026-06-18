@@ -193,8 +193,26 @@ const Index = () => {
       
       setContacts(updatedContacts);
       saveContacts(updatedContacts);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error generating AI response:', error);
+      const errorMessageText = `⚠️ **Error generating AI response:**\n\n${error?.message || 'An unknown error occurred.'}\n\nPlease check your AI Settings or try again.`;
+      
+      const aiResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        text: errorMessageText,
+        senderId: activeContact,
+        timestamp: new Date(),
+        isRead: false,
+        date: dateString
+      };
+      
+      const finalMessages = {
+        ...updatedMessages,
+        [activeContact]: [...(updatedMessages[activeContact] || []), aiResponse]
+      };
+      
+      setMessages(finalMessages);
+      saveMessages(finalMessages);
     } finally {
       setIsGenerating(false);
     }
