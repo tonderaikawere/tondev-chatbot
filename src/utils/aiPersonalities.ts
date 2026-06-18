@@ -230,7 +230,8 @@ const STOP_WORDS = new Set([
   'really', 'sure', 'why', 'how', 'explain', 'tell', 'more',
   'work', 'works', 'working', 'use', 'uses', 'using', 'run', 'runs', 'running', 'make', 'makes', 'making',
   'create', 'creates', 'creating', 'concept', 'concepts', 'basic', 'basics', 'learn', 'learning', 'understand',
-  'understanding', 'show', 'shows', 'give', 'gives', 'ask', 'asks', 'question', 'questions', 'definition', 'explain'
+  'understanding', 'show', 'shows', 'give', 'gives', 'ask', 'asks', 'question', 'questions', 'definition', 'explain',
+  'build', 'builds', 'building', 'develop', 'developing', 'developer', 'lets', 'let', 'please', 'get', 'set', 'write', 'writing', 'code', 'coding'
 ]);
 
 // Levenshtein distance calculation for typo tolerance
@@ -1055,7 +1056,10 @@ export async function generateAIResponse(message: string, mentorId: string, hist
 
       const result = await session.prompt(promptText);
       session.destroy(); // Clean up session memory
-      return result;
+      if (result && result.trim()) {
+        return result;
+      }
+      throw new Error('Chrome AI returned empty response.');
     } catch (err: any) {
       console.warn('Chrome AI failed, using offline fallback:', err);
       return generateLocalFallbackResponse(message, mentor, history);
