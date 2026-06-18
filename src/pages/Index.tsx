@@ -3,7 +3,7 @@ import ChatLayout from '../components/ChatLayout';
 import AuthScreen from '../components/AuthScreen';
 import SplashScreen from '../components/SplashScreen';
 import { Contact, Message } from '../types/chat';
-import { aiPersonalities, generateAIResponse, routeAndGenerateAIResponse } from '../utils/aiPersonalities';
+import { aiPersonalities, generateAIResponse } from '../utils/aiPersonalities';
 import { saveContacts, loadContacts, saveMessages, loadMessages, saveActiveContact, loadActiveContact } from '../utils/storage';
 
 interface User {
@@ -45,8 +45,10 @@ const Index = () => {
     const savedContacts = loadContacts();
     const savedMessages = loadMessages();
     const savedActiveContact = loadActiveContact();
+    const validMentorIds = ['software-engineering', 'casual-career', 'project-builder'];
+    const hasInvalidContacts = savedContacts.length === 0 || savedContacts.some(c => !validMentorIds.includes(c.id));
 
-    if (savedContacts.length > 0) {
+    if (savedContacts.length > 0 && !hasInvalidContacts) {
       const contactsWithNoUnread = savedContacts.map(contact => ({
         ...contact,
         unreadCount: 0
@@ -54,9 +56,14 @@ const Index = () => {
       
       setContacts(contactsWithNoUnread);
       setMessages(savedMessages);
-      setActiveContact(savedActiveContact);
+      
+      const newActiveContact = validMentorIds.includes(savedActiveContact || '') 
+        ? savedActiveContact 
+        : 'software-engineering';
+      setActiveContact(newActiveContact);
       
       saveContacts(contactsWithNoUnread);
+      saveActiveContact(newActiveContact);
     } else {
       initializeAIMentors();
     }
