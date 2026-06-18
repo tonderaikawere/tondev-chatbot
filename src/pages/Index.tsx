@@ -159,12 +159,12 @@ const Index = () => {
 
     try {
       const currentHistory = updatedMessages[activeContact] || [];
-      const { mentorId: routedMentorId, response: aiResponseText } = await routeAndGenerateAIResponse(text, activeContact, currentHistory);
+      const aiResponseText = await generateAIResponse(text, activeContact, currentHistory);
       
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
-        text: routedMentorId !== activeContact ? `${aiPersonalities[routedMentorId].name} says: ${aiResponseText}` : aiResponseText,
-        senderId: routedMentorId,
+        text: aiResponseText,
+        senderId: activeContact,
         timestamp: new Date(),
         isRead: false,
         date: dateString
@@ -172,19 +172,14 @@ const Index = () => {
       
       const finalMessages = {
         ...updatedMessages,
-        [routedMentorId]: [...(updatedMessages[routedMentorId] || []), aiResponse]
+        [activeContact]: [...(updatedMessages[activeContact] || []), aiResponse]
       };
       
       setMessages(finalMessages);
       saveMessages(finalMessages);
-      
-      if (routedMentorId !== activeContact) {
-        setActiveContact(routedMentorId);
-        saveActiveContact(routedMentorId);
-      }
 
       const updatedContacts = contacts.map(contact => {
-        if (contact.id === routedMentorId) {
+        if (contact.id === activeContact) {
           return { 
             ...contact, 
             lastMessage: aiResponseText, 
